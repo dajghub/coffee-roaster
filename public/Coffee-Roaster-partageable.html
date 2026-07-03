@@ -116,7 +116,9 @@
     .tools{gap:6px;width:100%}
     .tools .mini,.tools button{padding:8px 9px;font-size:12px}
     .tools #resetBtn{margin-left:auto}
-    .fieldrow label{min-height:34px}}
+    .fieldrow{flex-direction:column}
+    .fieldrow>div{width:100%;flex:none;min-width:0}
+    .eyebrow-tail{display:none}}
   /* modal */
   #modal{display:none;position:fixed;inset:0;background:rgba(59,42,30,.45);z-index:70;align-items:center;justify-content:center}
   #onb{display:none;position:fixed;inset:0;z-index:100;background:radial-gradient(900px 500px at 78% -12%,#f7edde 0%,var(--bg) 55%);overflow:auto;align-items:center;justify-content:center;padding:24px}
@@ -156,7 +158,7 @@
         </div>
         <div class="bar"><div class="fill" id="nextFill"></div></div>
       </div>
-      <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">
+      <div class="fieldrow" style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">
         <div style="flex:1.3;min-width:140px"><label data-i18n="lbl_curval">Valeur actuelle (€)</label><input type="number" id="capital" step="100"></div>
         <div style="flex:1;min-width:110px"><label data-i18n="lbl_monthly">Versement /mois (€)</label><input type="number" id="monthly" step="50"></div>
       </div>
@@ -286,7 +288,7 @@
         <div style="display:flex;flex-direction:column;gap:12px">
           <div><label data-i18n="onb_lbl_cap">Capital déjà investi (€)</label><input type="number" id="onbCap" step="100" placeholder="0"></div>
           <div><label data-i18n="lbl_cushion">Épargne de précaution (€)</label><input type="number" id="onbCushion" step="100" placeholder="0"><p style="font-size:11px;color:var(--dim);margin:6px 0 0" data-i18n="onb_cushion_hint">Ce que tu as déjà de côté, liquide (livret…), non investi.</p></div>
-          <div style="display:flex;gap:10px">
+          <div class="fieldrow" style="display:flex;gap:10px">
             <div style="flex:1"><label data-i18n="lbl_monthly">Versement /mois (€)</label><input type="number" id="onbMo" step="50" value="500"></div>
             <div style="flex:1"><label data-i18n="lbl_age">Ton âge</label><input type="number" id="onbAge" step="1" value="30"></div>
           </div>
@@ -352,10 +354,10 @@
       reset_t:"Effacer toutes les données", reset_aria:"Réinitialiser toutes les données",
       ey_portfolio:"Valeur de mon portefeuille",
       lbl_curval:"Valeur actuelle (%CUR%)", lbl_monthly:"Versement /mois (%CUR%)",
-      ey_passive:"☕ Revenu passif — ce que ta cagnotte te verse",
+      ey_passive:"☕ Revenu passif<span class='eyebrow-tail'> — ce que ta cagnotte te verse</span>",
       unit_permonth:" / mois",
       fly_passive:"Calculé comme valeur × taux de retrait ÷ 12, <b>avant impôts</b>. Selon l'enveloppe (PEA, assurance-vie, CTO…), compte ≈ 17 à 30 % de fiscalité sur les gains retirés.",
-      ey_milestones:"Les paliers — de l'Americano à l'Espresso",
+      ey_milestones:"Les paliers<span class='eyebrow-tail'> — de l'Americano à l'Espresso</span>",
       btn_add_goal:"+ Ajouter un palier",
       btn_edit_goals:"✎ Ajuster mes paliers", btn_close_edit:"Fermer l'édition",
       ey_sim:"☕ Simulateur",
@@ -374,7 +376,7 @@
       ey_chart:"Évolution — réel vs plan", lg_real:"Réel", lg_plan:"Plan",
       tt_real:"Réel : ", tt_plan:"Plan : ",
       chart_unavail:"Graphique indisponible pour l'instant (connexion requise au premier chargement).",
-      ey_loyalty:"Carte de fidélité — un grain torréfié par mois investi",
+      ey_loyalty:"Carte de fidélité<span class='eyebrow-tail'> — un grain torréfié par mois investi</span>",
       kpi_streak:"série en cours (mois)", kpi_months:"mois investis", kpi_total:"total investi",
       cal_help:"« + » pour investir&nbsp;&nbsp;·&nbsp;&nbsp;grain plein pour ajuster",
       footer_note:"Tes chiffres vivent uniquement dans ce navigateur et ne sont jamais envoyés en ligne (seules des statistiques de visite anonymes, sans cookies, sont mesurées).<br>Pense à cliquer <b>Exporter</b> pour télécharger une sauvegarde de temps en temps : vider le cache du navigateur les effacerait.",
@@ -462,10 +464,10 @@
       reset_t:"Erase all data", reset_aria:"Reset all data",
       ey_portfolio:"My portfolio value",
       lbl_curval:"Current value (%CUR%)", lbl_monthly:"Contribution /month (%CUR%)",
-      ey_passive:"☕ Passive income — what your pot pays you",
+      ey_passive:"☕ Passive income<span class='eyebrow-tail'> — what your pot pays you</span>",
       unit_permonth:" / month",
       fly_passive:"Calculated as value × withdrawal rate ÷ 12, <b>before tax</b>. Depending on your account, expect ≈ 15 to 30% tax on withdrawn gains.",
-      ey_milestones:"The milestones — from Americano to Espresso",
+      ey_milestones:"The milestones<span class='eyebrow-tail'> — from Americano to Espresso</span>",
       btn_add_goal:"+ Add a milestone",
       btn_edit_goals:"✎ Adjust my milestones", btn_close_edit:"Close editing",
       ey_sim:"☕ Simulator",
@@ -484,7 +486,7 @@
       ey_chart:"Progress — actual vs plan", lg_real:"Actual", lg_plan:"Plan",
       tt_real:"Actual: ", tt_plan:"Plan: ",
       chart_unavail:"Chart unavailable for now (connection needed on first load).",
-      ey_loyalty:"Loyalty card — one roasted bean per month invested",
+      ey_loyalty:"Loyalty card<span class='eyebrow-tail'> — one roasted bean per month invested</span>",
       kpi_streak:"current streak (months)", kpi_months:"months invested", kpi_total:"total invested",
       cal_help:"« + » to invest&nbsp;&nbsp;·&nbsp;&nbsp;full bean to adjust",
       footer_note:"Your figures live only in this browser and are never sent online (only anonymous, cookie-free visit stats are measured).<br>Click <b>Export</b> now and then to download a backup: clearing your browser cache would erase it.",
