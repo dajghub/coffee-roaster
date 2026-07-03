@@ -22,11 +22,10 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
-      - name: Assemble site (le fichier produit devient index.html)
+      - name: Assemble site (public/ = tout ce qui est déployé tel quel)
         run: |
           mkdir -p _site
-          cp public/Coffee-Roaster-partageable.html _site/index.html
-          cp public/og.png _site/og.png
+          cp -r public/. _site/
           echo "getcoffeeroaster.com" > _site/CNAME
       - uses: actions/upload-pages-artifact@v3
         with:
