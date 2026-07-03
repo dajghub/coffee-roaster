@@ -371,7 +371,9 @@
       ms_empty:"Ajoute un palier ci-dessous pour commencer.",
       ms_indep:" · <span style='color:var(--green)'>ton indépendance — couvre tout ton train de vie ☕</span>",
       ms_covers:" · couvre ~{p} % de ton train de vie",
-      ms_life_early:"Un matelas de sécurité se constitue : un coup dur ou une transition font déjà moins peur.",
+      ms_months:" · ≈ {n} mois de dépenses",
+      ms_life_cushion:"Ton matelas de sécurité : de quoi encaisser un imprévu — perte d'emploi, gros pépin — sans t'endetter.",
+      ms_life_early:"Une vraie base : tu peux voir venir et prendre des risques mesurés (formation, projet, reconversion).",
       ms_life_mid:"De quoi lever le pied : temps partiel, pause, ou un travail qui compte plus que le salaire.",
       ms_life_high:"Le travail devient surtout un choix : l'essentiel de ton quotidien tournerait sans lui.",
       ms_life_full:"Liberté : travailler — ou non — devient entièrement ton choix.",
@@ -465,7 +467,9 @@
       ms_empty:"Add a milestone below to get started.",
       ms_indep:" · <span style='color:var(--green)'>your independence — covers your whole lifestyle ☕</span>",
       ms_covers:" · covers ~{p}% of your lifestyle",
-      ms_life_early:"A safety cushion is forming: a setback or a career change already feels less scary.",
+      ms_months:" · ≈ {n} months of expenses",
+      ms_life_cushion:"Your safety cushion: enough to absorb a shock — job loss, a big surprise — without going into debt.",
+      ms_life_early:"A real base: you can look ahead and take measured risks (training, a project, a career switch).",
       ms_life_mid:"Room to ease off: part-time, a break, or work that matters more than the paycheck.",
       ms_life_high:"Work becomes mostly a choice: most of your day-to-day would run without it.",
       ms_life_full:"Freedom: working — or not — becomes entirely your call.",
@@ -532,14 +536,18 @@
   function reqMonthly(T,C,n){if(n<=0)return Infinity;var f=Math.pow(1+R,n),grown=C*f;if(grown>=T)return 0;return R>0?(T-grown)*R/(f-1):(T-C)/n;}
   function r10(x){return Math.ceil(x/10)*10;}
   function seedGoals(){
-    // Paliers par défaut dérivés du chiffre d'indépendance (dépenses × 12 ÷ retrait) : ¼, ½, plein.
+    // Matelas de sécurité (~6 mois de dépenses) puis chiffre d'indépendance (dépenses × 12 ÷ retrait) : ¼, ½, plein.
     var fi=fiTarget();
     if(!(fi>0))return JSON.parse(JSON.stringify(DEF_GOALS));
     var step=fi>=400000?25000:(fi>=150000?10000:5000);
     var g1=Math.max(step,Math.round(fi*0.25/step)*step);
     var g2=Math.max(g1+step,Math.round(fi*0.5/step)*step);
     var g3=Math.max(g2+step,Math.ceil(fi/step)*step); // plein arrondi au-dessus → couvre bien 100 %
-    return [{v:g1},{v:g2},{v:g3}];
+    var out=[];
+    var cushion=Math.max(1000,Math.round(6*expenses/1000)*1000); // 6 mois de dépenses, arrondi au millier
+    if(cushion<g1)out.push({v:cushion}); // 1er palier atteignable = victoire précoce
+    out.push({v:g1},{v:g2},{v:g3});
+    return out;
   }
   function nextGoalIdx(){for(var i=0;i<goals.length;i++)if(cap<goals[i].v)return i;return goals.length-1;}
 
@@ -593,8 +601,15 @@
     goals.forEach(function(m,i){
       var prev=i===0?0:goals[i-1].v, reached=cap>=m.v, unlocked=i===0?true:cap>=goals[i-1].v, col=PAL[i%PAL.length];
       var cov=expenses>0?passive(m.v)/expenses*100:0;
-      var meaning= fi>0 ? (m.v>=fi*0.995 ? t('ms_indep') : t('ms_covers',{p:Math.round(cov)})) : "";
-      var life= fi>0 ? t(m.v>=fi*0.995?'ms_life_full':(cov>=70?'ms_life_high':(cov>=40?'ms_life_mid':'ms_life_early'))) : "";
+      var isCushion=expenses>0 && m.v<12*expenses && m.v<fi*0.995; // < 1 an de dépenses → exprimé en mois
+      var meaning="", life="";
+      if(fi>0){
+        if(m.v>=fi*0.995){ meaning=t('ms_indep'); life=t('ms_life_full'); }
+        else if(isCushion){ meaning=t('ms_months',{n:Math.max(1,Math.round(m.v/expenses))}); life=t('ms_life_cushion'); }
+        else if(cov>=70){ meaning=t('ms_covers',{p:Math.round(cov)}); life=t('ms_life_high'); }
+        else if(cov>=40){ meaning=t('ms_covers',{p:Math.round(cov)}); life=t('ms_life_mid'); }
+        else { meaning=t('ms_covers',{p:Math.round(cov)}); life=t('ms_life_early'); }
+      }
       var pct=reached?100:unlocked?Math.max(0,Math.min(100,(cap-prev)/(m.v-prev)*100)):0;
       var pill=reached?t('pill_served'):unlocked?t('pill_live'):t('pill_lock',{v:eurk(prev)});
       var foot;
