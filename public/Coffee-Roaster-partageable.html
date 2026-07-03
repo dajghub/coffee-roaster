@@ -303,7 +303,7 @@
   var R;
   var PAL=["#c9a36b","#a0673a","#5b3a24","#8a5a2b","#6f4e37","#b5793a"];
   var DEF_GOALS=[{v:300000},{v:600000},{v:1000000}];
-  var LADDER=["Americano","Cappuccino","Affogato","Irish Coffee","Espresso Martini","Grand Cru"];
+  var LADDER=["Americano","Cappuccino","Affogato","Moka","Ristretto","Grand Cru"];
   function goalName(i){return LADDER[i]||("Grand Cru "+(i-4));}
   var K={cap:"crs_cap",mo:"crs_mo",exp:"crs_exp",age:"crs_age",goals:"crs_goals",amt:"crs_amt",hist:"crs_hist",cel:"crs_cel",onb:"crs_onb",rate:"crs_rate",swr:"crs_swr",base:"crs_base",start:"crs_start",tage:"crs_tage",lang:"crs_lang",cur:"crs_cur",cushion:"crs_cushion"};
   function g(k,d){try{var v=localStorage.getItem(k);return v===null?d:JSON.parse(v)}catch(e){return d}}
