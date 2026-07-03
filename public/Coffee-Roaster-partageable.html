@@ -118,7 +118,7 @@
       <h1>Coffee Roaster</h1>
     </div>
     <div class="tools">
-      <button class="ghost" id="exportBtn" title="Télécharge un fichier de sauvegarde">💾 Exporter</button>
+      <button class="ghost" id="exportBtn" title="Télécharge un fichier de sauvegarde">Exporter</button>
       <button class="ghost" id="importBtn" title="Recharge une sauvegarde exportée">Importer</button>
       <button class="ghost danger" id="resetBtn" title="Effacer toutes les données" aria-label="Réinitialiser toutes les données" style="margin-left:14px">↺</button>
       <input type="file" id="importFile" accept="application/json">
@@ -231,7 +231,7 @@
     <p class="note" style="margin-top:14px">« + » pour investir&nbsp;&nbsp;·&nbsp;&nbsp;grain plein pour ajuster</p>
   </div>
 
-  <p class="note" style="text-align:center;margin-top:4px">Tes données vivent uniquement dans ce navigateur — rien n'est envoyé en ligne.<br>Pense à <b>💾 Exporter</b> une sauvegarde de temps en temps : vider le cache du navigateur les effacerait.</p>
+  <p class="note" style="text-align:center;margin-top:4px">Tes données vivent uniquement dans ce navigateur — rien n'est envoyé en ligne.<br>Pense à cliquer <b>Exporter</b> pour télécharger une sauvegarde de temps en temps : vider le cache du navigateur les effacerait.</p>
 
   <div id="onb">
     <div class="onb-card">
@@ -313,6 +313,16 @@
   function fiTarget(){return expenses*12/(swr/100);}
   function reqMonthly(T,C,n){if(n<=0)return Infinity;var f=Math.pow(1+R,n),grown=C*f;if(grown>=T)return 0;return R>0?(T-grown)*R/(f-1):(T-C)/n;}
   function r10(x){return Math.ceil(x/10)*10;}
+  function seedGoals(){
+    // Paliers par défaut dérivés du chiffre d'indépendance (dépenses × 12 ÷ retrait) : ¼, ½, plein.
+    var fi=fiTarget();
+    if(!(fi>0))return JSON.parse(JSON.stringify(DEF_GOALS));
+    var step=fi>=400000?25000:(fi>=150000?10000:5000);
+    var g1=Math.max(step,Math.round(fi*0.25/step)*step);
+    var g2=Math.max(g1+step,Math.round(fi*0.5/step)*step);
+    var g3=Math.max(g2+step,Math.ceil(fi/step)*step); // plein arrondi au-dessus → couvre bien 100 %
+    return [{v:g1},{v:g2},{v:g3}];
+  }
   function nextGoalIdx(){for(var i=0;i<goals.length;i++)if(cap<goals[i].v)return i;return goals.length-1;}
 
   function render(){
@@ -350,8 +360,11 @@
   function renderMs(){
     var host=document.getElementById('milestones');host.innerHTML="";
     if(!goals.length){host.innerHTML='<p class="note">Ajoute un palier ci-dessous pour commencer.</p>';return;}
+    var fi=(expenses>0&&swr>0)?fiTarget():0;
     goals.forEach(function(m,i){
       var prev=i===0?0:goals[i-1].v, reached=cap>=m.v, unlocked=i===0?true:cap>=goals[i-1].v, col=PAL[i%PAL.length];
+      var cov=expenses>0?passive(m.v)/expenses*100:0;
+      var meaning= fi>0 ? (m.v>=fi*0.995 ? ' · <span style="color:var(--green)">ton indépendance — couvre tout ton train de vie ☕</span>' : ' · couvre ~'+Math.round(cov)+' % de ton train de vie') : '';
       var pct=reached?100:unlocked?Math.max(0,Math.min(100,(cap-prev)/(m.v-prev)*100)):0;
       var pill=reached?'<span class="pill done">✓ servi</span>':unlocked?'<span class="pill live">en cours</span>':'<span class="pill lock">🔒 dès '+eurk(prev)+'</span>';
       var foot;
@@ -359,7 +372,7 @@
       else{var mn=monthsTo(m.v,cap,mo);foot=(mn>=9999)?'hors de portée à ce rythme — augmente ton versement':'atteint autour de '+frMonth(addMonths(ymNow(),mn))+(age>0?' · <b>~'+Math.round(age+mn/12)+' ans</b>':'');}
       var d=document.createElement('div');d.className="ms"+(unlocked?"":" lock");
       d.innerHTML='<div class="ms-top"><div><div class="ms-name"><span class="bean" style="background:'+col+'"></span>'+goalName(i)+' '+pill+'</div>'+
-        '<div class="ms-sub">'+eurk(m.v)+'</div></div>'+
+        '<div class="ms-sub">'+eurk(m.v)+meaning+'</div></div>'+
         '<div class="ms-fig">'+eurk(unlocked?Math.min(cap,m.v):prev)+' / '+eurk(m.v)+' · '+Math.round(pct)+'%</div></div>'+
         '<div class="bar"><div class="fill" style="background:linear-gradient(90deg,'+col+','+col+'bb)"></div></div>'+
         '<div class="ms-foot">'+foot+'</div>';
@@ -391,9 +404,9 @@
     var base=monthsTo(tgt,cap,mo), wit=monthsTo(tgt,cap,mo+extra);
     var saved=base-wit;
     var atW= age>0?" (~"+Math.round(age+wit/12)+" ans)":"";
-    if(extra===0){document.getElementById('simOut').innerHTML="Glisse le curseur pour voir l'effet d'un versement en plus sur <b>"+goalName(ni)+"</b>.";ap.style.display='none';return;}
-    if(wit>=9999){document.getElementById('simOut').innerHTML="Même avec ce versement, <b>"+goalName(ni)+"</b> reste hors de portée à horizon raisonnable.";ap.style.display='none';return;}
-    document.getElementById('simOut').innerHTML="Avec <b>"+eur(mo+extra)+"/mois</b>, tu atteins <b>"+goalName(ni)+"</b> autour de "+frMonth(addMonths(ymNow(),wit))+atW+
+    if(extra===0){document.getElementById('simOut').innerHTML="Glisse le curseur pour voir l'effet d'un versement en plus sur ton palier à <b>"+eurk(tgt)+"</b>.";ap.style.display='none';return;}
+    if(wit>=9999){document.getElementById('simOut').innerHTML="Même avec ce versement, le palier <b>"+eurk(tgt)+"</b> reste hors de portée à horizon raisonnable.";ap.style.display='none';return;}
+    document.getElementById('simOut').innerHTML="Avec <b>"+eur(mo+extra)+"/mois</b>, tu atteins <b>"+eurk(tgt)+"</b> autour de "+frMonth(addMonths(ymNow(),wit))+atW+
       " — soit <b>"+(saved>=12?Math.round(saved/12)+" an"+(saved>=24?"s":""):saved+" mois")+" plus tôt</b>.";
     ap.textContent="Adopter "+eur(mo+extra)+"/mois";ap.style.display='inline-block';
   }
@@ -539,7 +552,8 @@
     age=Math.max(0,+document.getElementById('onbAge').value||30);
     expenses=Math.max(0,+document.getElementById('onbExp').value||2000);
     baseInvested=cap;startYm=ymNow();
-    s(K.cap,cap);s(K.mo,mo);s(K.age,age);s(K.exp,expenses);s(K.base,baseInvested);s(K.start,startYm);s(K.onb,true);
+    goals=seedGoals();celebrated=[];
+    s(K.cap,cap);s(K.mo,mo);s(K.age,age);s(K.exp,expenses);s(K.base,baseInvested);s(K.start,startYm);s(K.goals,goals);s(K.cel,celebrated);s(K.onb,true);
     syncCelebrated(true);onbEl.style.display='none';render();
   });
 
