@@ -204,6 +204,9 @@
         <div style="flex:1;min-width:110px"><label><span data-i18n="lbl_expenses">Dépenses cibles /mois (€)</span> <span class="info" data-k="expenses">i</span></label><input type="number" id="expenses" step="50"><div class="flyout" id="fly-expenses" data-i18n="fly_expenses">Le train de vie mensuel que tu veux pouvoir financer une fois indépendant(e) — c'est lui qui fixe ton chiffre d'indépendance (× 12 ÷ taux de retrait). Si tu ne sais pas, pars de tes dépenses actuelles.</div></div>
         <div style="flex:1;min-width:90px"><label data-i18n="lbl_age">Ton âge</label><input type="number" id="age" step="1"></div>
       </div>
+      <div style="margin-top:12px">
+        <label><span data-i18n="lbl_cushion">Épargne de précaution (€)</span> <span class="info" data-k="cushion">i</span></label><input type="number" id="cushion" step="100"><div class="flyout" id="fly-cushion" data-i18n="fly_cushion">Ton fonds d'urgence : liquide, stable, non investi (livret…). Il vise ~6 mois de dépenses et n'entre <b>ni dans la projection de rendement, ni dans le revenu passif</b> — il finance seulement le palier « matelas de sécurité ».</div>
+      </div>
       <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:12px">
         <div style="flex:1;min-width:140px">
           <label><span data-i18n="lbl_return">Rendement annuel réel (%)</span> <span class="info" data-k="return">i</span></label>
@@ -261,7 +264,8 @@
       <div id="onb2" style="display:none">
         <div class="eyebrow" style="margin-bottom:14px" data-i18n="onb_step">Étape 2/2 · ta situation</div>
         <div style="display:flex;flex-direction:column;gap:12px">
-          <div><label data-i18n="onb_lbl_cap">Capital déjà mis de côté (€)</label><input type="number" id="onbCap" step="100" placeholder="0"><p style="font-size:11px;color:var(--dim);margin:6px 0 0" data-i18n="onb_cap_hint">Épargne de précaution comprise — pas seulement tes placements.</p></div>
+          <div><label data-i18n="onb_lbl_cap">Capital déjà investi (€)</label><input type="number" id="onbCap" step="100" placeholder="0"></div>
+          <div><label data-i18n="lbl_cushion">Épargne de précaution (€)</label><input type="number" id="onbCushion" step="100" placeholder="0"><p style="font-size:11px;color:var(--dim);margin:6px 0 0" data-i18n="onb_cushion_hint">Liquide et disponible (livret…), non investie. ~6 mois de dépenses visés.</p></div>
           <div style="display:flex;gap:10px">
             <div style="flex:1"><label data-i18n="lbl_monthly">Versement /mois (€)</label><input type="number" id="onbMo" step="50" value="500"></div>
             <div style="flex:1"><label data-i18n="lbl_age">Ton âge</label><input type="number" id="onbAge" step="1" value="30"></div>
@@ -300,7 +304,7 @@
   var DEF_GOALS=[{v:300000},{v:600000},{v:1000000}];
   var LADDER=["Americano","Cappuccino","Affogato","Irish Coffee","Espresso Martini","Grand Cru"];
   function goalName(i){return LADDER[i]||("Grand Cru "+(i-4));}
-  var K={cap:"crs_cap",mo:"crs_mo",exp:"crs_exp",age:"crs_age",goals:"crs_goals",amt:"crs_amt",hist:"crs_hist",cel:"crs_cel",onb:"crs_onb",rate:"crs_rate",swr:"crs_swr",base:"crs_base",start:"crs_start",tage:"crs_tage",lang:"crs_lang",cur:"crs_cur"};
+  var K={cap:"crs_cap",mo:"crs_mo",exp:"crs_exp",age:"crs_age",goals:"crs_goals",amt:"crs_amt",hist:"crs_hist",cel:"crs_cel",onb:"crs_onb",rate:"crs_rate",swr:"crs_swr",base:"crs_base",start:"crs_start",tage:"crs_tage",lang:"crs_lang",cur:"crs_cur",cushion:"crs_cushion"};
   function g(k,d){try{var v=localStorage.getItem(k);return v===null?d:JSON.parse(v)}catch(e){return d}}
   function s(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
 
@@ -351,8 +355,10 @@
       onb_privacy:"☕ <b>100 % privé</b> : tes chiffres restent dans ton navigateur. Aucun compte, aucun serveur, personne d'autre n'y accède.",
       onb_start:"Commencer",
       onb_step:"Étape 2/2 · ta situation",
-      onb_lbl_cap:"Capital déjà mis de côté (%CUR%)",
-      onb_cap_hint:"Épargne de précaution comprise — pas seulement tes placements.",
+      onb_lbl_cap:"Capital déjà investi (%CUR%)",
+      lbl_cushion:"Épargne de précaution (%CUR%)",
+      onb_cushion_hint:"Liquide et disponible (livret…), non investie. ~6 mois de dépenses visés.",
+      fly_cushion:"Ton fonds d'urgence : liquide, stable, non investi (livret…). Il vise ~6 mois de dépenses et n'entre <b>ni dans la projection de rendement, ni dans le revenu passif</b> — il finance seulement le palier « matelas de sécurité ».",
       onb_note:"Tu fixeras ensuite tes objectifs dans le dashboard.",
       onb_back:"← Retour", onb_finish:"Accéder à mon dashboard ☕",
       modal_ey:"☕ Montant investi ce mois", modal_lbl:"Montant (%CUR%)",
@@ -382,6 +388,8 @@
       pill_live:"<span class='pill live'>en cours</span>",
       pill_lock:"<span class='pill lock'>🔒 dès {v}</span>",
       foot_reached:"<span style='color:var(--green)'>✓ atteint</span>",
+      foot_cushion_done:"<span style='color:var(--green)'>✓ constitué</span>",
+      foot_cushion_todo:"à constituer (épargne liquide)",
       foot_unreach:"hors de portée à ce rythme — augmente ton versement",
       foot_eta:"atteint autour de {m}{age}",
       age_dot:" · <b>~{a} ans</b>",
@@ -448,8 +456,10 @@
       onb_privacy:"☕ <b>100% private</b>: your numbers stay in your browser. No account, no server, no one else can see them.",
       onb_start:"Start",
       onb_step:"Step 2/2 · your situation",
-      onb_lbl_cap:"Money already set aside (%CUR%)",
-      onb_cap_hint:"Emergency fund included — not just your investments.",
+      onb_lbl_cap:"Capital already invested (%CUR%)",
+      lbl_cushion:"Emergency fund (%CUR%)",
+      onb_cushion_hint:"Liquid and available (savings account…), not invested. ~6 months of expenses is the goal.",
+      fly_cushion:"Your emergency fund: liquid, stable, not invested (savings account…). It targets ~6 months of expenses and counts toward <b>neither the return projection nor passive income</b> — it only funds the “safety cushion” milestone.",
       onb_note:"You'll set your goals next in the dashboard.",
       onb_back:"← Back", onb_finish:"Go to my dashboard ☕",
       modal_ey:"☕ Amount invested this month", modal_lbl:"Amount (%CUR%)",
@@ -479,6 +489,8 @@
       pill_live:"<span class='pill live'>in progress</span>",
       pill_lock:"<span class='pill lock'>🔒 from {v}</span>",
       foot_reached:"<span style='color:var(--green)'>✓ reached</span>",
+      foot_cushion_done:"<span style='color:var(--green)'>✓ built</span>",
+      foot_cushion_todo:"to build (liquid savings)",
       foot_unreach:"out of reach at this pace — raise your contribution",
       foot_eta:"reached around {m}{age}",
       age_dot:" · <b>~{a} yrs</b>",
@@ -519,7 +531,7 @@
 
   var cap=g(K.cap,0), mo=g(K.mo,500), expenses=g(K.exp,2000), age=g(K.age,30),
       goals=g(K.goals,DEF_GOALS), amounts=g(K.amt,{}), hist=g(K.hist,[]), celebrated=g(K.cel,[]),
-      rate=g(K.rate,5), swr=g(K.swr,4), baseInvested=g(K.base,null), startYm=g(K.start,null), tage=g(K.tage,0), chart=null;
+      rate=g(K.rate,5), swr=g(K.swr,4), baseInvested=g(K.base,null), startYm=g(K.start,null), tage=g(K.tage,0), cushion=g(K.cushion,0), chart=null;
   R=rate/100/12;
   if(baseInvested===null){baseInvested=cap;s(K.base,baseInvested);}
   if(startYm===null){startYm=ymNow();s(K.start,startYm);}
@@ -546,12 +558,15 @@
     var g2=Math.max(g1+step,Math.round(fi*0.5/step)*step);
     var g3=Math.max(g2+step,Math.ceil(fi/step)*step); // plein arrondi au-dessus → couvre bien 100 %
     var out=[];
-    var cushion=Math.max(1000,Math.round(6*expenses/1000)*1000); // 6 mois de dépenses, arrondi au millier
-    if(cushion<g1)out.push({v:cushion}); // 1er palier atteignable = victoire précoce
+    var mat=Math.max(1000,Math.round(6*expenses/1000)*1000); // matelas = 6 mois de dépenses, arrondi au millier
+    if(mat<g1)out.push({v:mat}); // 1er palier = épargne de précaution (victoire précoce)
     out.push({v:g1},{v:g2},{v:g3});
     return out;
   }
-  function nextGoalIdx(){for(var i=0;i<goals.length;i++)if(cap<goals[i].v)return i;return goals.length-1;}
+  // Un palier est un "matelas de sécurité" (base = épargne liquide) s'il vaut moins d'un an de dépenses et reste sous le chiffre d'indépendance.
+  function isCushionRung(v){var fiT=(expenses>0&&swr>0)?fiTarget():0;return expenses>0 && v<12*expenses && v<fiT*0.995;}
+  // Prochain palier d'INVESTISSEMENT non atteint (le matelas est suivi à part, via l'épargne de précaution).
+  function nextGoalIdx(){var last=0;for(var i=0;i<goals.length;i++){if(isCushionRung(goals[i].v))continue;last=i;if(cap<goals[i].v)return i;}return last;}
 
   function applyStatic(){
     document.documentElement.lang=LANG;
@@ -572,6 +587,7 @@
     document.getElementById('age').value=age;
     document.getElementById('rate').value=rate;
     document.getElementById('swr').value=swr;
+    var cuEl=document.getElementById('cushion');if(cuEl&&document.activeElement!==cuEl)cuEl.value=cushion||"";
     document.getElementById('regNote').textContent=t('reg_note',{rate:rate,swr:swr});
 
     var pass=passive(cap);
@@ -601,26 +617,30 @@
     if(!goals.length){host.innerHTML='<p class="note">'+t('ms_empty')+'</p>';return;}
     var fi=(expenses>0&&swr>0)?fiTarget():0;
     goals.forEach(function(m,i){
-      var prev=i===0?0:goals[i-1].v, reached=cap>=m.v, unlocked=i===0?true:cap>=goals[i-1].v, col=PAL[i%PAL.length];
+      // Matelas = épargne de précaution (base = cushion, jamais projetée) ; autres paliers = capital investi (base = cap)
+      var isMatelas=isCushionRung(m.v), base=isMatelas?cushion:cap, col=PAL[i%PAL.length];
+      var prev=0; // borne basse : dernier palier d'INVESTISSEMENT précédent (le matelas ne compte pas dans la chaîne cap)
+      if(!isMatelas){for(var j=i-1;j>=0;j--){if(!isCushionRung(goals[j].v)){prev=goals[j].v;break;}}}
+      var reached=base>=m.v, unlocked=isMatelas?true:(prev===0?true:cap>=prev);
       var cov=expenses>0?passive(m.v)/expenses*100:0;
-      var isCushion=expenses>0 && m.v<12*expenses && m.v<fi*0.995; // < 1 an de dépenses → exprimé en mois
       var meaning="", life="";
       if(fi>0){
         if(m.v>=fi*0.995){ meaning=t('ms_indep'); life=t('ms_life_full'); }
-        else if(isCushion){ meaning=t('ms_months',{n:Math.max(1,Math.round(m.v/expenses))}); life=t('ms_life_cushion'); }
+        else if(isMatelas){ meaning=t('ms_months',{n:Math.max(1,Math.round(m.v/expenses))}); life=t('ms_life_cushion'); }
         else if(cov>=70){ meaning=t('ms_covers',{p:Math.round(cov)}); life=t('ms_life_high'); }
         else if(cov>=40){ meaning=t('ms_covers',{p:Math.round(cov)}); life=t('ms_life_mid'); }
         else { meaning=t('ms_covers',{p:Math.round(cov)}); life=t('ms_life_early'); }
       }
-      var pct=reached?100:unlocked?Math.max(0,Math.min(100,(cap-prev)/(m.v-prev)*100)):0;
+      var pct=reached?100:unlocked?Math.max(0,Math.min(100,(base-prev)/(m.v-prev)*100)):0;
       var pill=reached?t('pill_served'):unlocked?t('pill_live'):t('pill_lock',{v:eurk(prev)});
       var foot;
-      if(reached){foot=t('foot_reached');}
+      if(isMatelas){foot=reached?t('foot_cushion_done'):t('foot_cushion_todo');}
+      else if(reached){foot=t('foot_reached');}
       else{var mn=monthsTo(m.v,cap,mo);foot=(mn>=9999)?t('foot_unreach'):t('foot_eta',{m:frMonth(addMonths(ymNow(),mn)),age:(age>0?t('age_dot',{a:Math.round(age+mn/12)}):"")});}
       var d=document.createElement('div');d.className="ms"+(unlocked?"":" lock");
       d.innerHTML='<div class="ms-top"><div><div class="ms-name"><span class="bean" style="background:'+col+'"></span>'+goalName(i)+' '+pill+'</div>'+
         '<div class="ms-sub">'+eurk(m.v)+meaning+'</div></div>'+
-        '<div class="ms-fig">'+eurk(unlocked?Math.min(cap,m.v):prev)+' / '+eurk(m.v)+' · '+Math.round(pct)+'%</div></div>'+
+        '<div class="ms-fig">'+eurk(unlocked?Math.min(base,m.v):prev)+' / '+eurk(m.v)+' · '+Math.round(pct)+'%</div></div>'+
         '<div class="bar"><div class="fill" style="background:linear-gradient(90deg,'+col+','+col+'bb)"></div></div>'+
         (life?'<div class="ms-life">'+life+'</div>':'')+
         '<div class="ms-foot">'+foot+'</div>';
@@ -742,7 +762,7 @@
     ]};
     var opts={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return (c.datasetIndex===0?t('tt_real'):t('tt_plan'))+(c.parsed.y==null?'—':eur(c.parsed.y));}}}},
       scales:{x:{ticks:{color:'#7f6b57',maxTicksLimit:7,font:{size:10}},grid:{display:false}},y:{ticks:{color:'#7f6b57',font:{size:10},callback:function(v){return v===0?'':Math.round(v/1000)+'k';}},grid:{color:'#ece0cf'}}}};
-    var goalLines={id:'goalLines',afterDatasetsDraw:function(ch){var yA=ch.scales.y,xA=ch.scales.x,c2=ch.ctx;goals.forEach(function(gg,i){if(gg.v>=yA.min&&gg.v<=yA.max){var py=yA.getPixelForValue(gg.v);c2.save();c2.strokeStyle=PAL[i%PAL.length];c2.setLineDash([4,3]);c2.globalAlpha=.55;c2.lineWidth=1;c2.beginPath();c2.moveTo(xA.left,py);c2.lineTo(xA.right,py);c2.stroke();c2.globalAlpha=1;c2.setLineDash([]);c2.fillStyle=PAL[i%PAL.length];c2.font='9px sans-serif';c2.textAlign='right';c2.fillText(goalName(i),xA.right-2,py-3);c2.restore();}});}};
+    var goalLines={id:'goalLines',afterDatasetsDraw:function(ch){var yA=ch.scales.y,xA=ch.scales.x,c2=ch.ctx;goals.forEach(function(gg,i){if(isCushionRung(gg.v))return;if(gg.v>=yA.min&&gg.v<=yA.max){var py=yA.getPixelForValue(gg.v);c2.save();c2.strokeStyle=PAL[i%PAL.length];c2.setLineDash([4,3]);c2.globalAlpha=.55;c2.lineWidth=1;c2.beginPath();c2.moveTo(xA.left,py);c2.lineTo(xA.right,py);c2.stroke();c2.globalAlpha=1;c2.setLineDash([]);c2.fillStyle=PAL[i%PAL.length];c2.font='9px sans-serif';c2.textAlign='right';c2.fillText(goalName(i),xA.right-2,py-3);c2.restore();}});}};
     if(chart){chart.data=data;chart.options=opts;chart.update();}else{chart=new Chart(document.getElementById('chart'),{type:'line',data:data,options:opts,plugins:[goalLines]});}
   }
 
@@ -751,7 +771,7 @@
   function toast(msg){var t=document.createElement('div');t.className="toast";t.textContent=msg;document.getElementById('toasts').appendChild(t);
     setTimeout(function(){t.classList.add('show');},20);setTimeout(function(){t.classList.remove('show');setTimeout(function(){t.remove();},400);},3600);}
   function syncCelebrated(silent){
-    goals.forEach(function(gg,i){ if(cap>=gg.v && celebrated.indexOf(gg.v)<0){ celebrated.push(gg.v); if(!silent)toast(t('toast_served',{name:goalName(i),v:eurk(gg.v)})); } });
+    goals.forEach(function(gg,i){ var base=isCushionRung(gg.v)?cushion:cap; if(base>=gg.v && celebrated.indexOf(gg.v)<0){ celebrated.push(gg.v); if(!silent)toast(t('toast_served',{name:goalName(i),v:eurk(gg.v)})); } });
     s(K.cel,celebrated);
   }
 
@@ -760,6 +780,7 @@
   bind('capital',K.cap,function(v){cap=v;},function(){var ym=ymNow();if(!(amounts[ym]>0)&&mo>0){amounts[ym]=mo;s(K.amt,amounts);toast(t('toast_stamped',{x:eur(mo)}));}recordSnapshot();syncCelebrated(false);});
   bind('monthly',K.mo,function(v){mo=v;});
   bind('expenses',K.exp,function(v){expenses=v;});
+  bind('cushion',K.cushion,function(v){cushion=v;},function(){syncCelebrated(false);});
   bind('age',K.age,function(v){age=v;});
   document.getElementById('rate').addEventListener('change',function(e){rate=Math.max(0,+e.target.value||5);R=rate/100/12;s(K.rate,rate);render();});
   document.getElementById('swr').addEventListener('change',function(e){swr=Math.max(0.1,+e.target.value||4);s(K.swr,swr);render();});
@@ -797,28 +818,29 @@
   document.getElementById('addGoal').addEventListener('click',function(){goals.push({v:(goals.length?goals[goals.length-1].v+300000:300000)});s(K.goals,goals);render();});
   var onbEl=document.getElementById('onb');
   function showOnb(){document.getElementById('onb1').style.display='block';document.getElementById('onb2').style.display='none';
-    document.getElementById('onbCap').value=cap||'';document.getElementById('onbMo').value=mo;document.getElementById('onbAge').value=age;document.getElementById('onbExp').value=expenses;
+    document.getElementById('onbCap').value=cap||'';document.getElementById('onbCushion').value=cushion||'';document.getElementById('onbMo').value=mo;document.getElementById('onbAge').value=age;document.getElementById('onbExp').value=expenses;
     onbEl.style.display='flex';}
   document.getElementById('onbStart').addEventListener('click',function(){document.getElementById('onb1').style.display='none';document.getElementById('onb2').style.display='block';document.getElementById('onbCap').focus();});
   document.getElementById('onbBack').addEventListener('click',function(){document.getElementById('onb2').style.display='none';document.getElementById('onb1').style.display='block';});
   document.getElementById('onbFinish').addEventListener('click',function(){
     cap=Math.max(0,+document.getElementById('onbCap').value||0);
+    cushion=Math.max(0,+document.getElementById('onbCushion').value||0);
     mo=Math.max(0,+document.getElementById('onbMo').value||500);
     age=Math.max(0,+document.getElementById('onbAge').value||30);
     expenses=Math.max(0,+document.getElementById('onbExp').value||2000);
     baseInvested=cap;startYm=ymNow();
     goals=seedGoals();celebrated=[];
-    s(K.cap,cap);s(K.mo,mo);s(K.age,age);s(K.exp,expenses);s(K.base,baseInvested);s(K.start,startYm);s(K.goals,goals);s(K.cel,celebrated);s(K.onb,true);
+    s(K.cap,cap);s(K.cushion,cushion);s(K.mo,mo);s(K.age,age);s(K.exp,expenses);s(K.base,baseInvested);s(K.start,startYm);s(K.goals,goals);s(K.cel,celebrated);s(K.onb,true);
     syncCelebrated(true);onbEl.style.display='none';render();
   });
 
   document.getElementById('resetBtn').addEventListener('click',function(){
     if(confirm(t('confirm_reset'))){Object.keys(K).forEach(function(k){localStorage.removeItem(K[k]);});
-      cap=0;mo=500;expenses=2000;age=30;tage=0;rate=5;swr=4;R=rate/100/12;goals=JSON.parse(JSON.stringify(DEF_GOALS));amounts={};hist=[];celebrated=[];baseInvested=0;startYm=ymNow();
+      cap=0;cushion=0;mo=500;expenses=2000;age=30;tage=0;rate=5;swr=4;R=rate/100/12;goals=JSON.parse(JSON.stringify(DEF_GOALS));amounts={};hist=[];celebrated=[];baseInvested=0;startYm=ymNow();
       s(K.lang,LANG);s(K.cur,CUR);render();showOnb();}
   });
   document.getElementById('exportBtn').addEventListener('click',function(){
-    var blob=new Blob([JSON.stringify({version:1,cap:cap,mo:mo,expenses:expenses,age:age,rate:rate,swr:swr,tage:tage,lang:LANG,cur:CUR,baseInvested:baseInvested,startYm:startYm,goals:goals,amounts:amounts,hist:hist,celebrated:celebrated},null,2)],{type:"application/json"});
+    var blob=new Blob([JSON.stringify({version:1,cap:cap,cushion:cushion,mo:mo,expenses:expenses,age:age,rate:rate,swr:swr,tage:tage,lang:LANG,cur:CUR,baseInvested:baseInvested,startYm:startYm,goals:goals,amounts:amounts,hist:hist,celebrated:celebrated},null,2)],{type:"application/json"});
     var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=t('export_filename');a.click();
   });
   document.getElementById('importBtn').addEventListener('click',function(){document.getElementById('importFile').click();});
@@ -828,9 +850,9 @@
       if(!d||typeof d!=='object'||Array.isArray(d))throw new Error("bad");
       if(!confirm(t('confirm_import')))return;
       var nn=function(v,def){return (v!=null&&isFinite(+v))?+v:def;};
-      cap=nn(d.cap,0);mo=nn(d.mo,500);expenses=nn(d.expenses,2000);age=nn(d.age,30);rate=nn(d.rate,5);swr=nn(d.swr,4);tage=nn(d.tage,0);baseInvested=nn(d.baseInvested,cap);startYm=d.startYm||ymNow();goals=Array.isArray(d.goals)?d.goals:DEF_GOALS;amounts=(d.amounts&&typeof d.amounts==='object')?d.amounts:{};hist=Array.isArray(d.hist)?d.hist:[];celebrated=Array.isArray(d.celebrated)?d.celebrated:[];R=rate/100/12;
+      cap=nn(d.cap,0);cushion=nn(d.cushion,0);mo=nn(d.mo,500);expenses=nn(d.expenses,2000);age=nn(d.age,30);rate=nn(d.rate,5);swr=nn(d.swr,4);tage=nn(d.tage,0);baseInvested=nn(d.baseInvested,cap);startYm=d.startYm||ymNow();goals=Array.isArray(d.goals)?d.goals:DEF_GOALS;amounts=(d.amounts&&typeof d.amounts==='object')?d.amounts:{};hist=Array.isArray(d.hist)?d.hist:[];celebrated=Array.isArray(d.celebrated)?d.celebrated:[];R=rate/100/12;
       if(d.lang==='en'||d.lang==='fr')LANG=d.lang; if(SYMS[d.cur])CUR=d.cur; CURSYM=SYMS[CUR];
-      s(K.cap,cap);s(K.mo,mo);s(K.exp,expenses);s(K.age,age);s(K.rate,rate);s(K.swr,swr);s(K.tage,tage);s(K.lang,LANG);s(K.cur,CUR);s(K.base,baseInvested);s(K.start,startYm);s(K.goals,goals);s(K.amt,amounts);s(K.hist,hist);s(K.cel,celebrated);applyStatic();render();
+      s(K.cap,cap);s(K.cushion,cushion);s(K.mo,mo);s(K.exp,expenses);s(K.age,age);s(K.rate,rate);s(K.swr,swr);s(K.tage,tage);s(K.lang,LANG);s(K.cur,CUR);s(K.base,baseInvested);s(K.start,startYm);s(K.goals,goals);s(K.amt,amounts);s(K.hist,hist);s(K.cel,celebrated);applyStatic();render();
     }catch(err){alert(t('alert_invalid'));}finally{e.target.value="";}};r.readAsText(f);
   });
 
