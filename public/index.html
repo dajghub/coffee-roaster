@@ -71,7 +71,8 @@
   .ms-foot{font-size:11.5px;color:var(--dim);margin-top:7px}
   .ms-life{font-size:12.5px;color:var(--mut);margin-top:8px;padding-left:9px;border-left:2px solid var(--line2)}
   .ms-life.warn{color:#8a4f28;border-left-color:var(--caramel)}
-  .info{display:inline-flex;width:15px;height:15px;border-radius:50%;background:var(--line2);color:var(--espresso);font-size:10px;line-height:1;align-items:center;justify-content:center;cursor:pointer;font-weight:700;font-style:italic;vertical-align:middle}
+  .info{display:inline-flex;width:18px;height:18px;border-radius:50%;background:var(--line2);color:var(--espresso);font-size:11px;line-height:1;align-items:center;justify-content:center;cursor:pointer;font-weight:700;font-style:italic;vertical-align:middle;position:relative}
+  .info::after{content:"";position:absolute;inset:-9px} /* zone tactile ~36px sans changer le visuel */
   .info:hover{background:var(--caramel);color:#fff}
   .flyout{display:none;margin-top:8px;background:var(--bg2);border:1px solid var(--line2);border-radius:10px;padding:10px 12px;font-size:11.5px;color:var(--ink);line-height:1.5}
   .flyout.open{display:block}
@@ -111,7 +112,8 @@
     box-shadow:0 12px 30px rgba(59,42,30,.4);opacity:0;transform:translateY(14px);transition:.35s}
   .toast.show{opacity:1;transform:translateY(0)}
   input[type=file]{display:none}
-  @media(max-width:560px){.hero-num{font-size:40px}.cal-months{gap:4px}.cell{font-size:8px}.cell .amt{display:none}
+  @media(max-width:560px){.hero-num{font-size:40px}.cal-months{gap:3px}.cell{font-size:8px}.cell .amt{display:none}
+    .card{padding:18px}
     .tag{margin:12px 0 24px 0}
     .tools{gap:6px;width:100%}
     .tools .mini,.tools button{padding:8px 9px;font-size:12px}
@@ -261,6 +263,7 @@
     <button class="ghost" id="donateBtn" data-i18n="donate_btn">☕ Offre-moi un café</button>
     <button class="ghost" id="shareBtn" data-i18n="share_app_btn">Partager l'app</button>
   </div>
+  <p class="note" style="text-align:center;max-width:560px;margin:16px auto 0;opacity:.85" data-i18n="disclaimer">Coffee Roaster est un outil de suivi et de motivation, à titre informatif — ce n'est pas un conseil en investissement.</p>
 
   <div id="onb">
     <div class="onb-card">
@@ -299,6 +302,7 @@
           <div><label data-i18n="lbl_expenses">Dépenses cibles /mois (€)</label><input type="number" id="onbExp" step="50" value="2000"><p style="font-size:11px;color:var(--dim);margin:6px 0 0" data-i18n="onb_exp_hint">Le train de vie que tu veux financer, pas forcément tes dépenses d'aujourd'hui.</p></div>
         </div>
         <p style="font-size:12px;color:var(--dim);margin:12px 0 16px" data-i18n="onb_note">Tu fixeras ensuite tes objectifs dans le dashboard.</p>
+        <p id="onbErr" style="display:none;font-size:12.5px;color:#a33b2e;background:#f6e3dd;border-radius:9px;padding:9px 12px;margin:0 0 12px"></p>
         <div style="display:flex;gap:8px">
           <button class="ghost" id="onbBack" data-i18n="onb_back">← Retour</button>
           <button id="onbFinish" data-i18n="onb_finish" style="flex:1">Accéder à mon dashboard ☕</button>
@@ -396,6 +400,9 @@
       onb_cushion_hint:"Ce que tu as déjà de côté, liquide (livret…), non investi.",
       fly_cushion:"Ton fonds d'urgence : liquide, stable, non investi (livret…). Il vise ~6 mois de dépenses et n'entre <b>ni dans la projection de rendement, ni dans le revenu passif</b> — il finance seulement le palier « matelas de sécurité ». La cible est calculée sur tes dépenses cibles ; si ton train de vie <b>actuel</b> est différent, ajuste le montant du palier via « ✎ Ajuster mes paliers ».",
       onb_note:"Tu fixeras ensuite tes objectifs dans le dashboard.",
+      onb_err_exp:"Renseigne tes dépenses mensuelles (supérieures à 0) — elles fixent tout ton parcours.",
+      onb_err_age:"Renseigne un âge réaliste (entre 16 et 99 ans).",
+      disclaimer:"Coffee Roaster est un outil de suivi et de motivation, à titre informatif — ce n'est pas un conseil en investissement.",
       onb_back:"← Retour", onb_finish:"Accéder à mon dashboard ☕",
       modal_ey:"☕ Montant investi ce mois", modal_lbl:"Montant (%CUR%)",
       modal_save:"Enregistrer", modal_remove:"Retirer", modal_cancel_aria:"Fermer",
@@ -406,7 +413,7 @@
       passive_full:"Ta cagnotte couvre déjà tout ton train de vie — le café est offert à vie ☕",
       passive_more:"Encore {x}/mois pour couvrir ton quotidien.",
       plusval_pos:"dont <b style='color:var(--green)'>+{x}</b> de plus-values",
-      plusval_neg:"dont <b style='color:#c0392b'>{x}</b> (moins-value latente)",
+      plusval_neg:"dont <b style='color:#c0392b'>{x}</b> (moins-value latente ou retraits)",
       next_all:"Tous les paliers atteints 🎉",
       next_toward:"vers <b>{name}</b> ({v})",
       proj_updated:"Dernière mise à jour : {m}.",
@@ -506,6 +513,9 @@
       onb_cushion_hint:"What you already have set aside, liquid (savings account…), not invested.",
       fly_cushion:"Your emergency fund: liquid, stable, not invested (savings account…). It targets ~6 months of expenses and counts toward <b>neither the return projection nor passive income</b> — it only funds the “safety cushion” milestone. The target is based on your target expenses; if your <b>current</b> spending differs, adjust the milestone amount via “✎ Adjust my milestones”.",
       onb_note:"You'll set your goals next in the dashboard.",
+      onb_err_exp:"Enter your monthly expenses (above 0) — they set your whole journey.",
+      onb_err_age:"Enter a realistic age (between 16 and 99).",
+      disclaimer:"Coffee Roaster is a tracking and motivation tool, for information only — not investment advice.",
       onb_back:"← Back", onb_finish:"Go to my dashboard ☕",
       modal_ey:"☕ Amount invested this month", modal_lbl:"Amount (%CUR%)",
       modal_save:"Save", modal_remove:"Remove", modal_cancel_aria:"Close",
@@ -516,7 +526,7 @@
       passive_full:"Your pot already covers your whole lifestyle — coffee's on the house for life ☕",
       passive_more:"{x}/month more to cover your day-to-day.",
       plusval_pos:"including <b style='color:var(--green)'>+{x}</b> in gains",
-      plusval_neg:"including <b style='color:#c0392b'>{x}</b> (unrealized loss)",
+      plusval_neg:"including <b style='color:#c0392b'>{x}</b> (unrealized loss or withdrawals)",
       next_all:"All milestones reached 🎉",
       next_toward:"toward <b>{name}</b> ({v})",
       proj_updated:"Last updated: {m}.",
@@ -875,12 +885,19 @@
     onbEl.style.display='flex';}
   document.getElementById('onbStart').addEventListener('click',function(){document.getElementById('onb1').style.display='none';document.getElementById('onb2').style.display='block';document.getElementById('onbCap').focus();});
   document.getElementById('onbBack').addEventListener('click',function(){document.getElementById('onb2').style.display='none';document.getElementById('onb1').style.display='block';});
+  function onbError(key,fieldId){var e=document.getElementById('onbErr');e.textContent=t(key);e.style.display='block';var f=document.getElementById(fieldId);if(f){f.style.borderColor='#a33b2e';f.focus();}}
   document.getElementById('onbFinish').addEventListener('click',function(){
-    cap=Math.max(0,+document.getElementById('onbCap').value||0);
-    cushion=Math.max(0,+document.getElementById('onbCushion').value||0);
-    mo=Math.max(0,+document.getElementById('onbMo').value||500);
-    age=Math.max(0,+document.getElementById('onbAge').value||30);
-    expenses=Math.max(0,+document.getElementById('onbExp').value||2000);
+    document.getElementById('onbErr').style.display='none';
+    ['onbExp','onbAge'].forEach(function(id){document.getElementById(id).style.borderColor='';});
+    var pnum=function(id){var n=parseFloat(document.getElementById(id).value);return isFinite(n)?n:NaN;}; // 0 tapé reste 0 (pas de substitution silencieuse)
+    var expV=pnum('onbExp'), ageV=pnum('onbAge'), moV=pnum('onbMo'), capV=pnum('onbCap'), cushV=pnum('onbCushion');
+    if(!(expV>0)){onbError('onb_err_exp','onbExp');return;}          // dépenses cibles : obligatoires, > 0
+    if(!(ageV>=16&&ageV<=99)){onbError('onb_err_age','onbAge');return;} // âge : plage réaliste requise
+    cap=Math.max(0,isFinite(capV)?capV:0);
+    cushion=Math.max(0,isFinite(cushV)?cushV:0);
+    mo=Math.max(0,isFinite(moV)?moV:500);   // versement : 0 accepté (pas d'apport en cours)
+    age=ageV;
+    expenses=expV;
     baseInvested=cap;startYm=ymNow();
     // Versement du mois déjà inclus dans le capital saisi : on tamponne le grain 1 et on le sort de la base (évite double comptage / fausse moins-value).
     if(document.getElementById('onbStamped').checked&&mo>0){amounts[startYm]=mo;baseInvested=Math.max(0,cap-mo);s(K.amt,amounts);}
