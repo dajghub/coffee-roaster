@@ -26,6 +26,7 @@ jobs:
         run: |
           mkdir -p _site
           cp public/Coffee-Roaster-partageable.html _site/index.html
+          echo "getcoffeeroaster.com" > _site/CNAME
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site
