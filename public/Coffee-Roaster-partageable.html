@@ -391,6 +391,7 @@
       toast_served:"☕ {name} servi ! Palier {v} atteint 🎉",
       toast_stamped:"☕ Mois en cours tamponné à {x} — clique le grain pour ajuster",
       toast_adopted:"☕ Nouveau versement adopté : {permo}",
+      toast_capfromlink:"☕ Capital mis à jour depuis ton relevé : {x}",
       confirm_reset:"Réinitialiser toutes tes données ?",
       confirm_import:"Remplacer toutes les données actuelles par cette sauvegarde ?",
       alert_invalid:"Fichier invalide."
@@ -478,6 +479,7 @@
       toast_served:"☕ {name} served! Milestone {v} reached 🎉",
       toast_stamped:"☕ Current month stamped at {x} — click the bean to adjust",
       toast_adopted:"☕ New contribution adopted: {permo}",
+      toast_capfromlink:"☕ Capital updated from your statement: {x}",
       confirm_reset:"Reset all your data?",
       confirm_import:"Replace all current data with this backup?",
       alert_invalid:"Invalid file."
@@ -809,10 +811,48 @@
   document.addEventListener('keydown',function(e){if(e.key==='Escape'&&mEl.style.display==='flex')closeModal();});
   Array.prototype.forEach.call(document.querySelectorAll('#onb2 input'),function(inp){inp.addEventListener('keydown',function(e){if(e.key==='Enter')document.getElementById('onbFinish').click();});});
 
+  // --- Récepteur d'URL (bookmarklet de capture) : ?cap=… ou #cap=… ---
+  function readCapParam(){
+    try{var url=new URL(location.href);var v=url.searchParams.get('cap');
+      if(v==null&&url.hash){url.hash.replace(/^#/,'').split('&').forEach(function(p){var kv=p.split('=');if(decodeURIComponent(kv[0])==='cap')v=kv.slice(1).join('=');});}
+      return v;
+    }catch(e){return null;}
+  }
+  function stripCapFromUrl(){
+    try{var url=new URL(location.href);url.searchParams.delete('cap');
+      if(url.hash){var h=url.hash.replace(/^#/,'').split('&').filter(function(p){return decodeURIComponent(p.split('=')[0])!=='cap';}).join('&');url.hash=h?('#'+h):'';}
+      history.replaceState(null,'',url.pathname+url.search+url.hash);
+    }catch(e){}
+  }
+  function parseIncomingCap(raw){
+    if(raw==null)return null;
+    var str;try{str=decodeURIComponent(String(raw));}catch(e){str=String(raw);}
+    str=str.replace(/[^0-9.,]/g,'');if(!str)return null;
+    // sépare une éventuelle décimale (dernier séparateur suivi de ≤2 chiffres), puis retire les séparateurs de milliers
+    var dec=Math.max(str.lastIndexOf(','),str.lastIndexOf('.'));
+    var intPart=(dec>-1&&(str.length-dec-1)<=2)?str.slice(0,dec):str;
+    intPart=intPart.replace(/[.,]/g,'');
+    var n=parseInt(intPart,10);
+    if(!isFinite(n)||n<0||n>1e12)return null;
+    return n;
+  }
+  function applyIncomingCap(){
+    var raw=readCapParam();if(raw==null)return;
+    var n=parseIncomingCap(raw);stripCapFromUrl();
+    if(n==null)return;
+    if(!g(K.onb,false)){var f=document.getElementById('onbCap');if(f)f.value=n;return;}
+    cap=n;s(K.cap,cap);
+    var ym=ymNow();if(!(amounts[ym]>0)&&mo>0){amounts[ym]=mo;s(K.amt,amounts);}
+    recordSnapshot();syncCelebrated(false);render();
+    toast(t('toast_capfromlink',{x:eur(cap)}));
+  }
+
   applyStatic();
   syncCelebrated(true);
   render();
   if(!g(K.onb,false))showOnb();
+  applyIncomingCap();
+  window.addEventListener('hashchange',applyIncomingCap); // app déjà ouverte : réagir si le hash change
 })();
 </script>
 </body>
