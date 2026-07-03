@@ -1,0 +1,6 @@
+# Données personnelles — ne jamais versionner (le repo pourrait devenir public)
+personal/
+
+# Système / outillage local
+.DS_Store
+.claude/
