@@ -111,7 +111,12 @@
     box-shadow:0 12px 30px rgba(59,42,30,.4);opacity:0;transform:translateY(14px);transition:.35s}
   .toast.show{opacity:1;transform:translateY(0)}
   input[type=file]{display:none}
-  @media(max-width:560px){.hero-num{font-size:40px}.cal-months{gap:4px}.cell{font-size:8px}.cell .amt{display:none}}
+  @media(max-width:560px){.hero-num{font-size:40px}.cal-months{gap:4px}.cell{font-size:8px}.cell .amt{display:none}
+    .tag{margin-left:0}
+    .tools{gap:6px;width:100%}
+    .tools .mini,.tools button{padding:8px 9px;font-size:12px}
+    .tools #resetBtn{margin-left:auto}
+    .fieldrow label{min-height:34px}}
   /* modal */
   #modal{display:none;position:fixed;inset:0;background:rgba(59,42,30,.45);z-index:70;align-items:center;justify-content:center}
   #onb{display:none;position:fixed;inset:0;z-index:100;background:radial-gradient(900px 500px at 78% -12%,#f7edde 0%,var(--bg) 55%);overflow:auto;align-items:center;justify-content:center;padding:24px}
@@ -210,14 +215,14 @@
   <div class="grid2">
     <div class="card">
       <div class="eyebrow" data-i18n="ey_settings">Réglages</div>
-      <div style="display:flex;gap:12px;flex-wrap:wrap">
+      <div class="fieldrow" style="display:flex;gap:12px;flex-wrap:wrap">
         <div style="flex:1;min-width:110px"><label><span data-i18n="lbl_expenses">Dépenses cibles /mois (€)</span> <span class="info" data-k="expenses">i</span></label><input type="number" id="expenses" step="50"><div class="flyout" id="fly-expenses" data-i18n="fly_expenses">Le train de vie mensuel que tu veux pouvoir financer une fois indépendant(e) — c'est lui qui fixe ton chiffre d'indépendance (× 12 ÷ taux de retrait). Si tu ne sais pas, pars de tes dépenses actuelles.</div></div>
         <div style="flex:1;min-width:90px"><label data-i18n="lbl_age">Ton âge</label><input type="number" id="age" step="1"></div>
       </div>
       <div style="margin-top:12px">
         <label><span data-i18n="lbl_cushion">Épargne de précaution (€)</span> <span class="info" data-k="cushion">i</span></label><input type="number" id="cushion" step="100"><div class="flyout" id="fly-cushion" data-i18n="fly_cushion">Ton fonds d'urgence : liquide, stable, non investi (livret…). Il vise ~6 mois de dépenses et n'entre <b>ni dans la projection de rendement, ni dans le revenu passif</b> — il finance seulement le palier « matelas de sécurité ». La cible est calculée sur tes dépenses cibles ; si ton train de vie <b>actuel</b> est différent, ajuste le montant du palier via « ✎ Ajuster mes paliers ».</div>
       </div>
-      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:12px">
+      <div class="fieldrow" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:12px">
         <div style="flex:1;min-width:140px">
           <label><span data-i18n="lbl_return">Rendement annuel réel (%)</span> <span class="info" data-k="return">i</span></label>
           <input type="number" id="rate" step="0.5">
