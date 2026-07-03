@@ -64,6 +64,7 @@
   .ms-sub{color:var(--mut);font-size:12px;font-weight:400;margin-top:2px}
   .ms-foot{font-size:11.5px;color:var(--dim);margin-top:7px}
   .ms-life{font-size:12.5px;color:var(--mut);margin-top:8px;padding-left:9px;border-left:2px solid var(--line2)}
+  .ms-life.warn{color:#8a4f28;border-left-color:var(--caramel)}
   .info{display:inline-flex;width:15px;height:15px;border-radius:50%;background:var(--line2);color:var(--espresso);font-size:10px;line-height:1;align-items:center;justify-content:center;cursor:pointer;font-weight:700;font-style:italic;vertical-align:middle}
   .info:hover{background:var(--caramel);color:#fff}
   .flyout{display:none;margin-top:8px;background:var(--bg2);border:1px solid var(--line2);border-radius:10px;padding:10px 12px;font-size:11.5px;color:var(--ink);line-height:1.5}
@@ -386,6 +387,7 @@
       ms_covers:" · couvre ~{p} % de ton train de vie",
       ms_months:" · ≈ {n} mois de dépenses",
       ms_life_cushion:"Ton matelas de sécurité : de quoi encaisser un imprévu — perte d'emploi, gros pépin — sans t'endetter.",
+      ms_surplus:"Tu dépasses ton matelas de {amount} (~{mlabel} en trop) — ce surplus dort en liquide. Tu pourrais en investir une partie pour accélérer vers l'indépendance.",
       ms_life_early:"Une vraie base : tu peux voir venir et prendre des risques mesurés (formation, projet, reconversion).",
       ms_life_mid:"De quoi lever le pied : temps partiel, pause, ou un travail qui compte plus que le salaire.",
       ms_life_high:"Le travail devient surtout un choix : l'essentiel de ton quotidien tournerait sans lui.",
@@ -489,6 +491,7 @@
       ms_covers:" · covers ~{p}% of your lifestyle",
       ms_months:" · ≈ {n} months of expenses",
       ms_life_cushion:"Your safety cushion: enough to absorb a shock — job loss, a big surprise — without going into debt.",
+      ms_surplus:"You're {amount} over your cushion (~{mlabel} extra) — this surplus sits idle. You could invest part of it to speed toward independence.",
       ms_life_early:"A real base: you can look ahead and take measured risks (training, a project, a career switch).",
       ms_life_mid:"Room to ease off: part-time, a break, or work that matters more than the paycheck.",
       ms_life_high:"Work becomes mostly a choice: most of your day-to-day would run without it.",
@@ -631,10 +634,15 @@
       if(!isMatelas){for(var j=i-1;j>=0;j--){if(!isCushionRung(goals[j].v)){prev=goals[j].v;break;}}}
       var reached=base>=m.v, unlocked=isMatelas?true:(prev===0?true:cap>=prev);
       var cov=expenses>0?passive(m.v)/expenses*100:0;
-      var meaning="", life="";
+      var meaning="", life="", lifeWarn=false;
       if(fi>0){
         if(m.v>=fi*0.995){ meaning=t('ms_indep'); life=t('ms_life_full'); }
-        else if(isMatelas){ meaning=t('ms_months',{n:Math.max(1,Math.round(m.v/expenses))}); life=t('ms_life_cushion'); }
+        else if(isMatelas){
+          meaning=t('ms_months',{n:Math.max(1,Math.round(m.v/expenses))});
+          var surplus=cushion-m.v; // au-delà de la cible ; on ne signale qu'un surplus net (≥ 2 mois de dépenses)
+          if(expenses>0 && surplus>=2*expenses){var nm=Math.round(surplus/expenses);life=t('ms_surplus',{amount:eur(surplus),mlabel:nm+(LANG==='en'?(nm>1?' months':' month'):' mois')});lifeWarn=true;}
+          else life=t('ms_life_cushion');
+        }
         else if(cov>=70){ meaning=t('ms_covers',{p:Math.round(cov)}); life=t('ms_life_high'); }
         else if(cov>=40){ meaning=t('ms_covers',{p:Math.round(cov)}); life=t('ms_life_mid'); }
         else { meaning=t('ms_covers',{p:Math.round(cov)}); life=t('ms_life_early'); }
@@ -650,7 +658,7 @@
         '<div class="ms-sub">'+eurk(m.v)+meaning+'</div></div>'+
         '<div class="ms-fig">'+eurk(unlocked?Math.min(base,m.v):prev)+' / '+eurk(m.v)+' · '+Math.round(pct)+'%</div></div>'+
         '<div class="bar"><div class="fill" style="background:linear-gradient(90deg,'+col+','+col+'bb)"></div></div>'+
-        (life?'<div class="ms-life">'+life+'</div>':'')+
+        (life?'<div class="ms-life'+(lifeWarn?' warn':'')+'">'+life+'</div>':'')+
         '<div class="ms-foot">'+foot+'</div>';
       host.appendChild(d);
       var f=d.querySelector('.fill');requestAnimationFrame(function(){f.style.width=pct+"%";});
