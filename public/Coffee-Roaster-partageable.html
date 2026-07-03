@@ -383,8 +383,8 @@
       proj_updated:"Dernière mise à jour : {m}.",
       proj_prompt:"Mets à jour ta valeur chaque mois — la courbe se trace au fil de l'eau.",
       ms_empty:"Ajoute un palier ci-dessous pour commencer.",
-      ms_indep:" · <span style='color:var(--green)'>ton indépendance — couvre tout ton train de vie ☕</span>",
-      ms_covers:" · couvre ~{p} % de ton train de vie",
+      ms_indep:" · ≈ {inc}/mois — <span style='color:var(--green)'>ton indépendance, tout ton train de vie couvert ☕</span>",
+      ms_covers:" · ≈ {inc}/mois, soit ~{p} % de ton train de vie",
       ms_months:" · ≈ {n} mois de dépenses",
       ms_life_cushion:"Ton matelas de sécurité : de quoi encaisser un imprévu — perte d'emploi, gros pépin — sans t'endetter.",
       ms_surplus:"Tu dépasses ton matelas de {amount} (~{mlabel} en trop) — ce surplus dort en liquide. Tu pourrais en investir une partie pour accélérer vers l'indépendance.",
@@ -487,8 +487,8 @@
       proj_updated:"Last updated: {m}.",
       proj_prompt:"Update your value each month — the curve fills in over time.",
       ms_empty:"Add a milestone below to get started.",
-      ms_indep:" · <span style='color:var(--green)'>your independence — covers your whole lifestyle ☕</span>",
-      ms_covers:" · covers ~{p}% of your lifestyle",
+      ms_indep:" · ≈ {inc}/mo — <span style='color:var(--green)'>your independence, whole lifestyle covered ☕</span>",
+      ms_covers:" · ≈ {inc}/mo, i.e. ~{p}% of your lifestyle",
       ms_months:" · ≈ {n} months of expenses",
       ms_life_cushion:"Your safety cushion: enough to absorb a shock — job loss, a big surprise — without going into debt.",
       ms_surplus:"You're {amount} over your cushion (~{mlabel} extra) — this surplus sits idle. You could invest part of it to speed toward independence.",
@@ -633,19 +633,19 @@
       var prev=0; // borne basse : dernier palier d'INVESTISSEMENT précédent (le matelas ne compte pas dans la chaîne cap)
       if(!isMatelas){for(var j=i-1;j>=0;j--){if(!isCushionRung(goals[j].v)){prev=goals[j].v;break;}}}
       var reached=base>=m.v, unlocked=isMatelas?true:(prev===0?true:cap>=prev);
-      var cov=expenses>0?passive(m.v)/expenses*100:0;
+      var cov=expenses>0?passive(m.v)/expenses*100:0, inc=eur(passive(m.v));
       var meaning="", life="", lifeWarn=false;
       if(fi>0){
-        if(m.v>=fi*0.995){ meaning=t('ms_indep'); life=t('ms_life_full'); }
+        if(m.v>=fi*0.995){ meaning=t('ms_indep',{inc:inc}); life=t('ms_life_full'); }
         else if(isMatelas){
           meaning=t('ms_months',{n:Math.max(1,Math.round(m.v/expenses))});
           var surplus=cushion-m.v; // au-delà de la cible ; on ne signale qu'un surplus net (≥ 2 mois de dépenses)
           if(expenses>0 && surplus>=2*expenses){var nm=Math.round(surplus/expenses);life=t('ms_surplus',{amount:eur(surplus),mlabel:nm+(LANG==='en'?(nm>1?' months':' month'):' mois')});lifeWarn=true;}
           else life=t('ms_life_cushion');
         }
-        else if(cov>=70){ meaning=t('ms_covers',{p:Math.round(cov)}); life=t('ms_life_high'); }
-        else if(cov>=40){ meaning=t('ms_covers',{p:Math.round(cov)}); life=t('ms_life_mid'); }
-        else { meaning=t('ms_covers',{p:Math.round(cov)}); life=t('ms_life_early'); }
+        else if(cov>=70){ meaning=t('ms_covers',{p:Math.round(cov),inc:inc}); life=t('ms_life_high'); }
+        else if(cov>=40){ meaning=t('ms_covers',{p:Math.round(cov),inc:inc}); life=t('ms_life_mid'); }
+        else { meaning=t('ms_covers',{p:Math.round(cov),inc:inc}); life=t('ms_life_early'); }
       }
       var pct=reached?100:unlocked?Math.max(0,Math.min(100,(base-prev)/(m.v-prev)*100)):0;
       var pill=reached?t('pill_served'):unlocked?t('pill_live'):t('pill_lock',{v:eurk(prev)});
