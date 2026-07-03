@@ -275,6 +275,10 @@
             <div style="flex:1"><label data-i18n="lbl_monthly">Versement /mois (€)</label><input type="number" id="onbMo" step="50" value="500"></div>
             <div style="flex:1"><label data-i18n="lbl_age">Ton âge</label><input type="number" id="onbAge" step="1" value="30"></div>
           </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <input type="checkbox" id="onbStamped" style="width:auto;margin:0;accent-color:var(--coffee)">
+            <label for="onbStamped" data-i18n="onb_stamped" style="margin:0;text-transform:none;letter-spacing:0;font-size:12.5px;color:var(--mut);cursor:pointer">J'ai déjà versé mon investissement ce mois-ci (il est compris dans le capital saisi)</label>
+          </div>
           <div><label data-i18n="lbl_expenses">Dépenses cibles /mois (€)</label><input type="number" id="onbExp" step="50" value="2000"><p style="font-size:11px;color:var(--dim);margin:6px 0 0" data-i18n="onb_exp_hint">Le train de vie que tu veux financer, pas forcément tes dépenses d'aujourd'hui.</p></div>
         </div>
         <p style="font-size:12px;color:var(--dim);margin:12px 0 16px" data-i18n="onb_note">Tu fixeras ensuite tes objectifs dans le dashboard.</p>
@@ -345,6 +349,7 @@
       lbl_expenses:"Dépenses cibles /mois (%CUR%)", lbl_age:"Ton âge",
       fly_expenses:"Le train de vie mensuel que tu veux pouvoir financer une fois indépendant(e) — c'est lui qui fixe ton chiffre d'indépendance (× 12 ÷ taux de retrait). Si tu ne sais pas, pars de tes dépenses actuelles.",
       onb_exp_hint:"Le train de vie que tu veux financer, pas forcément tes dépenses d'aujourd'hui.",
+      onb_stamped:"J'ai déjà versé mon investissement ce mois-ci (il est compris dans le capital saisi)",
       lbl_return:"Rendement annuel réel (%)",
       fly_return:"Le gain annuel moyen espéré de tes placements, <b>après inflation</b> (« réel »). Repères par profil : <b>100 % actions</b> ~5 à 6 %/an · <b>diversifié</b> (type 60/40 actions/obligations) ~3,5 à 4,5 % · <b>fonds euros / obligations</b> ~1 à 2 %. Au-delà de 6-7 %, méfiance — on se berce vite d'illusions. À noter : le « plan » du graphique est en euros d'aujourd'hui, alors que ta valeur saisie gonfle aussi avec l'inflation — « battre le plan » sur la durée est donc en partie normal.",
       lbl_swr:"Taux de retrait (%)",
@@ -449,6 +454,7 @@
       lbl_expenses:"Target expenses /month (%CUR%)", lbl_age:"Your age",
       fly_expenses:"The monthly lifestyle you want to be able to fund once independent — it sets your independence number (× 12 ÷ withdrawal rate). If unsure, start from your current expenses.",
       onb_exp_hint:"The lifestyle you want to fund — not necessarily what you spend today.",
+      onb_stamped:"I've already made this month's contribution (it's included in the capital above)",
       lbl_return:"Real annual return (%)",
       fly_return:"The average yearly gain you expect from your investments, <b>after inflation</b> (real). Benchmarks by profile: <b>100% stocks</b> ~5 to 6%/yr · <b>diversified</b> (e.g. 60/40 stocks/bonds) ~3.5 to 4.5% · <b>bonds / cash-like</b> ~1 to 2%. Above 6-7%, be wary — it's easy to fool yourself. Note: the chart's plan is in today's money, while the value you enter also inflates over time — so beating the plan over the years is partly normal.",
       lbl_swr:"Withdrawal rate (%)",
@@ -835,6 +841,7 @@
   var onbEl=document.getElementById('onb');
   function showOnb(){document.getElementById('onb1').style.display='block';document.getElementById('onb2').style.display='none';
     document.getElementById('onbCap').value=cap||'';document.getElementById('onbCushion').value=cushion||'';document.getElementById('onbMo').value=mo;document.getElementById('onbAge').value=age;document.getElementById('onbExp').value=expenses;
+    document.getElementById('onbStamped').checked=false;
     onbEl.style.display='flex';}
   document.getElementById('onbStart').addEventListener('click',function(){document.getElementById('onb1').style.display='none';document.getElementById('onb2').style.display='block';document.getElementById('onbCap').focus();});
   document.getElementById('onbBack').addEventListener('click',function(){document.getElementById('onb2').style.display='none';document.getElementById('onb1').style.display='block';});
@@ -845,6 +852,8 @@
     age=Math.max(0,+document.getElementById('onbAge').value||30);
     expenses=Math.max(0,+document.getElementById('onbExp').value||2000);
     baseInvested=cap;startYm=ymNow();
+    // Versement du mois déjà inclus dans le capital saisi : on tamponne le grain 1 et on le sort de la base (évite double comptage / fausse moins-value).
+    if(document.getElementById('onbStamped').checked&&mo>0){amounts[startYm]=mo;baseInvested=Math.max(0,cap-mo);s(K.amt,amounts);}
     goals=seedGoals();celebrated=[];
     s(K.cap,cap);s(K.cushion,cushion);s(K.mo,mo);s(K.age,age);s(K.exp,expenses);s(K.base,baseInvested);s(K.start,startYm);s(K.goals,goals);s(K.cel,celebrated);s(K.onb,true);
     syncCelebrated(true);onbEl.style.display='none';render();
