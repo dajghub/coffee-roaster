@@ -200,7 +200,7 @@
     <div class="card">
       <div class="eyebrow" data-i18n="ey_settings">Réglages</div>
       <div style="display:flex;gap:12px;flex-wrap:wrap">
-        <div style="flex:1;min-width:110px"><label data-i18n="lbl_expenses">Dépenses /mois (€)</label><input type="number" id="expenses" step="50"></div>
+        <div style="flex:1;min-width:110px"><label><span data-i18n="lbl_expenses">Dépenses cibles /mois (€)</span> <span class="info" data-k="expenses">i</span></label><input type="number" id="expenses" step="50"><div class="flyout" id="fly-expenses" data-i18n="fly_expenses">Le train de vie mensuel que tu veux pouvoir financer une fois indépendant(e) — c'est lui qui fixe ton chiffre d'indépendance (× 12 ÷ taux de retrait). Si tu ne sais pas, pars de tes dépenses actuelles.</div></div>
         <div style="flex:1;min-width:90px"><label data-i18n="lbl_age">Ton âge</label><input type="number" id="age" step="1"></div>
       </div>
       <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:12px">
@@ -265,7 +265,7 @@
             <div style="flex:1"><label data-i18n="lbl_monthly">Versement /mois (€)</label><input type="number" id="onbMo" step="50" value="500"></div>
             <div style="flex:1"><label data-i18n="lbl_age">Ton âge</label><input type="number" id="onbAge" step="1" value="30"></div>
           </div>
-          <div><label data-i18n="lbl_expenses">Dépenses /mois (€)</label><input type="number" id="onbExp" step="50" value="2000"></div>
+          <div><label data-i18n="lbl_expenses">Dépenses cibles /mois (€)</label><input type="number" id="onbExp" step="50" value="2000"><p style="font-size:11px;color:var(--dim);margin:6px 0 0" data-i18n="onb_exp_hint">Le train de vie que tu veux financer, pas forcément tes dépenses d'aujourd'hui.</p></div>
         </div>
         <p style="font-size:12px;color:var(--dim);margin:12px 0 16px" data-i18n="onb_note">Tu fixeras ensuite tes objectifs dans le dashboard.</p>
         <div style="display:flex;gap:8px">
@@ -332,7 +332,9 @@
       slash_mo:"/mois",
       lbl_freeat:"Libre à (âge)",
       ey_settings:"Réglages",
-      lbl_expenses:"Dépenses /mois (%CUR%)", lbl_age:"Ton âge",
+      lbl_expenses:"Dépenses cibles /mois (%CUR%)", lbl_age:"Ton âge",
+      fly_expenses:"Le train de vie mensuel que tu veux pouvoir financer une fois indépendant(e) — c'est lui qui fixe ton chiffre d'indépendance (× 12 ÷ taux de retrait). Si tu ne sais pas, pars de tes dépenses actuelles.",
+      onb_exp_hint:"Le train de vie que tu veux financer, pas forcément tes dépenses d'aujourd'hui.",
       lbl_return:"Rendement annuel réel (%)",
       fly_return:"Le gain annuel moyen espéré de tes placements, <b>après inflation</b> (« réel »). Repères par profil : <b>100 % actions</b> ~5 à 6 %/an · <b>diversifié</b> (type 60/40 actions/obligations) ~3,5 à 4,5 % · <b>fonds euros / obligations</b> ~1 à 2 %. Au-delà de 6-7 %, méfiance — on se berce vite d'illusions. À noter : le « plan » du graphique est en euros d'aujourd'hui, alors que ta valeur saisie gonfle aussi avec l'inflation — « battre le plan » sur la durée est donc en partie normal.",
       lbl_swr:"Taux de retrait (%)",
@@ -420,7 +422,9 @@
       slash_mo:"/month",
       lbl_freeat:"Free at (age)",
       ey_settings:"Settings",
-      lbl_expenses:"Expenses /month (%CUR%)", lbl_age:"Your age",
+      lbl_expenses:"Target expenses /month (%CUR%)", lbl_age:"Your age",
+      fly_expenses:"The monthly lifestyle you want to be able to fund once independent — it sets your independence number (× 12 ÷ withdrawal rate). If unsure, start from your current expenses.",
+      onb_exp_hint:"The lifestyle you want to fund — not necessarily what you spend today.",
       lbl_return:"Real annual return (%)",
       fly_return:"The average yearly gain you expect from your investments, <b>after inflation</b> (real). Benchmarks by profile: <b>100% stocks</b> ~5 to 6%/yr · <b>diversified</b> (e.g. 60/40 stocks/bonds) ~3.5 to 4.5% · <b>bonds / cash-like</b> ~1 to 2%. Above 6-7%, be wary — it's easy to fool yourself. Note: the chart's plan is in today's money, while the value you enter also inflates over time — so beating the plan over the years is partly normal.",
       lbl_swr:"Withdrawal rate (%)",
