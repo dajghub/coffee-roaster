@@ -6,6 +6,11 @@
 <title>Coffee Roaster — Roast your capital toward financial independence</title>
 <meta name="description" content="Track your progress toward financial independence, loyalty-card style. 100% private: your data stays in your browser, no account, no server.">
 <meta name="theme-color" content="#efe3d3">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="apple-touch-icon" href="/icon-180.png">
+<meta name="apple-mobile-web-app-title" content="Coffee Roaster">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="google-site-verification" content="7VHBNmMOzvTdpqIyMIpPo4xXP1tIbSzLA6h0irv0OPU">
 <meta property="og:title" content="Coffee Roaster — Roast your capital toward financial independence">
 <meta property="og:description" content="Track your progress toward financial independence, loyalty-card style. 100% private, no account.">
@@ -33,7 +38,7 @@
   .headrow{display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap}
   .brand{display:flex;align-items:center;gap:14px}
   .cup{width:44px;height:44px;flex:none}
-  h1{font-family:'Space Grotesk','Inter',sans-serif;font-size:26px;font-weight:600;margin:0;color:var(--espresso);letter-spacing:-.3px}
+  h1,.wordmark{font-family:'Space Grotesk','Inter',sans-serif;font-size:26px;font-weight:600;margin:0;color:var(--espresso);letter-spacing:-.3px}
   .tag{color:var(--mut);font-size:13px;margin:2px 0 24px 58px}
   .tools{display:flex;gap:8px;flex-wrap:wrap;margin-left:auto;align-items:center}
   .mini{background:var(--bg2);border:1px solid var(--line2);color:var(--mut);border-radius:9px;padding:9px 8px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
@@ -41,7 +46,7 @@
   .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px;margin-bottom:18px;box-shadow:var(--shadow)}
   .grid2{display:grid;grid-template-columns:1.1fr .9fr;gap:18px}
   @media(max-width:760px){.grid2{grid-template-columns:1fr}.grid2 .card:not(:last-child){margin-bottom:0}}
-  .eyebrow{font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:9px}
+  .eyebrow{font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:1px;font-weight:700;margin:0 0 9px 0}
   label{display:block;font-size:11px;color:var(--dim);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
   input[type=number],input[type=text]{width:100%;background:var(--bg2);border:1px solid var(--line2);color:var(--ink);
     border-radius:9px;padding:10px 12px;font-size:15px;font-variant-numeric:tabular-nums}
@@ -122,7 +127,7 @@
     .fieldrow>div{width:100%;flex:none;min-width:0}
     .eyebrow-tail{display:none}}
   /* modal */
-  #modal{display:none;position:fixed;inset:0;background:rgba(59,42,30,.45);z-index:70;align-items:center;justify-content:center}
+  #modal,#confirm{display:none;position:fixed;inset:0;background:rgba(59,42,30,.45);z-index:70;align-items:center;justify-content:center;padding:24px}
   #onb{display:none;position:fixed;inset:0;z-index:100;background:radial-gradient(900px 500px at 78% -12%,#f7edde 0%,var(--bg) 55%);overflow:auto;align-items:center;justify-content:center;padding:24px}
   .onb-card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:30px;max-width:460px;width:100%;box-shadow:var(--shadow)}
 </style>
@@ -151,7 +156,7 @@
 
   <div class="grid2">
     <div class="card">
-      <div class="eyebrow" data-i18n="ey_portfolio">Valeur de mon portefeuille</div>
+      <h2 class="eyebrow" data-i18n="ey_portfolio">Valeur de mon portefeuille</h2>
       <div><span class="hero-num" id="capVal">—</span></div>
       <div id="plusval" style="font-size:12.5px;margin-top:4px;color:var(--mut)"></div>
       <div style="margin-top:14px">
@@ -167,7 +172,7 @@
       <p class="hint" id="projLine"></p>
     </div>
     <div class="card">
-      <div class="eyebrow"><span data-i18n="ey_passive">☕ Revenu passif — ce que ta cagnotte te verse</span> <span class="info" data-k="passive">i</span></div>
+      <h2 class="eyebrow"><span data-i18n="ey_passive">☕ Revenu passif — ce que ta cagnotte te verse</span> <span class="info" data-k="passive">i</span></h2>
       <div><span class="capval" id="passiveHero">—</span><span class="hero-unit" data-i18n="unit_permonth"> / mois</span></div>
       <div style="margin-top:14px">
         <div style="display:flex;justify-content:space-between;font-size:12.5px;color:var(--mut);margin-bottom:7px">
@@ -181,7 +186,7 @@
   </div>
 
   <div class="card">
-    <div class="eyebrow" data-i18n="ey_milestones">Les paliers — de l'Americano à l'Espresso</div>
+    <h2 class="eyebrow" data-i18n="ey_milestones">Les paliers — de l'Americano à l'Espresso</h2>
     <div id="milestones"></div>
     <div id="goalsEditWrap" style="display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line2)">
       <div id="goalsEdit"></div>
@@ -191,7 +196,7 @@
   </div>
 
   <div class="card">
-    <div class="eyebrow" data-i18n="ey_sim">☕ Simulateur</div>
+    <h2 class="eyebrow" data-i18n="ey_sim">☕ Simulateur</h2>
     <div class="seg">
       <button id="simModeExtra" data-i18n="sim_mode_extra" aria-pressed="true">Et si j'ajoute un peu ?</button>
       <button id="simModeAge" class="ghost" data-i18n="sim_mode_age" aria-pressed="false">Et si je vise un âge ?</button>
@@ -218,7 +223,7 @@
 
   <div class="grid2">
     <div class="card">
-      <div class="eyebrow" data-i18n="ey_settings">Réglages</div>
+      <h2 class="eyebrow" data-i18n="ey_settings">Réglages</h2>
       <div class="fieldrow" style="display:flex;gap:12px;flex-wrap:wrap">
         <div style="flex:1;min-width:110px"><label><span data-i18n="lbl_expenses">Dépenses cibles /mois (€)</span> <span class="info" data-k="expenses">i</span></label><input type="number" id="expenses" step="50"><div class="flyout" id="fly-expenses" data-i18n="fly_expenses">Le train de vie mensuel que tu veux pouvoir financer une fois indépendant(e) — c'est lui qui fixe ton chiffre d'indépendance (× 12 ÷ taux de retrait). Si tu ne sais pas, pars de tes dépenses actuelles.</div></div>
         <div style="flex:1;min-width:90px"><label data-i18n="lbl_age">Ton âge</label><input type="number" id="age" step="1"></div>
@@ -241,16 +246,17 @@
       <p class="note" id="regNote"></p>
     </div>
     <div class="card">
-      <div class="eyebrow" data-i18n="ey_chart">Évolution — réel vs plan</div>
+      <h2 class="eyebrow" data-i18n="ey_chart">Évolution — réel vs plan</h2>
       <div class="chart-wrap"><canvas id="chart"></canvas></div>
       <div class="legend"><span><span class="sw" style="background:var(--coffee)"></span><span data-i18n="lg_real">Réel</span></span><span><span class="sw" style="background:var(--dim);height:2px"></span><span data-i18n="lg_plan">Plan</span></span></div>
     </div>
   </div>
 
   <div class="card">
-    <div class="eyebrow" data-i18n="ey_loyalty">Carte de fidélité — un grain torréfié par mois investi</div>
+    <h2 class="eyebrow" data-i18n="ey_loyalty">Carte de fidélité — un grain torréfié par mois investi</h2>
     <div class="stamps">
       <div class="kpi"><div class="n" id="streak">0</div><div class="l" data-i18n="kpi_streak">série en cours (mois)</div></div>
+      <div class="kpi"><div class="n" id="bestStreak">0</div><div class="l" data-i18n="kpi_best">meilleure série (mois)</div></div>
       <div class="kpi"><div class="n" id="totalMonths">0</div><div class="l" data-i18n="kpi_months">mois investis</div></div>
       <div class="kpi"><div class="n" id="totalInvested">0 €</div><div class="l" data-i18n="kpi_total">total investi</div></div>
     </div>
@@ -276,7 +282,7 @@
             <path d="M15 10c-1.5 2 1.5 3 0 5M22 9c-1.5 2 1.5 3 0 5M29 10c-1.5 2 1.5 3 0 5" stroke="#c08a4a" stroke-width="2" stroke-linecap="round"/>
             <rect x="9" y="17" width="26" height="4" fill="#c08a4a"/>
           </svg>
-          <h1>Coffee Roaster</h1>
+          <div class="wordmark">Coffee Roaster</div>
         </div>
         <p style="font-size:14.5px;color:var(--ink);margin:0 0 8px" data-i18n="onb_tag">Torréfie ton capital jusqu'à l'indépendance financière — un grain à la fois, à ton rythme.</p>
         <p style="font-size:13px;color:var(--mut);margin:0 0 20px" data-i18n="onb_privacy">☕ <b>100 % privé</b> : tes chiffres restent dans ton navigateur. Aucun compte, aucun serveur, personne d'autre n'y accède.</p>
@@ -321,6 +327,15 @@
         <button id="modalSave" data-i18n="modal_save" style="flex:1">Enregistrer</button>
         <button class="ghost" id="modalRemove" data-i18n="modal_remove">Retirer</button>
         <button class="ghost" id="modalCancel" data-i18n-aria="modal_cancel_aria" aria-label="Fermer">✕</button>
+      </div>
+    </div>
+  </div>
+  <div id="confirm" role="dialog" aria-modal="true" aria-labelledby="confirmMsg">
+    <div style="background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px;width:340px;max-width:100%;box-shadow:0 20px 60px rgba(59,42,30,.35)">
+      <p id="confirmMsg" style="font-size:14px;color:var(--ink);margin:0 0 18px;line-height:1.5">—</p>
+      <div style="display:flex;gap:8px">
+        <button class="ghost" id="confirmCancel" data-i18n="btn_cancel" style="flex:1">Annuler</button>
+        <button id="confirmOk" data-i18n="btn_confirm" style="flex:1">Confirmer</button>
       </div>
     </div>
   </div>
@@ -381,7 +396,7 @@
       tt_real:"Réel : ", tt_plan:"Plan : ",
       chart_unavail:"Graphique indisponible pour l'instant (connexion requise au premier chargement).",
       ey_loyalty:"Carte de fidélité<span class='eyebrow-tail'> — un grain torréfié par mois investi</span>",
-      kpi_streak:"série en cours (mois)", kpi_months:"mois investis", kpi_total:"total investi",
+      kpi_streak:"série en cours (mois)", kpi_best:"meilleure série (mois)", kpi_months:"mois investis", kpi_total:"total investi",
       cal_help:"« + » pour investir&nbsp;&nbsp;·&nbsp;&nbsp;grain plein pour ajuster",
       footer_note:"Tes chiffres vivent uniquement dans ce navigateur et ne sont jamais envoyés en ligne (seules des statistiques de visite anonymes, sans cookies, sont mesurées).<br>Pense à cliquer <b>Exporter</b> pour télécharger une sauvegarde de temps en temps : vider le cache du navigateur les effacerait.",
       donate_btn:"☕ Offre-moi un café",
@@ -406,6 +421,7 @@
       onb_back:"← Retour", onb_finish:"Accéder à mon dashboard ☕",
       modal_ey:"☕ Montant investi ce mois", modal_lbl:"Montant (%CUR%)",
       modal_save:"Enregistrer", modal_remove:"Retirer", modal_cancel_aria:"Fermer",
+      btn_confirm:"Confirmer", btn_cancel:"Annuler",
       export_filename:"coffee-roaster-sauvegarde.json",
       del_title:"Supprimer", del_aria:"Supprimer ce palier",
       reg_note:"Projection : {rate} %/an réel · revenu passif à {swr} % de retrait.",
@@ -494,7 +510,7 @@
       tt_real:"Actual: ", tt_plan:"Plan: ",
       chart_unavail:"Chart unavailable for now (connection needed on first load).",
       ey_loyalty:"Loyalty card<span class='eyebrow-tail'> — one roasted bean per month invested</span>",
-      kpi_streak:"current streak (months)", kpi_months:"months invested", kpi_total:"total invested",
+      kpi_streak:"current streak (months)", kpi_best:"best streak (months)", kpi_months:"months invested", kpi_total:"total invested",
       cal_help:"« + » to invest&nbsp;&nbsp;·&nbsp;&nbsp;full bean to adjust",
       footer_note:"Your figures live only in this browser and are never sent online (only anonymous, cookie-free visit stats are measured).<br>Click <b>Export</b> now and then to download a backup: clearing your browser cache would erase it.",
       donate_btn:"☕ Buy me a coffee",
@@ -519,6 +535,7 @@
       onb_back:"← Back", onb_finish:"Go to my dashboard ☕",
       modal_ey:"☕ Amount invested this month", modal_lbl:"Amount (%CUR%)",
       modal_save:"Save", modal_remove:"Remove", modal_cancel_aria:"Close",
+      btn_confirm:"Confirm", btn_cancel:"Cancel",
       export_filename:"coffee-roaster-backup.json",
       del_title:"Delete", del_aria:"Delete this milestone",
       reg_note:"Projection: {rate}%/yr real · passive income at {swr}% withdrawal.",
@@ -804,8 +821,10 @@
       host.appendChild(mr);
     }
     var st=0;for(var i=1;i<=curIdx;i++){var fm=addMonths(startYm,i-1);if((amounts[fm]||0)>0)st++;else if(i<curIdx)st=0;}
+    var best=0,run=0;for(var i2=1;i2<=curIdx;i2++){if((amounts[addMonths(startYm,i2-1)]||0)>0){run++;if(run>best)best=run;}else run=0;} // plus longue série consécutive
     var cnt=0;for(var k in amounts){if(amounts[k]>0)cnt++;}
     document.getElementById('streak').textContent=st;
+    document.getElementById('bestStreak').textContent=best;
     document.getElementById('totalMonths').textContent=cnt;
     document.getElementById('totalInvested').textContent=eur(baseInvested+sumStamped());
   }
@@ -906,10 +925,19 @@
     syncCelebrated(true);onbEl.style.display='none';render();
   });
 
+  // Modal de confirmation générique (remplace confirm() natif)
+  var confirmCb=null, confirmEl=document.getElementById('confirm');
+  function showConfirm(msg,cb){document.getElementById('confirmMsg').textContent=msg;confirmCb=cb;confirmEl.style.display='flex';setTimeout(function(){document.getElementById('confirmOk').focus();},30);}
+  function closeConfirm(){confirmEl.style.display='none';confirmCb=null;}
+  document.getElementById('confirmOk').addEventListener('click',function(){var cb=confirmCb;closeConfirm();if(cb)cb();});
+  document.getElementById('confirmCancel').addEventListener('click',closeConfirm);
+  confirmEl.addEventListener('click',function(e){if(e.target===confirmEl)closeConfirm();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&confirmEl.style.display==='flex')closeConfirm();});
+
   document.getElementById('resetBtn').addEventListener('click',function(){
-    if(confirm(t('confirm_reset'))){Object.keys(K).forEach(function(k){localStorage.removeItem(K[k]);});
+    showConfirm(t('confirm_reset'),function(){Object.keys(K).forEach(function(k){localStorage.removeItem(K[k]);});
       cap=0;cushion=0;mo=500;expenses=2000;age=30;tage=0;rate=5;swr=4;R=rate/100/12;goals=JSON.parse(JSON.stringify(DEF_GOALS));amounts={};hist=[];celebrated=[];baseInvested=0;startYm=ymNow();
-      s(K.lang,LANG);s(K.cur,CUR);render();showOnb();}
+      s(K.lang,LANG);s(K.cur,CUR);render();showOnb();});
   });
   function doShare(txt){
     var url='https://getcoffeeroaster.com/';
@@ -929,14 +957,18 @@
   document.getElementById('importBtn').addEventListener('click',function(){document.getElementById('importFile').click();});
   document.getElementById('importFile').addEventListener('change',function(e){
     var f=e.target.files[0];if(!f)return;var r=new FileReader();
-    r.onload=function(){try{var d=JSON.parse(r.result);
-      if(!d||typeof d!=='object'||Array.isArray(d))throw new Error("bad");
-      if(!confirm(t('confirm_import')))return;
-      var nn=function(v,def){return (v!=null&&isFinite(+v))?+v:def;};
-      cap=nn(d.cap,0);cushion=nn(d.cushion,0);mo=nn(d.mo,500);expenses=nn(d.expenses,2000);age=nn(d.age,30);rate=nn(d.rate,5);swr=nn(d.swr,4);tage=nn(d.tage,0);baseInvested=nn(d.baseInvested,cap);startYm=d.startYm||ymNow();goals=Array.isArray(d.goals)?d.goals:DEF_GOALS;amounts=(d.amounts&&typeof d.amounts==='object')?d.amounts:{};hist=Array.isArray(d.hist)?d.hist:[];celebrated=Array.isArray(d.celebrated)?d.celebrated:[];R=rate/100/12;
-      if(d.lang==='en'||d.lang==='fr')LANG=d.lang; if(SYMS[d.cur])CUR=d.cur; CURSYM=SYMS[CUR];
-      s(K.cap,cap);s(K.cushion,cushion);s(K.mo,mo);s(K.exp,expenses);s(K.age,age);s(K.rate,rate);s(K.swr,swr);s(K.tage,tage);s(K.lang,LANG);s(K.cur,CUR);s(K.base,baseInvested);s(K.start,startYm);s(K.goals,goals);s(K.amt,amounts);s(K.hist,hist);s(K.cel,celebrated);applyStatic();render();
-    }catch(err){alert(t('alert_invalid'));}finally{e.target.value="";}};r.readAsText(f);
+    r.onload=function(){
+      var d;
+      try{d=JSON.parse(r.result);if(!d||typeof d!=='object'||Array.isArray(d))throw 0;}
+      catch(err){e.target.value="";toast(t('alert_invalid'));return;}
+      e.target.value="";
+      showConfirm(t('confirm_import'),function(){
+        var nn=function(v,def){return (v!=null&&isFinite(+v))?+v:def;};
+        cap=nn(d.cap,0);cushion=nn(d.cushion,0);mo=nn(d.mo,500);expenses=nn(d.expenses,2000);age=nn(d.age,30);rate=nn(d.rate,5);swr=nn(d.swr,4);tage=nn(d.tage,0);baseInvested=nn(d.baseInvested,cap);startYm=d.startYm||ymNow();goals=Array.isArray(d.goals)?d.goals:DEF_GOALS;amounts=(d.amounts&&typeof d.amounts==='object')?d.amounts:{};hist=Array.isArray(d.hist)?d.hist:[];celebrated=Array.isArray(d.celebrated)?d.celebrated:[];R=rate/100/12;
+        if(d.lang==='en'||d.lang==='fr')LANG=d.lang; if(SYMS[d.cur])CUR=d.cur; CURSYM=SYMS[CUR];
+        s(K.cap,cap);s(K.cushion,cushion);s(K.mo,mo);s(K.exp,expenses);s(K.age,age);s(K.rate,rate);s(K.swr,swr);s(K.tage,tage);s(K.lang,LANG);s(K.cur,CUR);s(K.base,baseInvested);s(K.start,startYm);s(K.goals,goals);s(K.amt,amounts);s(K.hist,hist);s(K.cel,celebrated);applyStatic();render();
+      });
+    };r.readAsText(f);
   });
 
   // modal
