@@ -251,6 +251,10 @@
         </div>
         <p style="font-size:14.5px;color:var(--ink);margin:0 0 8px" data-i18n="onb_tag">Torréfie ton capital jusqu'à l'indépendance financière — un grain à la fois, à ton rythme.</p>
         <p style="font-size:13px;color:var(--mut);margin:0 0 20px" data-i18n="onb_privacy">☕ <b>100 % privé</b> : tes chiffres restent dans ton navigateur. Aucun compte, aucun serveur, personne d'autre n'y accède.</p>
+        <div style="display:flex;gap:8px;margin:0 0 14px">
+          <select id="onbLang" class="mini" style="flex:1" aria-label="Language / Langue"><option value="fr">Français</option><option value="en">English</option></select>
+          <select id="onbCur" class="mini" style="flex:1" aria-label="Currency / Devise"><option value="EUR">€ — Euro</option><option value="USD">$ — Dollar</option><option value="GBP">£ — Pound</option></select>
+        </div>
         <button id="onbStart" data-i18n="onb_start" style="width:100%">Commencer</button>
       </div>
       <div id="onb2" style="display:none">
@@ -302,7 +306,8 @@
   // --- i18n & devise ---
   var SYMS={EUR:"€",USD:"$",GBP:"£"};
   var LANG=g(K.lang,((navigator.language||"fr").toLowerCase().indexOf("fr")===0)?"fr":"en"); if(LANG!=="fr"&&LANG!=="en")LANG="fr";
-  var CUR=g(K.cur,"EUR"); if(!SYMS[CUR])CUR="EUR";
+  var CUR=g(K.cur,null);
+  if(!SYMS[CUR]){var NL=(navigator.language||"").toLowerCase();CUR=NL.indexOf("en-gb")===0?"GBP":(NL.indexOf("en")===0?"USD":"EUR");}
   var CURSYM=SYMS[CUR];
   function numLocale(){return LANG==="fr"?"fr-FR":"en-US";}
   var MONTHS={fr:["janv.","févr.","mars","avr.","mai","juin","juil.","août","sept.","oct.","nov.","déc."],
@@ -533,8 +538,8 @@
     Array.prototype.forEach.call(document.querySelectorAll('[data-i18n-aria]'),function(el){el.setAttribute('aria-label',t(el.getAttribute('data-i18n-aria')));});
     var eg=document.getElementById('editGoalsBtn'),w=document.getElementById('goalsEditWrap');
     if(eg&&w)eg.textContent=(w.style.display!=='none')?t('btn_close_edit'):t('btn_edit_goals');
-    var ls=document.getElementById('langSel');if(ls)ls.value=LANG;
-    var cs=document.getElementById('curSel');if(cs)cs.value=CUR;
+    ['langSel','onbLang'].forEach(function(id){var el=document.getElementById(id);if(el)el.value=LANG;});
+    ['curSel','onbCur'].forEach(function(id){var el=document.getElementById(id);if(el)el.value=CUR;});
   }
 
   function render(){
@@ -726,8 +731,10 @@
   bind('age',K.age,function(v){age=v;});
   document.getElementById('rate').addEventListener('change',function(e){rate=Math.max(0,+e.target.value||6);R=rate/100/12;s(K.rate,rate);render();});
   document.getElementById('swr').addEventListener('change',function(e){swr=Math.max(0.1,+e.target.value||4);s(K.swr,swr);render();});
-  document.getElementById('langSel').addEventListener('change',function(){LANG=this.value==='en'?'en':'fr';s(K.lang,LANG);applyStatic();render();});
-  document.getElementById('curSel').addEventListener('change',function(){CUR=SYMS[this.value]?this.value:'EUR';CURSYM=SYMS[CUR];s(K.cur,CUR);applyStatic();render();});
+  function setLang(v){LANG=v==='en'?'en':'fr';s(K.lang,LANG);applyStatic();render();}
+  function setCur(v){CUR=SYMS[v]?v:'EUR';CURSYM=SYMS[CUR];s(K.cur,CUR);applyStatic();render();}
+  ['langSel','onbLang'].forEach(function(id){document.getElementById(id).addEventListener('change',function(){setLang(this.value);});});
+  ['curSel','onbCur'].forEach(function(id){document.getElementById(id).addEventListener('change',function(){setCur(this.value);});});
   Array.prototype.forEach.call(document.querySelectorAll('.info'),function(ic){
     ic.setAttribute('tabindex','0');ic.setAttribute('role','button');ic.setAttribute('aria-expanded','false');ic.setAttribute('aria-label','Explication');
     function tog(){var f=document.getElementById('fly-'+ic.getAttribute('data-k'));if(f){f.classList.toggle('open');ic.setAttribute('aria-expanded',f.classList.contains('open')?'true':'false');}}
