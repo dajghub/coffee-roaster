@@ -27,7 +27,9 @@
   .cup{width:44px;height:44px;flex:none}
   h1{font-family:'Space Grotesk','Inter',sans-serif;font-size:26px;font-weight:600;margin:0;color:var(--espresso);letter-spacing:-.3px}
   .tag{color:var(--mut);font-size:13px;margin:2px 0 24px 58px}
-  .tools{display:flex;gap:8px;flex-wrap:wrap;margin-left:auto}
+  .tools{display:flex;gap:8px;flex-wrap:wrap;margin-left:auto;align-items:center}
+  .mini{background:var(--bg2);border:1px solid var(--line2);color:var(--mut);border-radius:9px;padding:9px 8px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+  .mini:focus{outline:none;border-color:var(--coffee)}
   .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px;margin-bottom:18px;box-shadow:var(--shadow)}
   .grid2{display:grid;grid-template-columns:1.1fr .9fr;gap:18px}
   @media(max-width:760px){.grid2{grid-template-columns:1fr}}
@@ -118,17 +120,19 @@
       <h1>Coffee Roaster</h1>
     </div>
     <div class="tools">
-      <button class="ghost" id="exportBtn" title="Télécharge un fichier de sauvegarde">Exporter</button>
-      <button class="ghost" id="importBtn" title="Recharge une sauvegarde exportée">Importer</button>
-      <button class="ghost danger" id="resetBtn" title="Effacer toutes les données" aria-label="Réinitialiser toutes les données" style="margin-left:14px">↺</button>
+      <select id="langSel" class="mini" aria-label="Language"><option value="fr">FR</option><option value="en">EN</option></select>
+      <select id="curSel" class="mini" aria-label="Currency"><option value="EUR">€</option><option value="USD">$</option><option value="GBP">£</option></select>
+      <button class="ghost" id="exportBtn" data-i18n="btn_export" data-i18n-title="btn_export_t">Exporter</button>
+      <button class="ghost" id="importBtn" data-i18n="btn_import" data-i18n-title="btn_import_t">Importer</button>
+      <button class="ghost danger" id="resetBtn" data-i18n-title="reset_t" data-i18n-aria="reset_aria" style="margin-left:14px">↺</button>
       <input type="file" id="importFile" accept="application/json">
     </div>
   </div>
-  <p class="tag">Torréfie ton capital jusqu'à l'indépendance financière — un grain à la fois.</p>
+  <p class="tag" data-i18n="tag">Torréfie ton capital jusqu'à l'indépendance financière — un grain à la fois.</p>
 
   <div class="grid2">
     <div class="card">
-      <div class="eyebrow">Valeur de mon portefeuille</div>
+      <div class="eyebrow" data-i18n="ey_portfolio">Valeur de mon portefeuille</div>
       <div><span class="hero-num" id="capVal">—</span></div>
       <div id="plusval" style="font-size:12.5px;margin-top:4px;color:var(--mut)"></div>
       <div style="margin-top:14px">
@@ -138,14 +142,14 @@
         <div class="bar"><div class="fill" id="nextFill"></div></div>
       </div>
       <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">
-        <div style="flex:1.3;min-width:140px"><label>Valeur actuelle (€)</label><input type="number" id="capital" step="100"></div>
-        <div style="flex:1;min-width:110px"><label>Versement /mois (€)</label><input type="number" id="monthly" step="50"></div>
+        <div style="flex:1.3;min-width:140px"><label data-i18n="lbl_curval">Valeur actuelle (€)</label><input type="number" id="capital" step="100"></div>
+        <div style="flex:1;min-width:110px"><label data-i18n="lbl_monthly">Versement /mois (€)</label><input type="number" id="monthly" step="50"></div>
       </div>
       <p class="hint" id="projLine"></p>
     </div>
     <div class="card">
-      <div class="eyebrow">☕ Revenu passif — ce que ta cagnotte te verse <span class="info" data-k="passive">i</span></div>
-      <div><span class="capval" id="passiveHero">—</span><span class="hero-unit"> / mois</span></div>
+      <div class="eyebrow"><span data-i18n="ey_passive">☕ Revenu passif — ce que ta cagnotte te verse</span> <span class="info" data-k="passive">i</span></div>
+      <div><span class="capval" id="passiveHero">—</span><span class="hero-unit" data-i18n="unit_permonth"> / mois</span></div>
       <div style="margin-top:14px">
         <div style="display:flex;justify-content:space-between;font-size:12.5px;color:var(--mut);margin-bottom:7px">
           <span id="coverLbl">—</span><span id="coverPctR" style="color:var(--espresso);font-weight:700">—</span>
@@ -153,39 +157,39 @@
         <div class="bar"><div class="fill" id="coverFill"></div></div>
       </div>
       <p class="note" id="passiveNote"></p>
-      <div class="flyout" id="fly-passive">Calculé comme valeur × taux de retrait ÷ 12, <b>avant impôts</b>. Selon l'enveloppe (PEA, assurance-vie, CTO…), compte ≈ 17 à 30 % de fiscalité sur les gains retirés.</div>
+      <div class="flyout" id="fly-passive" data-i18n="fly_passive">Calculé comme valeur × taux de retrait ÷ 12, <b>avant impôts</b>. Selon l'enveloppe (PEA, assurance-vie, CTO…), compte ≈ 17 à 30 % de fiscalité sur les gains retirés.</div>
     </div>
   </div>
 
   <div class="card">
-    <div class="eyebrow">Les paliers — de la torréfaction claire à l'espresso</div>
+    <div class="eyebrow" data-i18n="ey_milestones">Les paliers — de la torréfaction claire à l'espresso</div>
     <div id="milestones"></div>
     <div id="goalsEditWrap" style="display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line2)">
       <div id="goalsEdit"></div>
-      <button class="ghost" id="addGoal" style="margin-top:4px">+ Ajouter un palier</button>
+      <button class="ghost" id="addGoal" data-i18n="btn_add_goal" style="margin-top:4px">+ Ajouter un palier</button>
     </div>
     <button class="ghost" id="editGoalsBtn" style="margin-top:14px">✎ Ajuster mes paliers</button>
   </div>
 
   <div class="card">
-    <div class="eyebrow">☕ Simulateur</div>
+    <div class="eyebrow" data-i18n="ey_sim">☕ Simulateur</div>
     <div class="seg">
-      <button id="simModeExtra" aria-pressed="true">Et si j'ajoute un peu ?</button>
-      <button id="simModeAge" class="ghost" aria-pressed="false">Et si je vise un âge ?</button>
+      <button id="simModeExtra" data-i18n="sim_mode_extra" aria-pressed="true">Et si j'ajoute un peu ?</button>
+      <button id="simModeAge" class="ghost" data-i18n="sim_mode_age" aria-pressed="false">Et si je vise un âge ?</button>
     </div>
     <div id="simExtraPane">
       <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
         <div style="flex:1;min-width:200px">
           <input type="range" id="simSlider" min="0" max="2000" step="50" value="0">
         </div>
-        <div style="text-align:right"><span class="simval" id="simExtra">+0 €</span><span style="color:var(--dim);font-size:12px">/mois</span></div>
+        <div style="text-align:right"><span class="simval" id="simExtra">+0 €</span><span style="color:var(--dim);font-size:12px" data-i18n="slash_mo">/mois</span></div>
       </div>
       <p class="note" id="simOut" style="color:var(--ink);font-size:13px;margin-top:12px"></p>
       <button id="simApply" style="display:none;margin-top:10px">Adopter ce versement</button>
     </div>
     <div id="simAgePane" style="display:none">
       <div style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap">
-        <div style="min-width:130px;max-width:170px"><label>Libre à (âge)</label><input type="number" id="simAge" step="1"></div>
+        <div style="min-width:130px;max-width:170px"><label data-i18n="lbl_freeat">Libre à (âge)</label><input type="number" id="simAge" step="1"></div>
       </div>
       <p class="note" id="simAgeOut" style="color:var(--ink);font-size:13px;margin-top:12px"></p>
       <button id="simAgeApply" style="display:none;margin-top:10px"></button>
@@ -194,44 +198,44 @@
 
   <div class="grid2">
     <div class="card">
-      <div class="eyebrow">Réglages</div>
+      <div class="eyebrow" data-i18n="ey_settings">Réglages</div>
       <div style="display:flex;gap:12px;flex-wrap:wrap">
-        <div style="flex:1;min-width:110px"><label>Dépenses /mois (€)</label><input type="number" id="expenses" step="50"></div>
-        <div style="flex:1;min-width:90px"><label>Ton âge</label><input type="number" id="age" step="1"></div>
+        <div style="flex:1;min-width:110px"><label data-i18n="lbl_expenses">Dépenses /mois (€)</label><input type="number" id="expenses" step="50"></div>
+        <div style="flex:1;min-width:90px"><label data-i18n="lbl_age">Ton âge</label><input type="number" id="age" step="1"></div>
       </div>
       <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:12px">
         <div style="flex:1;min-width:140px">
-          <label>Rendement annuel réel (%) <span class="info" data-k="return">i</span></label>
+          <label><span data-i18n="lbl_return">Rendement annuel réel (%)</span> <span class="info" data-k="return">i</span></label>
           <input type="number" id="rate" step="0.5">
-          <div class="flyout" id="fly-return">Le gain annuel moyen espéré de tes placements, <b>après inflation</b> (« réel »). Repère : un portefeuille d'actions diversifié rapporte historiquement <b>~5 à 7 %/an réel</b> sur le long terme. Au-delà, méfiance — on se berce vite d'illusions. À noter : le « plan » du graphique est en euros d'aujourd'hui, alors que ta valeur saisie gonfle aussi avec l'inflation — « battre le plan » sur la durée est donc en partie normal.</div>
+          <div class="flyout" id="fly-return" data-i18n="fly_return">Le gain annuel moyen espéré de tes placements, <b>après inflation</b> (« réel »). Repère : un portefeuille d'actions diversifié rapporte historiquement <b>~5 à 7 %/an réel</b> sur le long terme. Au-delà, méfiance — on se berce vite d'illusions. À noter : le « plan » du graphique est en euros d'aujourd'hui, alors que ta valeur saisie gonfle aussi avec l'inflation — « battre le plan » sur la durée est donc en partie normal.</div>
         </div>
         <div style="flex:1;min-width:140px">
-          <label>Taux de retrait (%) <span class="info" data-k="swr">i</span></label>
+          <label><span data-i18n="lbl_swr">Taux de retrait (%)</span> <span class="info" data-k="swr">i</span></label>
           <input type="number" id="swr" step="0.5">
-          <div class="flyout" id="fly-swr">Le pourcentage de ton capital que tu peux retirer chaque année sans l'épuiser — la fameuse <b>« règle des 4 % »</b>. Prudent : <b>3 à 4 %</b>. Plus bas = plus sûr, surtout pour une longue période. Et pense <b>net d'impôts</b> : les retraits sont fiscalisés (≈ 17 à 30 % sur les gains selon l'enveloppe) — vise large sur tes dépenses.</div>
+          <div class="flyout" id="fly-swr" data-i18n="fly_swr">Le pourcentage de ton capital que tu peux retirer chaque année sans l'épuiser — la fameuse <b>« règle des 4 % »</b>. Prudent : <b>3 à 4 %</b>. Plus bas = plus sûr, surtout pour une longue période. Et pense <b>net d'impôts</b> : les retraits sont fiscalisés (≈ 17 à 30 % sur les gains selon l'enveloppe) — vise large sur tes dépenses.</div>
         </div>
       </div>
       <p class="note" id="regNote"></p>
     </div>
     <div class="card">
-      <div class="eyebrow">Évolution — réel vs plan</div>
+      <div class="eyebrow" data-i18n="ey_chart">Évolution — réel vs plan</div>
       <div class="chart-wrap"><canvas id="chart"></canvas></div>
-      <div class="legend"><span><span class="sw" style="background:var(--coffee)"></span>Réel</span><span><span class="sw" style="background:var(--dim);height:2px"></span>Plan</span></div>
+      <div class="legend"><span><span class="sw" style="background:var(--coffee)"></span><span data-i18n="lg_real">Réel</span></span><span><span class="sw" style="background:var(--dim);height:2px"></span><span data-i18n="lg_plan">Plan</span></span></div>
     </div>
   </div>
 
   <div class="card">
-    <div class="eyebrow">Carte de fidélité — un grain torréfié par mois investi</div>
+    <div class="eyebrow" data-i18n="ey_loyalty">Carte de fidélité — un grain torréfié par mois investi</div>
     <div class="stamps">
-      <div class="kpi"><div class="n" id="streak">0</div><div class="l">série en cours (mois)</div></div>
-      <div class="kpi"><div class="n" id="totalMonths">0</div><div class="l">mois investis</div></div>
-      <div class="kpi"><div class="n" id="totalInvested">0 €</div><div class="l">total investi</div></div>
+      <div class="kpi"><div class="n" id="streak">0</div><div class="l" data-i18n="kpi_streak">série en cours (mois)</div></div>
+      <div class="kpi"><div class="n" id="totalMonths">0</div><div class="l" data-i18n="kpi_months">mois investis</div></div>
+      <div class="kpi"><div class="n" id="totalInvested">0 €</div><div class="l" data-i18n="kpi_total">total investi</div></div>
     </div>
     <div id="calendar" style="margin-top:6px"></div>
-    <p class="note" style="margin-top:14px">« + » pour investir&nbsp;&nbsp;·&nbsp;&nbsp;grain plein pour ajuster</p>
+    <p class="note" style="margin-top:14px" data-i18n="cal_help">« + » pour investir&nbsp;&nbsp;·&nbsp;&nbsp;grain plein pour ajuster</p>
   </div>
 
-  <p class="note" style="text-align:center;margin-top:4px">Tes données vivent uniquement dans ce navigateur — rien n'est envoyé en ligne.<br>Pense à cliquer <b>Exporter</b> pour télécharger une sauvegarde de temps en temps : vider le cache du navigateur les effacerait.</p>
+  <p class="note" style="text-align:center;margin-top:4px" data-i18n="footer_note">Tes données vivent uniquement dans ce navigateur — rien n'est envoyé en ligne.<br>Pense à cliquer <b>Exporter</b> pour télécharger une sauvegarde de temps en temps : vider le cache du navigateur les effacerait.</p>
 
   <div id="onb">
     <div class="onb-card">
@@ -245,24 +249,24 @@
           </svg>
           <h1>Coffee Roaster</h1>
         </div>
-        <p style="font-size:14.5px;color:var(--ink);margin:0 0 8px">Torréfie ton capital jusqu'à l'indépendance financière — un grain à la fois, à ton rythme.</p>
-        <p style="font-size:13px;color:var(--mut);margin:0 0 20px">☕ <b>100 % privé</b> : tes chiffres restent dans ton navigateur. Aucun compte, aucun serveur, personne d'autre n'y accède.</p>
-        <button id="onbStart" style="width:100%">Commencer</button>
+        <p style="font-size:14.5px;color:var(--ink);margin:0 0 8px" data-i18n="onb_tag">Torréfie ton capital jusqu'à l'indépendance financière — un grain à la fois, à ton rythme.</p>
+        <p style="font-size:13px;color:var(--mut);margin:0 0 20px" data-i18n="onb_privacy">☕ <b>100 % privé</b> : tes chiffres restent dans ton navigateur. Aucun compte, aucun serveur, personne d'autre n'y accède.</p>
+        <button id="onbStart" data-i18n="onb_start" style="width:100%">Commencer</button>
       </div>
       <div id="onb2" style="display:none">
-        <div class="eyebrow" style="margin-bottom:14px">Étape 2/2 · ta situation</div>
+        <div class="eyebrow" style="margin-bottom:14px" data-i18n="onb_step">Étape 2/2 · ta situation</div>
         <div style="display:flex;flex-direction:column;gap:12px">
-          <div><label>Capital déjà investi (€)</label><input type="number" id="onbCap" step="100" placeholder="0"></div>
+          <div><label data-i18n="onb_lbl_cap">Capital déjà investi (€)</label><input type="number" id="onbCap" step="100" placeholder="0"></div>
           <div style="display:flex;gap:10px">
-            <div style="flex:1"><label>Versement /mois (€)</label><input type="number" id="onbMo" step="50" value="500"></div>
-            <div style="flex:1"><label>Ton âge</label><input type="number" id="onbAge" step="1" value="30"></div>
+            <div style="flex:1"><label data-i18n="lbl_monthly">Versement /mois (€)</label><input type="number" id="onbMo" step="50" value="500"></div>
+            <div style="flex:1"><label data-i18n="lbl_age">Ton âge</label><input type="number" id="onbAge" step="1" value="30"></div>
           </div>
-          <div><label>Dépenses /mois (€)</label><input type="number" id="onbExp" step="50" value="2000"></div>
+          <div><label data-i18n="lbl_expenses">Dépenses /mois (€)</label><input type="number" id="onbExp" step="50" value="2000"></div>
         </div>
-        <p style="font-size:12px;color:var(--dim);margin:12px 0 16px">Tu fixeras ensuite tes objectifs dans le dashboard.</p>
+        <p style="font-size:12px;color:var(--dim);margin:12px 0 16px" data-i18n="onb_note">Tu fixeras ensuite tes objectifs dans le dashboard.</p>
         <div style="display:flex;gap:8px">
-          <button class="ghost" id="onbBack">← Retour</button>
-          <button id="onbFinish" style="flex:1">Accéder à mon dashboard ☕</button>
+          <button class="ghost" id="onbBack" data-i18n="onb_back">← Retour</button>
+          <button id="onbFinish" data-i18n="onb_finish" style="flex:1">Accéder à mon dashboard ☕</button>
         </div>
       </div>
     </div>
@@ -270,14 +274,14 @@
 
   <div id="modal" role="dialog" aria-modal="true" aria-labelledby="modalMonth">
     <div style="background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px;width:290px;max-width:88%;box-shadow:0 20px 60px rgba(59,42,30,.35)">
-      <div class="eyebrow" style="margin-bottom:3px">☕ Montant investi ce mois</div>
+      <div class="eyebrow" style="margin-bottom:3px" data-i18n="modal_ey">☕ Montant investi ce mois</div>
       <div id="modalMonth" style="font-family:'Space Grotesk','Inter',sans-serif;font-size:19px;font-weight:600;color:var(--espresso);margin-bottom:14px">—</div>
-      <label>Montant (€)</label>
+      <label data-i18n="modal_lbl">Montant (€)</label>
       <input type="number" id="modalAmt" step="50" style="margin-bottom:16px">
       <div style="display:flex;gap:8px">
-        <button id="modalSave" style="flex:1">Enregistrer</button>
-        <button class="ghost" id="modalRemove">Retirer</button>
-        <button class="ghost" id="modalCancel" aria-label="Fermer">✕</button>
+        <button id="modalSave" data-i18n="modal_save" style="flex:1">Enregistrer</button>
+        <button class="ghost" id="modalRemove" data-i18n="modal_remove">Retirer</button>
+        <button class="ghost" id="modalCancel" data-i18n-aria="modal_cancel_aria" aria-label="Fermer">✕</button>
       </div>
     </div>
   </div>
@@ -291,9 +295,202 @@
   var DEF_GOALS=[{v:300000},{v:600000},{v:1000000}];
   var LADDER=["Americano","Cappuccino","Affogato","Irish Coffee","Espresso Martini","Grand Cru"];
   function goalName(i){return LADDER[i]||("Grand Cru "+(i-4));}
-  var K={cap:"crs_cap",mo:"crs_mo",exp:"crs_exp",age:"crs_age",goals:"crs_goals",amt:"crs_amt",hist:"crs_hist",cel:"crs_cel",onb:"crs_onb",rate:"crs_rate",swr:"crs_swr",base:"crs_base",start:"crs_start",tage:"crs_tage"};
+  var K={cap:"crs_cap",mo:"crs_mo",exp:"crs_exp",age:"crs_age",goals:"crs_goals",amt:"crs_amt",hist:"crs_hist",cel:"crs_cel",onb:"crs_onb",rate:"crs_rate",swr:"crs_swr",base:"crs_base",start:"crs_start",tage:"crs_tage",lang:"crs_lang",cur:"crs_cur"};
   function g(k,d){try{var v=localStorage.getItem(k);return v===null?d:JSON.parse(v)}catch(e){return d}}
   function s(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+
+  // --- i18n & devise ---
+  var SYMS={EUR:"€",USD:"$",GBP:"£"};
+  var LANG=g(K.lang,((navigator.language||"fr").toLowerCase().indexOf("fr")===0)?"fr":"en"); if(LANG!=="fr"&&LANG!=="en")LANG="fr";
+  var CUR=g(K.cur,"EUR"); if(!SYMS[CUR])CUR="EUR";
+  var CURSYM=SYMS[CUR];
+  function numLocale(){return LANG==="fr"?"fr-FR":"en-US";}
+  var MONTHS={fr:["janv.","févr.","mars","avr.","mai","juin","juil.","août","sept.","oct.","nov.","déc."],
+              en:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]};
+  var TXT={
+    fr:{
+      title:"Coffee Roaster — torréfie ton capital vers la liberté",
+      tag:"Torréfie ton capital jusqu'à l'indépendance financière — un grain à la fois.",
+      btn_export:"Exporter", btn_export_t:"Télécharge un fichier de sauvegarde",
+      btn_import:"Importer", btn_import_t:"Recharge une sauvegarde exportée",
+      reset_t:"Effacer toutes les données", reset_aria:"Réinitialiser toutes les données",
+      ey_portfolio:"Valeur de mon portefeuille",
+      lbl_curval:"Valeur actuelle (%CUR%)", lbl_monthly:"Versement /mois (%CUR%)",
+      ey_passive:"☕ Revenu passif — ce que ta cagnotte te verse",
+      unit_permonth:" / mois",
+      fly_passive:"Calculé comme valeur × taux de retrait ÷ 12, <b>avant impôts</b>. Selon l'enveloppe (PEA, assurance-vie, CTO…), compte ≈ 17 à 30 % de fiscalité sur les gains retirés.",
+      ey_milestones:"Les paliers — de la torréfaction claire à l'espresso",
+      btn_add_goal:"+ Ajouter un palier",
+      btn_edit_goals:"✎ Ajuster mes paliers", btn_close_edit:"Fermer l'édition",
+      ey_sim:"☕ Simulateur",
+      sim_mode_extra:"Et si j'ajoute un peu ?", sim_mode_age:"Et si je vise un âge ?",
+      slash_mo:"/mois",
+      lbl_freeat:"Libre à (âge)",
+      ey_settings:"Réglages",
+      lbl_expenses:"Dépenses /mois (%CUR%)", lbl_age:"Ton âge",
+      lbl_return:"Rendement annuel réel (%)",
+      fly_return:"Le gain annuel moyen espéré de tes placements, <b>après inflation</b> (« réel »). Repère : un portefeuille d'actions diversifié rapporte historiquement <b>~5 à 7 %/an réel</b> sur le long terme. Au-delà, méfiance — on se berce vite d'illusions. À noter : le « plan » du graphique est en euros d'aujourd'hui, alors que ta valeur saisie gonfle aussi avec l'inflation — « battre le plan » sur la durée est donc en partie normal.",
+      lbl_swr:"Taux de retrait (%)",
+      fly_swr:"Le pourcentage de ton capital que tu peux retirer chaque année sans l'épuiser — la fameuse <b>« règle des 4 % »</b>. Prudent : <b>3 à 4 %</b>. Plus bas = plus sûr, surtout pour une longue période. Et pense <b>net d'impôts</b> : les retraits sont fiscalisés (≈ 17 à 30 % sur les gains selon l'enveloppe) — vise large sur tes dépenses.",
+      ey_chart:"Évolution — réel vs plan", lg_real:"Réel", lg_plan:"Plan",
+      tt_real:"Réel : ", tt_plan:"Plan : ",
+      chart_unavail:"Graphique indisponible pour l'instant (connexion requise au premier chargement).",
+      ey_loyalty:"Carte de fidélité — un grain torréfié par mois investi",
+      kpi_streak:"série en cours (mois)", kpi_months:"mois investis", kpi_total:"total investi",
+      cal_help:"« + » pour investir&nbsp;&nbsp;·&nbsp;&nbsp;grain plein pour ajuster",
+      footer_note:"Tes données vivent uniquement dans ce navigateur — rien n'est envoyé en ligne.<br>Pense à cliquer <b>Exporter</b> pour télécharger une sauvegarde de temps en temps : vider le cache du navigateur les effacerait.",
+      onb_tag:"Torréfie ton capital jusqu'à l'indépendance financière — un grain à la fois, à ton rythme.",
+      onb_privacy:"☕ <b>100 % privé</b> : tes chiffres restent dans ton navigateur. Aucun compte, aucun serveur, personne d'autre n'y accède.",
+      onb_start:"Commencer",
+      onb_step:"Étape 2/2 · ta situation",
+      onb_lbl_cap:"Capital déjà investi (%CUR%)",
+      onb_note:"Tu fixeras ensuite tes objectifs dans le dashboard.",
+      onb_back:"← Retour", onb_finish:"Accéder à mon dashboard ☕",
+      modal_ey:"☕ Montant investi ce mois", modal_lbl:"Montant (%CUR%)",
+      modal_save:"Enregistrer", modal_remove:"Retirer", modal_cancel_aria:"Fermer",
+      export_filename:"coffee-roaster-sauvegarde.json",
+      del_title:"Supprimer", del_aria:"Supprimer ce palier",
+      reg_note:"Projection : {rate} %/an réel · revenu passif à {swr} % de retrait.",
+      cover_lbl:"de tes {exp}/mois de train de vie",
+      passive_full:"Ta cagnotte couvre déjà tout ton train de vie — le café est offert à vie ☕",
+      passive_more:"Encore {x}/mois pour couvrir ton quotidien.",
+      plusval_pos:"dont <b style='color:var(--green)'>+{x}</b> de plus-values",
+      plusval_neg:"dont <b style='color:#c0392b'>{x}</b> (moins-value latente)",
+      next_all:"Tous les paliers atteints 🎉",
+      next_toward:"vers <b>{name}</b> ({v})",
+      proj_updated:"Dernière mise à jour : {m}.",
+      proj_prompt:"Mets à jour ta valeur chaque mois — la courbe se trace au fil de l'eau.",
+      ms_empty:"Ajoute un palier ci-dessous pour commencer.",
+      ms_indep:" · <span style='color:var(--green)'>ton indépendance — couvre tout ton train de vie ☕</span>",
+      ms_covers:" · couvre ~{p} % de ton train de vie",
+      pill_served:"<span class='pill done'>✓ servi</span>",
+      pill_live:"<span class='pill live'>en cours</span>",
+      pill_lock:"<span class='pill lock'>🔒 dès {v}</span>",
+      foot_reached:"<span style='color:var(--green)'>✓ atteint</span>",
+      foot_unreach:"hors de portée à ce rythme — augmente ton versement",
+      foot_eta:"atteint autour de {m}{age}",
+      age_dot:" · <b>~{a} ans</b>",
+      sim_all:"Tous les paliers sont atteints ☕🎉",
+      sim_slide:"Glisse le curseur pour voir l'effet d'un versement en plus sur ton palier à <b>{v}</b>.",
+      sim_unreach:"Même avec ce versement, le palier <b>{v}</b> reste hors de portée à horizon raisonnable.",
+      sim_reach:"Avec <b>{permo}</b>, tu atteins <b>{v}</b> autour de {m}{age} — soit <b>{sooner}</b>.",
+      sim_age:" (~{a} ans)",
+      sooner_years:"{n} an{s} plus tôt", sooner_months:"{n} mois plus tôt",
+      sim_adopt:"Adopter {permo}",
+      age_setup:"Renseigne ton âge et tes dépenses dans les Réglages pour utiliser ce mode.",
+      age_covered:"Ta cagnotte couvre déjà tout ton train de vie ☕🎉",
+      age_prompt:"À quel âge veux-tu que ta cagnotte couvre tes {expmo} ? Il te faudra <b>{v}</b> au taux de retrait actuel.",
+      age_beyond:"Choisis un âge au-delà du tien ({a} ans).",
+      age_selfreach:"À {rate} %/an, ton capital atteint <b>{v}</b> tout seul avant tes {tage} ans — ton versement actuel ne fait qu'accélérer ☕",
+      age_need:"Pour couvrir tes {expmo} à <b>{tage} ans</b> (cagnotte de {v}), il faudrait verser <b>~{permo}</b>.",
+      age_levers:"<br>Leviers : viser <b>{a} ans</b> ramène à ~{permo}",
+      age_lever_exp:" · {cutmo} de dépenses en moins → ~{permo}.",
+      age_enough:" Ton versement actuel ({permo}) <b>suffit déjà</b> ☕🎉",
+      month_n:"Mois {i} · {m}", to_fill:" · à remplir",
+      aria_adjust:" · {a}, ajuster", aria_invest:", investir",
+      toast_served:"☕ {name} servi ! Palier {v} atteint 🎉",
+      toast_stamped:"☕ Mois en cours tamponné à {x} — clique le grain pour ajuster",
+      toast_adopted:"☕ Nouveau versement adopté : {permo}",
+      confirm_reset:"Réinitialiser toutes tes données ?",
+      confirm_import:"Remplacer toutes les données actuelles par cette sauvegarde ?",
+      alert_invalid:"Fichier invalide."
+    },
+    en:{
+      title:"Coffee Roaster — roast your capital toward freedom",
+      tag:"Roast your capital toward financial independence — one bean at a time.",
+      btn_export:"Export", btn_export_t:"Download a backup file",
+      btn_import:"Import", btn_import_t:"Load an exported backup",
+      reset_t:"Erase all data", reset_aria:"Reset all data",
+      ey_portfolio:"My portfolio value",
+      lbl_curval:"Current value (%CUR%)", lbl_monthly:"Contribution /month (%CUR%)",
+      ey_passive:"☕ Passive income — what your pot pays you",
+      unit_permonth:" / month",
+      fly_passive:"Calculated as value × withdrawal rate ÷ 12, <b>before tax</b>. Depending on your account, expect ≈ 15 to 30% tax on withdrawn gains.",
+      ey_milestones:"The milestones — from light roast to espresso",
+      btn_add_goal:"+ Add a milestone",
+      btn_edit_goals:"✎ Adjust my milestones", btn_close_edit:"Close editing",
+      ey_sim:"☕ Simulator",
+      sim_mode_extra:"What if I add a little?", sim_mode_age:"What if I target an age?",
+      slash_mo:"/month",
+      lbl_freeat:"Free at (age)",
+      ey_settings:"Settings",
+      lbl_expenses:"Expenses /month (%CUR%)", lbl_age:"Your age",
+      lbl_return:"Real annual return (%)",
+      fly_return:"The average yearly gain you expect from your investments, <b>after inflation</b> (real). Benchmark: a diversified stock portfolio has historically returned <b>~5 to 7%/yr real</b> over the long run. Beyond that, be wary — it's easy to fool yourself. Note: the chart's plan is in today's money, while the value you enter also inflates over time — so beating the plan over the years is partly normal.",
+      lbl_swr:"Withdrawal rate (%)",
+      fly_swr:"The share of your capital you can withdraw each year without depleting it — the famous <b>4% rule</b>. Cautious: <b>3 to 4%</b>. Lower = safer, especially over a long horizon. And think <b>after tax</b>: withdrawals are taxed (≈ 15 to 30% on gains depending on the account) — aim high on your expenses.",
+      ey_chart:"Progress — actual vs plan", lg_real:"Actual", lg_plan:"Plan",
+      tt_real:"Actual: ", tt_plan:"Plan: ",
+      chart_unavail:"Chart unavailable for now (connection needed on first load).",
+      ey_loyalty:"Loyalty card — one roasted bean per month invested",
+      kpi_streak:"current streak (months)", kpi_months:"months invested", kpi_total:"total invested",
+      cal_help:"« + » to invest&nbsp;&nbsp;·&nbsp;&nbsp;full bean to adjust",
+      footer_note:"Your data lives only in this browser — nothing is sent online.<br>Click <b>Export</b> now and then to download a backup: clearing your browser cache would erase it.",
+      onb_tag:"Roast your capital toward financial independence — one bean at a time, at your own pace.",
+      onb_privacy:"☕ <b>100% private</b>: your numbers stay in your browser. No account, no server, no one else can see them.",
+      onb_start:"Start",
+      onb_step:"Step 2/2 · your situation",
+      onb_lbl_cap:"Capital already invested (%CUR%)",
+      onb_note:"You'll set your goals next in the dashboard.",
+      onb_back:"← Back", onb_finish:"Go to my dashboard ☕",
+      modal_ey:"☕ Amount invested this month", modal_lbl:"Amount (%CUR%)",
+      modal_save:"Save", modal_remove:"Remove", modal_cancel_aria:"Close",
+      export_filename:"coffee-roaster-backup.json",
+      del_title:"Delete", del_aria:"Delete this milestone",
+      reg_note:"Projection: {rate}%/yr real · passive income at {swr}% withdrawal.",
+      cover_lbl:"of your {exp}/month lifestyle",
+      passive_full:"Your pot already covers your whole lifestyle — coffee's on the house for life ☕",
+      passive_more:"{x}/month more to cover your day-to-day.",
+      plusval_pos:"including <b style='color:var(--green)'>+{x}</b> in gains",
+      plusval_neg:"including <b style='color:#c0392b'>{x}</b> (unrealized loss)",
+      next_all:"All milestones reached 🎉",
+      next_toward:"toward <b>{name}</b> ({v})",
+      proj_updated:"Last updated: {m}.",
+      proj_prompt:"Update your value each month — the curve fills in over time.",
+      ms_empty:"Add a milestone below to get started.",
+      ms_indep:" · <span style='color:var(--green)'>your independence — covers your whole lifestyle ☕</span>",
+      ms_covers:" · covers ~{p}% of your lifestyle",
+      pill_served:"<span class='pill done'>✓ served</span>",
+      pill_live:"<span class='pill live'>in progress</span>",
+      pill_lock:"<span class='pill lock'>🔒 from {v}</span>",
+      foot_reached:"<span style='color:var(--green)'>✓ reached</span>",
+      foot_unreach:"out of reach at this pace — raise your contribution",
+      foot_eta:"reached around {m}{age}",
+      age_dot:" · <b>~{a} yrs</b>",
+      sim_all:"All milestones reached ☕🎉",
+      sim_slide:"Slide to see the effect of an extra contribution on your <b>{v}</b> milestone.",
+      sim_unreach:"Even with this contribution, the <b>{v}</b> milestone stays out of reach within a reasonable horizon.",
+      sim_reach:"With <b>{permo}</b>, you reach <b>{v}</b> around {m}{age} — that's <b>{sooner}</b>.",
+      sim_age:" (~{a} yrs)",
+      sooner_years:"{n} yr{s} sooner", sooner_months:"{n} mo sooner",
+      sim_adopt:"Adopt {permo}",
+      age_setup:"Enter your age and expenses in Settings to use this mode.",
+      age_covered:"Your pot already covers your whole lifestyle ☕🎉",
+      age_prompt:"At what age should your pot cover your {expmo}? You'll need <b>{v}</b> at the current withdrawal rate.",
+      age_beyond:"Pick an age beyond your own (age {a}).",
+      age_selfreach:"At {rate}%/yr, your capital reaches <b>{v}</b> on its own before age {tage} — your current contribution just speeds it up ☕",
+      age_need:"To cover your {expmo} at <b>age {tage}</b> (pot of {v}), you'd need to contribute <b>~{permo}</b>.",
+      age_levers:"<br>Levers: targeting <b>age {a}</b> brings it down to ~{permo}",
+      age_lever_exp:" · {cutmo} less expenses → ~{permo}.",
+      age_enough:" Your current contribution ({permo}) is <b>already enough</b> ☕🎉",
+      month_n:"Month {i} · {m}", to_fill:" · to fill",
+      aria_adjust:" · {a}, adjust", aria_invest:", invest",
+      toast_served:"☕ {name} served! Milestone {v} reached 🎉",
+      toast_stamped:"☕ Current month stamped at {x} — click the bean to adjust",
+      toast_adopted:"☕ New contribution adopted: {permo}",
+      confirm_reset:"Reset all your data?",
+      confirm_import:"Replace all current data with this backup?",
+      alert_invalid:"Invalid file."
+    }
+  };
+  function t(key,vars){
+    var str=(TXT[LANG]&&TXT[LANG][key]);
+    if(str==null)str=(TXT.fr&&TXT.fr[key]);
+    if(str==null)str=key;
+    if(vars)str=str.replace(/\{(\w+)\}/g,function(_,k){return vars[k]!=null?vars[k]:"";});
+    return str.replace(/%CUR%/g,CURSYM);
+  }
+
   var cap=g(K.cap,0), mo=g(K.mo,500), expenses=g(K.exp,2000), age=g(K.age,30),
       goals=g(K.goals,DEF_GOALS), amounts=g(K.amt,{}), hist=g(K.hist,[]), celebrated=g(K.cel,[]),
       rate=g(K.rate,6), swr=g(K.swr,4), baseInvested=g(K.base,null), startYm=g(K.start,null), tage=g(K.tage,0), chart=null;
@@ -302,12 +499,13 @@
   if(startYm===null){startYm=ymNow();s(K.start,startYm);}
   function sumStamped(){var t=0;for(var k in amounts){t+=amounts[k]||0;}return t;}
 
-  var eur=function(n){return Math.round(n).toLocaleString('fr-FR')+" €"};
-  var eurk=function(n){if(Math.abs(n)>=1000000){var m=n/1000000;return (m%1===0?m:m.toFixed(1).replace('.',','))+" M€";}return Math.round(n/1000)+" k€";};
+  var eur=function(n){return Math.round(n).toLocaleString(numLocale())+" "+CURSYM;};
+  var eurk=function(n){if(Math.abs(n)>=1000000){var m=n/1000000;var mm=(m%1===0?String(m):m.toFixed(1).replace(".",LANG==="fr"?",":"."));return mm+" M"+CURSYM;}return Math.round(n/1000)+" k"+CURSYM;};
+  function perMo(x){return eur(x)+t('slash_mo');}
   function monthsSince(a,b){var pa=a.split("-"),pb=b.split("-");return (+pb[0]-+pa[0])*12+(+pb[1]-+pa[1]);}
   function addMonths(ym,k){var p=ym.split("-"),y=+p[0],m=+p[1]-1+k;y+=Math.floor(m/12);m=((m%12)+12)%12;return y+"-"+String(m+1).padStart(2,"0");}
   function ymNow(){var d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0");}
-  function frMonth(ym){var n=["janv.","févr.","mars","avr.","mai","juin","juil.","août","sept.","oct.","nov.","déc."];var p=ym.split("-");return n[+p[1]-1]+" "+p[0];}
+  function frMonth(ym){var p=ym.split("-");return (MONTHS[LANG]||MONTHS.fr)[+p[1]-1]+" "+p[0];}
   function monthsTo(t,c,m){if(c>=t)return 0;if(m<=0&&R<=0)return 9999;var v=c,n=0;while(v<t&&n<1200){v=v*(1+R)+m;n++;}return n>=1200?9999:n;}
   function passive(c){return c*(swr/100)/12;}
   function fiTarget(){return expenses*12/(swr/100);}
@@ -325,6 +523,18 @@
   }
   function nextGoalIdx(){for(var i=0;i<goals.length;i++)if(cap<goals[i].v)return i;return goals.length-1;}
 
+  function applyStatic(){
+    document.documentElement.lang=LANG;
+    document.title=t('title');
+    Array.prototype.forEach.call(document.querySelectorAll('[data-i18n]'),function(el){el.innerHTML=t(el.getAttribute('data-i18n'));});
+    Array.prototype.forEach.call(document.querySelectorAll('[data-i18n-title]'),function(el){el.title=t(el.getAttribute('data-i18n-title'));});
+    Array.prototype.forEach.call(document.querySelectorAll('[data-i18n-aria]'),function(el){el.setAttribute('aria-label',t(el.getAttribute('data-i18n-aria')));});
+    var eg=document.getElementById('editGoalsBtn'),w=document.getElementById('goalsEditWrap');
+    if(eg&&w)eg.textContent=(w.style.display!=='none')?t('btn_close_edit'):t('btn_edit_goals');
+    var ls=document.getElementById('langSel');if(ls)ls.value=LANG;
+    var cs=document.getElementById('curSel');if(cs)cs.value=CUR;
+  }
+
   function render(){
     document.getElementById('capital').value=cap||"";
     document.getElementById('monthly').value=mo;
@@ -332,44 +542,43 @@
     document.getElementById('age').value=age;
     document.getElementById('rate').value=rate;
     document.getElementById('swr').value=swr;
-    document.getElementById('regNote').textContent="Projection : "+rate+" %/an réel · revenu passif à "+swr+" % de retrait.";
+    document.getElementById('regNote').textContent=t('reg_note',{rate:rate,swr:swr});
 
     var pass=passive(cap);
     document.getElementById('passiveHero').textContent=eur(pass);
     var cover=expenses>0?Math.min(100,pass/expenses*100):0;
-    document.getElementById('coverLbl').textContent="de tes "+eur(expenses)+"/mois de train de vie";
+    document.getElementById('coverLbl').textContent=t('cover_lbl',{exp:eur(expenses)});
     document.getElementById('coverPctR').textContent=Math.round(cover)+" %";
     var cf=document.getElementById('coverFill');requestAnimationFrame(function(){cf.style.width=cover+"%";});
-    document.getElementById('passiveNote').innerHTML= cover>=100?"Ta cagnotte couvre déjà tout ton train de vie — le café est offert à vie ☕":
-      "Encore "+eur(Math.max(0,expenses-pass))+"/mois pour couvrir ton quotidien.";
+    document.getElementById('passiveNote').innerHTML= cover>=100?t('passive_full'):t('passive_more',{x:eur(Math.max(0,expenses-pass))});
 
     document.getElementById('capVal').textContent=eur(cap);
     var pv=cap-(baseInvested+sumStamped());
-    document.getElementById('plusval').innerHTML= pv>=0 ? 'dont <b style="color:var(--green)">+'+eur(pv)+'</b> de plus-values' : 'dont <b style="color:#c0392b">'+eur(pv)+'</b> (moins-value latente)';
+    document.getElementById('plusval').innerHTML= pv>=0 ? t('plusval_pos',{x:eur(pv)}) : t('plusval_neg',{x:eur(pv)});
     if(goals.length){
       var ni2=nextGoalIdx(), reachedAll=cap>=goals[goals.length-1].v;
       var p2=reachedAll?100:Math.max(0,Math.min(100,cap/goals[ni2].v*100));
-      if(reachedAll){document.getElementById('nextLbl').textContent="Tous les paliers atteints 🎉";document.getElementById('nextPct').textContent="";}
-      else{document.getElementById('nextLbl').innerHTML="vers <b>"+goalName(ni2)+"</b> ("+eurk(goals[ni2].v)+")";document.getElementById('nextPct').textContent=Math.round(p2)+" %";}
+      if(reachedAll){document.getElementById('nextLbl').textContent=t('next_all');document.getElementById('nextPct').textContent="";}
+      else{document.getElementById('nextLbl').innerHTML=t('next_toward',{name:goalName(ni2),v:eurk(goals[ni2].v)});document.getElementById('nextPct').textContent=Math.round(p2)+" %";}
       var nf=document.getElementById('nextFill');requestAnimationFrame(function(){nf.style.width=p2+"%";});
     }
-    document.getElementById('projLine').textContent=hist.length?("Dernière mise à jour : "+frMonth(hist[hist.length-1].d)+".") : "Mets à jour ta valeur chaque mois — la courbe se trace au fil de l'eau.";
+    document.getElementById('projLine').textContent=hist.length?t('proj_updated',{m:frMonth(hist[hist.length-1].d)}):t('proj_prompt');
     renderMs();renderGoalsEditor();renderSim();renderSimAge();renderCal();renderChart();
   }
 
   function renderMs(){
     var host=document.getElementById('milestones');host.innerHTML="";
-    if(!goals.length){host.innerHTML='<p class="note">Ajoute un palier ci-dessous pour commencer.</p>';return;}
+    if(!goals.length){host.innerHTML='<p class="note">'+t('ms_empty')+'</p>';return;}
     var fi=(expenses>0&&swr>0)?fiTarget():0;
     goals.forEach(function(m,i){
       var prev=i===0?0:goals[i-1].v, reached=cap>=m.v, unlocked=i===0?true:cap>=goals[i-1].v, col=PAL[i%PAL.length];
       var cov=expenses>0?passive(m.v)/expenses*100:0;
-      var meaning= fi>0 ? (m.v>=fi*0.995 ? ' · <span style="color:var(--green)">ton indépendance — couvre tout ton train de vie ☕</span>' : ' · couvre ~'+Math.round(cov)+' % de ton train de vie') : '';
+      var meaning= fi>0 ? (m.v>=fi*0.995 ? t('ms_indep') : t('ms_covers',{p:Math.round(cov)})) : "";
       var pct=reached?100:unlocked?Math.max(0,Math.min(100,(cap-prev)/(m.v-prev)*100)):0;
-      var pill=reached?'<span class="pill done">✓ servi</span>':unlocked?'<span class="pill live">en cours</span>':'<span class="pill lock">🔒 dès '+eurk(prev)+'</span>';
+      var pill=reached?t('pill_served'):unlocked?t('pill_live'):t('pill_lock',{v:eurk(prev)});
       var foot;
-      if(reached){foot='<span style="color:var(--green)">✓ atteint</span>';}
-      else{var mn=monthsTo(m.v,cap,mo);foot=(mn>=9999)?'hors de portée à ce rythme — augmente ton versement':'atteint autour de '+frMonth(addMonths(ymNow(),mn))+(age>0?' · <b>~'+Math.round(age+mn/12)+' ans</b>':'');}
+      if(reached){foot=t('foot_reached');}
+      else{var mn=monthsTo(m.v,cap,mo);foot=(mn>=9999)?t('foot_unreach'):t('foot_eta',{m:frMonth(addMonths(ymNow(),mn)),age:(age>0?t('age_dot',{a:Math.round(age+mn/12)}):"")});}
       var d=document.createElement('div');d.className="ms"+(unlocked?"":" lock");
       d.innerHTML='<div class="ms-top"><div><div class="ms-name"><span class="bean" style="background:'+col+'"></span>'+goalName(i)+' '+pill+'</div>'+
         '<div class="ms-sub">'+eurk(m.v)+meaning+'</div></div>'+
@@ -387,7 +596,7 @@
       var row=document.createElement('div');row.className="goalrow";
       var nm=document.createElement('div');nm.className="gname-lbl";nm.innerHTML='<span class="bean" style="background:'+PAL[i%PAL.length]+'"></span>'+goalName(i);
       var vl=document.createElement('input');vl.type="number";vl.className="gval";vl.value=gg.v;vl.step=10000;
-      var del=document.createElement('button');del.className="ghost";del.textContent="×";del.title="Supprimer";del.setAttribute('aria-label','Supprimer ce palier');
+      var del=document.createElement('button');del.className="ghost";del.textContent="×";del.title=t('del_title');del.setAttribute('aria-label',t('del_aria'));
       vl.addEventListener('change',function(){goals[i].v=Math.max(0,+vl.value||0);goals.sort(function(a,b){return a.v-b.v;});s(K.goals,goals);render();});
       del.addEventListener('click',function(){goals.splice(i,1);s(K.goals,goals);render();});
       row.appendChild(nm);row.appendChild(vl);row.appendChild(del);host.appendChild(row);
@@ -396,19 +605,21 @@
 
   function renderSim(){
     var ap=document.getElementById('simApply');
-    if(!goals.length){document.getElementById('simOut').textContent="";ap.style.display='none';return;}
     var extra=+document.getElementById('simSlider').value||0;
-    document.getElementById('simExtra').textContent="+"+eur(extra).replace(" €","")+" €";
+    document.getElementById('simExtra').textContent="+"+eur(extra);
+    if(!goals.length){document.getElementById('simOut').textContent="";ap.style.display='none';return;}
     var ni=nextGoalIdx(),tgt=goals[ni].v;
-    if(cap>=goals[goals.length-1].v){document.getElementById('simOut').textContent="Tous les paliers sont atteints ☕🎉";ap.style.display='none';return;}
+    if(cap>=goals[goals.length-1].v){document.getElementById('simOut').textContent=t('sim_all');ap.style.display='none';return;}
     var base=monthsTo(tgt,cap,mo), wit=monthsTo(tgt,cap,mo+extra);
     var saved=base-wit;
-    var atW= age>0?" (~"+Math.round(age+wit/12)+" ans)":"";
-    if(extra===0){document.getElementById('simOut').innerHTML="Glisse le curseur pour voir l'effet d'un versement en plus sur ton palier à <b>"+eurk(tgt)+"</b>.";ap.style.display='none';return;}
-    if(wit>=9999){document.getElementById('simOut').innerHTML="Même avec ce versement, le palier <b>"+eurk(tgt)+"</b> reste hors de portée à horizon raisonnable.";ap.style.display='none';return;}
-    document.getElementById('simOut').innerHTML="Avec <b>"+eur(mo+extra)+"/mois</b>, tu atteins <b>"+eurk(tgt)+"</b> autour de "+frMonth(addMonths(ymNow(),wit))+atW+
-      " — soit <b>"+(saved>=12?Math.round(saved/12)+" an"+(saved>=24?"s":""):saved+" mois")+" plus tôt</b>.";
-    ap.textContent="Adopter "+eur(mo+extra)+"/mois";ap.style.display='inline-block';
+    var atW= age>0?t('sim_age',{a:Math.round(age+wit/12)}):"";
+    if(extra===0){document.getElementById('simOut').innerHTML=t('sim_slide',{v:eurk(tgt)});ap.style.display='none';return;}
+    if(wit>=9999){document.getElementById('simOut').innerHTML=t('sim_unreach',{v:eurk(tgt)});ap.style.display='none';return;}
+    var sooner;
+    if(saved>=12){var yy=Math.round(saved/12);sooner=t('sooner_years',{n:yy,s:(yy>1?"s":"")});}
+    else sooner=t('sooner_months',{n:saved});
+    document.getElementById('simOut').innerHTML=t('sim_reach',{permo:perMo(mo+extra),v:eurk(tgt),m:frMonth(addMonths(ymNow(),wit)),age:atW,sooner:sooner});
+    ap.textContent=t('sim_adopt',{permo:perMo(mo+extra)});ap.style.display='inline-block';
   }
 
   function renderSimAge(){
@@ -416,21 +627,21 @@
     ap.style.display='none';
     if(document.activeElement!==inp)inp.value=tage||'';
     inp.placeholder=age>0?String(age+10):'';
-    if(!(age>0)||!(expenses>0)){out.textContent="Renseigne ton âge et tes dépenses dans les Réglages pour utiliser ce mode.";return;}
+    if(!(age>0)||!(expenses>0)){out.textContent=t('age_setup');return;}
     var T=fiTarget();
-    if(passive(cap)>=expenses){out.textContent="Ta cagnotte couvre déjà tout ton train de vie ☕🎉";return;}
-    if(!tage){out.innerHTML="À quel âge veux-tu que ta cagnotte couvre tes "+eur(expenses)+"/mois ? Il te faudra <b>"+eurk(T)+"</b> au taux de retrait actuel.";return;}
-    if(tage<=age){out.textContent="Choisis un âge au-delà du tien ("+age+" ans).";return;}
+    if(passive(cap)>=expenses){out.textContent=t('age_covered');return;}
+    if(!tage){out.innerHTML=t('age_prompt',{expmo:perMo(expenses),v:eurk(T)});return;}
+    if(tage<=age){out.textContent=t('age_beyond',{a:age});return;}
     var n=(tage-age)*12, m=reqMonthly(T,cap,n);
-    if(m<=0){out.innerHTML="À "+rate+" %/an, ton capital atteint <b>"+eurk(T)+"</b> tout seul avant tes "+tage+" ans — ton versement actuel ne fait qu'accélérer ☕";return;}
-    var html="Pour couvrir tes "+eur(expenses)+"/mois à <b>"+tage+" ans</b> (cagnotte de "+eurk(T)+"), il faudrait verser <b>~"+eur(r10(m))+"/mois</b>.";
+    if(m<=0){out.innerHTML=t('age_selfreach',{rate:rate,v:eurk(T),tage:tage});return;}
+    var html=t('age_need',{expmo:perMo(expenses),tage:tage,v:eurk(T),permo:perMo(r10(m))});
     if(m>mo){
       var m3=reqMonthly(T,cap,n+36);
-      html+="<br>Leviers : viser <b>"+(tage+3)+" ans</b> ramène à ~"+eur(r10(m3))+"/mois";
-      if(expenses>200){var m2=reqMonthly((expenses-200)*12/(swr/100),cap,n);html+=" · 200 €/mois de dépenses en moins → ~"+eur(Math.max(0,r10(m2)))+"/mois.";}else{html+=".";}
-      ap.textContent="Adopter "+eur(r10(m))+"/mois";ap.style.display='inline-block';
+      html+=t('age_levers',{a:(tage+3),permo:perMo(r10(m3))});
+      if(expenses>200){var m2=reqMonthly((expenses-200)*12/(swr/100),cap,n);html+=t('age_lever_exp',{cutmo:perMo(200),permo:perMo(Math.max(0,r10(m2)))});}else{html+=".";}
+      ap.textContent=t('sim_adopt',{permo:perMo(r10(m))});ap.style.display='inline-block';
     }else{
-      html+=" Ton versement actuel ("+eur(mo)+"/mois) <b>suffit déjà</b> ☕🎉";
+      html+=t('age_enough',{permo:perMo(mo)});
     }
     out.innerHTML=html;
   }
@@ -458,12 +669,13 @@
         else if(future){cls="future";content='<span class="m">'+idx+'</span>';}
         else{cls="todo";content='<span class="plus">+</span>';clickable=true;}
         var c=document.createElement('div');c.className="cell "+cls;c.innerHTML=content;
-        c.title="Mois "+idx+" · "+frMonth(ym)+(on?" · "+eur(amt):(cls==="todo"?" · à remplir":""));
+        var baseT=t('month_n',{i:idx,m:frMonth(ym)});
+        c.title=baseT+(on?" · "+eur(amt):(cls==="todo"?t('to_fill'):""));
         if(clickable){
           var act=(function(key,cur){return function(){ if(cur>0){openModal(key);} else{amounts[key]=mo;s(K.amt,amounts);render();} }})(ym,amt);
           c.onclick=act;
           c.setAttribute('tabindex','0');c.setAttribute('role','button');
-          c.setAttribute('aria-label',"Mois "+idx+" · "+frMonth(ym)+(on?" · "+eur(amt)+", ajuster":", investir"));
+          c.setAttribute('aria-label',baseT+(on?t('aria_adjust',{a:eur(amt)}):t('aria_invest')));
           c.addEventListener('keydown',(function(fn){return function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();fn();}}})(act));
         }else{c.style.cursor="default";}
         mr.appendChild(c);
@@ -478,7 +690,7 @@
   }
 
   function renderChart(){
-    if(typeof Chart==='undefined'){var cw=document.querySelector('.chart-wrap');if(cw&&!cw.querySelector('.note'))cw.innerHTML='<p class="note">Graphique indisponible pour l\'instant (connexion requise au premier chargement).</p>';return;}
+    if(typeof Chart==='undefined'){var cw=document.querySelector('.chart-wrap');if(cw&&!cw.querySelector('.note'))cw.innerHTML='<p class="note">'+t('chart_unavail')+'</p>';return;}
     var anchorYm=hist.length?hist[0].d:ymNow(), anchorVal=hist.length?hist[0].v:cap;
     var tgt=goals.length?goals[goals.length-1].v:300000;
     var n=Math.min(600,monthsTo(tgt,anchorVal,mo)+2), vv=anchorVal, plan=[];
@@ -486,10 +698,10 @@
     var labels=plan.map(function(p){return p.d;}), hm={};hist.forEach(function(h){hm[h.d]=h.v;});
     var real=labels.map(function(l){return hm[l]!==undefined?Math.round(hm[l]):null;});
     var data={labels:labels.map(frMonth),datasets:[
-      {label:'Réel',data:real,borderColor:'#6f4e37',backgroundColor:'rgba(111,78,55,.12)',borderWidth:2.5,pointRadius:3,pointBackgroundColor:'#6f4e37',spanGaps:true,fill:true,tension:.25},
-      {label:'Plan',data:plan.map(function(p){return p.v;}),borderColor:'#8a7563',borderWidth:1.5,borderDash:[5,4],pointRadius:0,fill:false,tension:.25}
+      {label:t('lg_real'),data:real,borderColor:'#6f4e37',backgroundColor:'rgba(111,78,55,.12)',borderWidth:2.5,pointRadius:3,pointBackgroundColor:'#6f4e37',spanGaps:true,fill:true,tension:.25},
+      {label:t('lg_plan'),data:plan.map(function(p){return p.v;}),borderColor:'#8a7563',borderWidth:1.5,borderDash:[5,4],pointRadius:0,fill:false,tension:.25}
     ]};
-    var opts={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return (c.datasetIndex===0?'Réel : ':'Plan : ')+(c.parsed.y==null?'—':c.parsed.y.toLocaleString('fr-FR')+' €');}}}},
+    var opts={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return (c.datasetIndex===0?t('tt_real'):t('tt_plan'))+(c.parsed.y==null?'—':eur(c.parsed.y));}}}},
       scales:{x:{ticks:{color:'#7f6b57',maxTicksLimit:7,font:{size:10}},grid:{display:false}},y:{ticks:{color:'#7f6b57',font:{size:10},callback:function(v){return v===0?'':Math.round(v/1000)+'k';}},grid:{color:'#ece0cf'}}}};
     var goalLines={id:'goalLines',afterDatasetsDraw:function(ch){var yA=ch.scales.y,xA=ch.scales.x,c2=ch.ctx;goals.forEach(function(gg,i){if(gg.v>=yA.min&&gg.v<=yA.max){var py=yA.getPixelForValue(gg.v);c2.save();c2.strokeStyle=PAL[i%PAL.length];c2.setLineDash([4,3]);c2.globalAlpha=.55;c2.lineWidth=1;c2.beginPath();c2.moveTo(xA.left,py);c2.lineTo(xA.right,py);c2.stroke();c2.globalAlpha=1;c2.setLineDash([]);c2.fillStyle=PAL[i%PAL.length];c2.font='9px sans-serif';c2.textAlign='right';c2.fillText(goalName(i),xA.right-2,py-3);c2.restore();}});}};
     if(chart){chart.data=data;chart.options=opts;chart.update();}else{chart=new Chart(document.getElementById('chart'),{type:'line',data:data,options:opts,plugins:[goalLines]});}
@@ -500,18 +712,20 @@
   function toast(msg){var t=document.createElement('div');t.className="toast";t.textContent=msg;document.getElementById('toasts').appendChild(t);
     setTimeout(function(){t.classList.add('show');},20);setTimeout(function(){t.classList.remove('show');setTimeout(function(){t.remove();},400);},3600);}
   function syncCelebrated(silent){
-    goals.forEach(function(gg,i){ if(cap>=gg.v && celebrated.indexOf(gg.v)<0){ celebrated.push(gg.v); if(!silent)toast("☕ "+goalName(i)+" servi ! Palier "+eurk(gg.v)+" atteint 🎉"); } });
+    goals.forEach(function(gg,i){ if(cap>=gg.v && celebrated.indexOf(gg.v)<0){ celebrated.push(gg.v); if(!silent)toast(t('toast_served',{name:goalName(i),v:eurk(gg.v)})); } });
     s(K.cel,celebrated);
   }
 
   function bind(id,key,setter,after){document.getElementById(id).addEventListener('change',function(e){var v=Math.max(0,+e.target.value||0);setter(v);s(key,v);if(after)after();render();});}
   function recordSnapshot(){var ym=ymNow();hist=hist.filter(function(h){return h.d!==ym;});hist.push({d:ym,v:cap});hist.sort(function(a,b){return a.d<b.d?-1:1;});s(K.hist,hist);}
-  bind('capital',K.cap,function(v){cap=v;},function(){var ym=ymNow();if(!(amounts[ym]>0)&&mo>0){amounts[ym]=mo;s(K.amt,amounts);toast("☕ Mois en cours tamponné à "+eur(mo)+" — clique le grain pour ajuster");}recordSnapshot();syncCelebrated(false);});
+  bind('capital',K.cap,function(v){cap=v;},function(){var ym=ymNow();if(!(amounts[ym]>0)&&mo>0){amounts[ym]=mo;s(K.amt,amounts);toast(t('toast_stamped',{x:eur(mo)}));}recordSnapshot();syncCelebrated(false);});
   bind('monthly',K.mo,function(v){mo=v;});
   bind('expenses',K.exp,function(v){expenses=v;});
   bind('age',K.age,function(v){age=v;});
   document.getElementById('rate').addEventListener('change',function(e){rate=Math.max(0,+e.target.value||6);R=rate/100/12;s(K.rate,rate);render();});
   document.getElementById('swr').addEventListener('change',function(e){swr=Math.max(0.1,+e.target.value||4);s(K.swr,swr);render();});
+  document.getElementById('langSel').addEventListener('change',function(){LANG=this.value==='en'?'en':'fr';s(K.lang,LANG);applyStatic();render();});
+  document.getElementById('curSel').addEventListener('change',function(){CUR=SYMS[this.value]?this.value:'EUR';CURSYM=SYMS[CUR];s(K.cur,CUR);applyStatic();render();});
   Array.prototype.forEach.call(document.querySelectorAll('.info'),function(ic){
     ic.setAttribute('tabindex','0');ic.setAttribute('role','button');ic.setAttribute('aria-expanded','false');ic.setAttribute('aria-label','Explication');
     function tog(){var f=document.getElementById('fly-'+ic.getAttribute('data-k'));if(f){f.classList.toggle('open');ic.setAttribute('aria-expanded',f.classList.contains('open')?'true':'false');}}
@@ -522,7 +736,7 @@
   document.getElementById('simApply').addEventListener('click',function(){
     var extra=+document.getElementById('simSlider').value||0;if(!extra)return;
     mo=mo+extra;s(K.mo,mo);document.getElementById('simSlider').value=0;
-    toast("☕ Nouveau versement adopté : "+eur(mo)+"/mois");render();
+    toast(t('toast_adopted',{permo:perMo(mo)}));render();
   });
   document.getElementById('simModeExtra').addEventListener('click',function(){setSimMode('extra');});
   document.getElementById('simModeAge').addEventListener('click',function(){setSimMode('age');});
@@ -532,12 +746,12 @@
     var m=reqMonthly(fiTarget(),cap,(tage-age)*12);
     if(!isFinite(m)||m<=0)return;
     mo=r10(m);s(K.mo,mo);
-    toast("☕ Nouveau versement adopté : "+eur(mo)+"/mois");render();
+    toast(t('toast_adopted',{permo:perMo(mo)}));render();
   });
   document.getElementById('editGoalsBtn').addEventListener('click',function(){
     var w=document.getElementById('goalsEditWrap'),open=w.style.display!=='none';
     w.style.display=open?'none':'block';
-    this.textContent=open?'✎ Ajuster mes paliers':'Fermer l\'édition';
+    this.textContent=open?t('btn_edit_goals'):t('btn_close_edit');
   });
   document.getElementById('addGoal').addEventListener('click',function(){goals.push({v:(goals.length?goals[goals.length-1].v+300000:300000)});s(K.goals,goals);render();});
   var onbEl=document.getElementById('onb');
@@ -558,23 +772,25 @@
   });
 
   document.getElementById('resetBtn').addEventListener('click',function(){
-    if(confirm("Réinitialiser toutes tes données ?")){Object.keys(K).forEach(function(k){localStorage.removeItem(K[k]);});
-      cap=0;mo=500;expenses=2000;age=30;tage=0;goals=JSON.parse(JSON.stringify(DEF_GOALS));amounts={};hist=[];celebrated=[];baseInvested=0;startYm=ymNow();render();showOnb();}
+    if(confirm(t('confirm_reset'))){Object.keys(K).forEach(function(k){localStorage.removeItem(K[k]);});
+      cap=0;mo=500;expenses=2000;age=30;tage=0;goals=JSON.parse(JSON.stringify(DEF_GOALS));amounts={};hist=[];celebrated=[];baseInvested=0;startYm=ymNow();
+      s(K.lang,LANG);s(K.cur,CUR);render();showOnb();}
   });
   document.getElementById('exportBtn').addEventListener('click',function(){
-    var blob=new Blob([JSON.stringify({version:1,cap:cap,mo:mo,expenses:expenses,age:age,rate:rate,swr:swr,tage:tage,baseInvested:baseInvested,startYm:startYm,goals:goals,amounts:amounts,hist:hist,celebrated:celebrated},null,2)],{type:"application/json"});
-    var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download="coffee-roaster-sauvegarde.json";a.click();
+    var blob=new Blob([JSON.stringify({version:1,cap:cap,mo:mo,expenses:expenses,age:age,rate:rate,swr:swr,tage:tage,lang:LANG,cur:CUR,baseInvested:baseInvested,startYm:startYm,goals:goals,amounts:amounts,hist:hist,celebrated:celebrated},null,2)],{type:"application/json"});
+    var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=t('export_filename');a.click();
   });
   document.getElementById('importBtn').addEventListener('click',function(){document.getElementById('importFile').click();});
   document.getElementById('importFile').addEventListener('change',function(e){
     var f=e.target.files[0];if(!f)return;var r=new FileReader();
     r.onload=function(){try{var d=JSON.parse(r.result);
       if(!d||typeof d!=='object'||Array.isArray(d))throw new Error("bad");
-      if(!confirm("Remplacer toutes les données actuelles par cette sauvegarde ?"))return;
+      if(!confirm(t('confirm_import')))return;
       var nn=function(v,def){return (v!=null&&isFinite(+v))?+v:def;};
       cap=nn(d.cap,0);mo=nn(d.mo,500);expenses=nn(d.expenses,2000);age=nn(d.age,30);rate=nn(d.rate,6);swr=nn(d.swr,4);tage=nn(d.tage,0);baseInvested=nn(d.baseInvested,cap);startYm=d.startYm||ymNow();goals=Array.isArray(d.goals)?d.goals:DEF_GOALS;amounts=(d.amounts&&typeof d.amounts==='object')?d.amounts:{};hist=Array.isArray(d.hist)?d.hist:[];celebrated=Array.isArray(d.celebrated)?d.celebrated:[];R=rate/100/12;
-      s(K.cap,cap);s(K.mo,mo);s(K.exp,expenses);s(K.age,age);s(K.rate,rate);s(K.swr,swr);s(K.tage,tage);s(K.base,baseInvested);s(K.start,startYm);s(K.goals,goals);s(K.amt,amounts);s(K.hist,hist);s(K.cel,celebrated);render();
-    }catch(err){alert("Fichier invalide.");}finally{e.target.value="";}};r.readAsText(f);
+      if(d.lang==='en'||d.lang==='fr')LANG=d.lang; if(SYMS[d.cur])CUR=d.cur; CURSYM=SYMS[CUR];
+      s(K.cap,cap);s(K.mo,mo);s(K.exp,expenses);s(K.age,age);s(K.rate,rate);s(K.swr,swr);s(K.tage,tage);s(K.lang,LANG);s(K.cur,CUR);s(K.base,baseInvested);s(K.start,startYm);s(K.goals,goals);s(K.amt,amounts);s(K.hist,hist);s(K.cel,celebrated);applyStatic();render();
+    }catch(err){alert(t('alert_invalid'));}finally{e.target.value="";}};r.readAsText(f);
   });
 
   // modal
@@ -593,6 +809,7 @@
   document.addEventListener('keydown',function(e){if(e.key==='Escape'&&mEl.style.display==='flex')closeModal();});
   Array.prototype.forEach.call(document.querySelectorAll('#onb2 input'),function(inp){inp.addEventListener('keydown',function(e){if(e.key==='Enter')document.getElementById('onbFinish').click();});});
 
+  applyStatic();
   syncCelebrated(true);
   render();
   if(!g(K.onb,false))showOnb();
