@@ -207,7 +207,7 @@
         <div style="flex:1;min-width:140px">
           <label><span data-i18n="lbl_return">Rendement annuel réel (%)</span> <span class="info" data-k="return">i</span></label>
           <input type="number" id="rate" step="0.5">
-          <div class="flyout" id="fly-return" data-i18n="fly_return">Le gain annuel moyen espéré de tes placements, <b>après inflation</b> (« réel »). Repère : un portefeuille d'actions diversifié rapporte historiquement <b>~5 à 7 %/an réel</b> sur le long terme. Au-delà, méfiance — on se berce vite d'illusions. À noter : le « plan » du graphique est en euros d'aujourd'hui, alors que ta valeur saisie gonfle aussi avec l'inflation — « battre le plan » sur la durée est donc en partie normal.</div>
+          <div class="flyout" id="fly-return" data-i18n="fly_return">Le gain annuel moyen espéré de tes placements, <b>après inflation</b> (« réel »). Repères par profil : <b>100 % actions</b> ~5 à 6 %/an · <b>diversifié</b> (type 60/40 actions/obligations) ~3,5 à 4,5 % · <b>fonds euros / obligations</b> ~1 à 2 %. Au-delà de 6-7 %, méfiance — on se berce vite d'illusions. À noter : le « plan » du graphique est en euros d'aujourd'hui, alors que ta valeur saisie gonfle aussi avec l'inflation — « battre le plan » sur la durée est donc en partie normal.</div>
         </div>
         <div style="flex:1;min-width:140px">
           <label><span data-i18n="lbl_swr">Taux de retrait (%)</span> <span class="info" data-k="swr">i</span></label>
@@ -334,7 +334,7 @@
       ey_settings:"Réglages",
       lbl_expenses:"Dépenses /mois (%CUR%)", lbl_age:"Ton âge",
       lbl_return:"Rendement annuel réel (%)",
-      fly_return:"Le gain annuel moyen espéré de tes placements, <b>après inflation</b> (« réel »). Repère : un portefeuille d'actions diversifié rapporte historiquement <b>~5 à 7 %/an réel</b> sur le long terme. Au-delà, méfiance — on se berce vite d'illusions. À noter : le « plan » du graphique est en euros d'aujourd'hui, alors que ta valeur saisie gonfle aussi avec l'inflation — « battre le plan » sur la durée est donc en partie normal.",
+      fly_return:"Le gain annuel moyen espéré de tes placements, <b>après inflation</b> (« réel »). Repères par profil : <b>100 % actions</b> ~5 à 6 %/an · <b>diversifié</b> (type 60/40 actions/obligations) ~3,5 à 4,5 % · <b>fonds euros / obligations</b> ~1 à 2 %. Au-delà de 6-7 %, méfiance — on se berce vite d'illusions. À noter : le « plan » du graphique est en euros d'aujourd'hui, alors que ta valeur saisie gonfle aussi avec l'inflation — « battre le plan » sur la durée est donc en partie normal.",
       lbl_swr:"Taux de retrait (%)",
       fly_swr:"Le pourcentage de ton capital que tu peux retirer chaque année sans l'épuiser — la fameuse <b>« règle des 4 % »</b>. Prudent : <b>3 à 4 %</b>. Plus bas = plus sûr, surtout pour une longue période. Et pense <b>net d'impôts</b> : les retraits sont fiscalisés (≈ 17 à 30 % sur les gains selon l'enveloppe) — vise large sur tes dépenses.",
       ey_chart:"Évolution — réel vs plan", lg_real:"Réel", lg_plan:"Plan",
@@ -422,7 +422,7 @@
       ey_settings:"Settings",
       lbl_expenses:"Expenses /month (%CUR%)", lbl_age:"Your age",
       lbl_return:"Real annual return (%)",
-      fly_return:"The average yearly gain you expect from your investments, <b>after inflation</b> (real). Benchmark: a diversified stock portfolio has historically returned <b>~5 to 7%/yr real</b> over the long run. Beyond that, be wary — it's easy to fool yourself. Note: the chart's plan is in today's money, while the value you enter also inflates over time — so beating the plan over the years is partly normal.",
+      fly_return:"The average yearly gain you expect from your investments, <b>after inflation</b> (real). Benchmarks by profile: <b>100% stocks</b> ~5 to 6%/yr · <b>diversified</b> (e.g. 60/40 stocks/bonds) ~3.5 to 4.5% · <b>bonds / cash-like</b> ~1 to 2%. Above 6-7%, be wary — it's easy to fool yourself. Note: the chart's plan is in today's money, while the value you enter also inflates over time — so beating the plan over the years is partly normal.",
       lbl_swr:"Withdrawal rate (%)",
       fly_swr:"The share of your capital you can withdraw each year without depleting it — the famous <b>4% rule</b>. Cautious: <b>3 to 4%</b>. Lower = safer, especially over a long horizon. And think <b>after tax</b>: withdrawals are taxed (≈ 15 to 30% on gains depending on the account) — aim high on your expenses.",
       ey_chart:"Progress — actual vs plan", lg_real:"Actual", lg_plan:"Plan",
@@ -500,7 +500,7 @@
 
   var cap=g(K.cap,0), mo=g(K.mo,500), expenses=g(K.exp,2000), age=g(K.age,30),
       goals=g(K.goals,DEF_GOALS), amounts=g(K.amt,{}), hist=g(K.hist,[]), celebrated=g(K.cel,[]),
-      rate=g(K.rate,6), swr=g(K.swr,4), baseInvested=g(K.base,null), startYm=g(K.start,null), tage=g(K.tage,0), chart=null;
+      rate=g(K.rate,5), swr=g(K.swr,4), baseInvested=g(K.base,null), startYm=g(K.start,null), tage=g(K.tage,0), chart=null;
   R=rate/100/12;
   if(baseInvested===null){baseInvested=cap;s(K.base,baseInvested);}
   if(startYm===null){startYm=ymNow();s(K.start,startYm);}
@@ -729,7 +729,7 @@
   bind('monthly',K.mo,function(v){mo=v;});
   bind('expenses',K.exp,function(v){expenses=v;});
   bind('age',K.age,function(v){age=v;});
-  document.getElementById('rate').addEventListener('change',function(e){rate=Math.max(0,+e.target.value||6);R=rate/100/12;s(K.rate,rate);render();});
+  document.getElementById('rate').addEventListener('change',function(e){rate=Math.max(0,+e.target.value||5);R=rate/100/12;s(K.rate,rate);render();});
   document.getElementById('swr').addEventListener('change',function(e){swr=Math.max(0.1,+e.target.value||4);s(K.swr,swr);render();});
   function setLang(v){LANG=v==='en'?'en':'fr';s(K.lang,LANG);applyStatic();render();}
   function setCur(v){CUR=SYMS[v]?v:'EUR';CURSYM=SYMS[CUR];s(K.cur,CUR);applyStatic();render();}
@@ -782,7 +782,7 @@
 
   document.getElementById('resetBtn').addEventListener('click',function(){
     if(confirm(t('confirm_reset'))){Object.keys(K).forEach(function(k){localStorage.removeItem(K[k]);});
-      cap=0;mo=500;expenses=2000;age=30;tage=0;goals=JSON.parse(JSON.stringify(DEF_GOALS));amounts={};hist=[];celebrated=[];baseInvested=0;startYm=ymNow();
+      cap=0;mo=500;expenses=2000;age=30;tage=0;rate=5;swr=4;R=rate/100/12;goals=JSON.parse(JSON.stringify(DEF_GOALS));amounts={};hist=[];celebrated=[];baseInvested=0;startYm=ymNow();
       s(K.lang,LANG);s(K.cur,CUR);render();showOnb();}
   });
   document.getElementById('exportBtn').addEventListener('click',function(){
@@ -796,7 +796,7 @@
       if(!d||typeof d!=='object'||Array.isArray(d))throw new Error("bad");
       if(!confirm(t('confirm_import')))return;
       var nn=function(v,def){return (v!=null&&isFinite(+v))?+v:def;};
-      cap=nn(d.cap,0);mo=nn(d.mo,500);expenses=nn(d.expenses,2000);age=nn(d.age,30);rate=nn(d.rate,6);swr=nn(d.swr,4);tage=nn(d.tage,0);baseInvested=nn(d.baseInvested,cap);startYm=d.startYm||ymNow();goals=Array.isArray(d.goals)?d.goals:DEF_GOALS;amounts=(d.amounts&&typeof d.amounts==='object')?d.amounts:{};hist=Array.isArray(d.hist)?d.hist:[];celebrated=Array.isArray(d.celebrated)?d.celebrated:[];R=rate/100/12;
+      cap=nn(d.cap,0);mo=nn(d.mo,500);expenses=nn(d.expenses,2000);age=nn(d.age,30);rate=nn(d.rate,5);swr=nn(d.swr,4);tage=nn(d.tage,0);baseInvested=nn(d.baseInvested,cap);startYm=d.startYm||ymNow();goals=Array.isArray(d.goals)?d.goals:DEF_GOALS;amounts=(d.amounts&&typeof d.amounts==='object')?d.amounts:{};hist=Array.isArray(d.hist)?d.hist:[];celebrated=Array.isArray(d.celebrated)?d.celebrated:[];R=rate/100/12;
       if(d.lang==='en'||d.lang==='fr')LANG=d.lang; if(SYMS[d.cur])CUR=d.cur; CURSYM=SYMS[CUR];
       s(K.cap,cap);s(K.mo,mo);s(K.exp,expenses);s(K.age,age);s(K.rate,rate);s(K.swr,swr);s(K.tage,tage);s(K.lang,LANG);s(K.cur,CUR);s(K.base,baseInvested);s(K.start,startYm);s(K.goals,goals);s(K.amt,amounts);s(K.hist,hist);s(K.cel,celebrated);applyStatic();render();
     }catch(err){alert(t('alert_invalid'));}finally{e.target.value="";}};r.readAsText(f);
