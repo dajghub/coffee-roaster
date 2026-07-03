@@ -242,6 +242,7 @@
   </div>
 
   <p class="note" style="text-align:center;margin-top:4px" data-i18n="footer_note">Tes données vivent uniquement dans ce navigateur — rien n'est envoyé en ligne.<br>Pense à cliquer <b>Exporter</b> pour télécharger une sauvegarde de temps en temps : vider le cache du navigateur les effacerait.</p>
+  <button class="ghost" id="donateBtn" data-i18n="donate_btn" style="display:block;margin:12px auto 0">☕ Offre-moi un café</button>
 
   <div id="onb">
     <div class="onb-card">
@@ -354,6 +355,7 @@
       kpi_streak:"série en cours (mois)", kpi_months:"mois investis", kpi_total:"total investi",
       cal_help:"« + » pour investir&nbsp;&nbsp;·&nbsp;&nbsp;grain plein pour ajuster",
       footer_note:"Tes données vivent uniquement dans ce navigateur — rien n'est envoyé en ligne.<br>Pense à cliquer <b>Exporter</b> pour télécharger une sauvegarde de temps en temps : vider le cache du navigateur les effacerait.",
+      donate_btn:"☕ Offre-moi un café",
       onb_tag:"Torréfie ton capital jusqu'à l'indépendance financière — un grain à la fois, à ton rythme.",
       onb_privacy:"☕ <b>100 % privé</b> : tes chiffres restent dans ton navigateur. Aucun compte, aucun serveur, personne d'autre n'y accède.",
       onb_start:"Commencer",
@@ -456,6 +458,7 @@
       kpi_streak:"current streak (months)", kpi_months:"months invested", kpi_total:"total invested",
       cal_help:"« + » to invest&nbsp;&nbsp;·&nbsp;&nbsp;full bean to adjust",
       footer_note:"Your data lives only in this browser — nothing is sent online.<br>Click <b>Export</b> now and then to download a backup: clearing your browser cache would erase it.",
+      donate_btn:"☕ Buy me a coffee",
       onb_tag:"Roast your capital toward financial independence — one bean at a time, at your own pace.",
       onb_privacy:"☕ <b>100% private</b>: your numbers stay in your browser. No account, no server, no one else can see them.",
       onb_start:"Start",
@@ -843,6 +846,9 @@
     if(confirm(t('confirm_reset'))){Object.keys(K).forEach(function(k){localStorage.removeItem(K[k]);});
       cap=0;cushion=0;mo=500;expenses=2000;age=30;tage=0;rate=5;swr=4;R=rate/100/12;goals=JSON.parse(JSON.stringify(DEF_GOALS));amounts={};hist=[];celebrated=[];baseInvested=0;startYm=ymNow();
       s(K.lang,LANG);s(K.cur,CUR);render();showOnb();}
+  });
+  document.getElementById('donateBtn').addEventListener('click',function(){
+    window.open('https://buymeacoffee.com/getcoffeeroaster','_blank','noopener');
   });
   document.getElementById('exportBtn').addEventListener('click',function(){
     var blob=new Blob([JSON.stringify({version:1,cap:cap,cushion:cushion,mo:mo,expenses:expenses,age:age,rate:rate,swr:swr,tage:tage,lang:LANG,cur:CUR,baseInvested:baseInvested,startYm:startYm,goals:goals,amounts:amounts,hist:hist,celebrated:celebrated},null,2)],{type:"application/json"});
