@@ -948,8 +948,8 @@
 
   function bind(id,key,setter,after){document.getElementById(id).addEventListener('change',function(e){var v=Math.max(0,+e.target.value||0);setter(v);s(key,v);if(after)after();render();});}
   function recordSnapshot(){var ym=ymNow();hist=hist.filter(function(h){return h.d!==ym;});hist.push({d:ym,v:cap});hist.sort(function(a,b){return a.d<b.d?-1:1;});s(K.hist,hist);}
-  // Éditer la valeur = corriger le chiffre (sûr, sans conséquence). Le tampon du mois + snapshot + célébration se font au clic sur « Enregistrer ce mois » (geste volontaire).
-  bind('capital',K.cap,function(v){cap=v;});
+  // Éditer la valeur = corriger le chiffre + faire suivre la courbe (recordSnapshot idempotent par mois). PAS de tampon ni de célébration ici : ça reste réservé au clic « Enregistrer ce mois » (geste volontaire).
+  bind('capital',K.cap,function(v){cap=v;},function(){recordSnapshot();});
   function updateLogBtnLabel(){var b=document.getElementById('logMonthBtn');if(!b||b.classList.contains('ok'))return;b.innerHTML=(amounts[ymNow()]>0)?t('btn_log_update'):t('btn_log_month');}
   function animateStamp(){var cell=document.querySelector('#calendar .cell.cal-current');if(cell){cell.classList.remove('stamped-now');void cell.offsetWidth;cell.classList.add('stamped-now');}}
   document.getElementById('logMonthBtn').addEventListener('click',function(){
