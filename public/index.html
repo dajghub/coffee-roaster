@@ -55,6 +55,7 @@
   button:hover{background:var(--espresso)}
   button.ghost{background:transparent;border:1px solid var(--line2);color:var(--mut)}
   button.ghost:hover{background:var(--cream);color:var(--ink)}
+  button.ok,button.ok:hover{background:var(--green);color:#fff}
   button.ghost.danger{color:#a33b2e;border-color:#dcb4a8}
   button.ghost.danger:hover{background:#f6e3dd;color:#8f2f23}
   .cell:focus-visible,.info:focus-visible,button:focus-visible{outline:2px solid var(--coffee);outline-offset:2px}
@@ -104,6 +105,8 @@
   .cell.pre{opacity:.5;border:1.5px solid var(--line2);background:var(--cream);color:var(--dim);cursor:default}
   .cell.todo{border:1.5px dashed var(--caramel)}
   .cell.todo .plus{color:var(--caramel);font-size:13px;font-weight:700;line-height:1}
+  @keyframes stampPop{0%{transform:scale(.55);opacity:.35}55%{transform:scale(1.18)}100%{transform:scale(1)}}
+  .cell.stamped-now{animation:stampPop .5s cubic-bezier(.2,1.3,.5,1)}
   .goalrow{display:flex;gap:8px;margin-bottom:8px;align-items:center}
   .goalrow input.gval{flex:1}
   .gname-lbl{display:flex;align-items:center;gap:8px;flex:1.4;font-weight:600;color:var(--espresso);font-size:14px}
@@ -189,6 +192,7 @@
         <div style="flex:1.3;min-width:140px"><label data-i18n="lbl_curval">Valeur actuelle (€)</label><input type="number" id="capital" step="100"></div>
         <div style="flex:1;min-width:110px"><label data-i18n="lbl_monthly">Investissement /mois (€)</label><input type="number" id="monthly" step="50"></div>
       </div>
+      <button id="logMonthBtn" data-i18n="btn_log_month" style="width:100%;margin-top:12px">☕ Enregistrer ce mois</button>
       <p class="hint" id="projLine"></p>
     </div>
     <div class="card">
@@ -525,6 +529,9 @@
       faq_q3:"Comment ça marche ?",
       faq_a3:"Tu renseignes ton capital, ton épargne de précaution et tes dépenses cibles. L'app estime ton chiffre d'indépendance (dépenses × 12 ÷ taux de retrait) et te montre ta progression vers des paliers, un grain de café tamponné par mois investi.",
       toast_stamped:"☕ Mois en cours tamponné à {x} — clique le grain pour ajuster",
+      btn_log_month:"☕ Enregistrer ce mois",
+      btn_log_update:"✓ Mois enregistré — mettre à jour",
+      btn_log_done:"✓ Enregistré ☕",
       toast_adopted:"☕ Nouveau versement adopté : {permo}",
       toast_capfromlink:"☕ Capital mis à jour depuis ton relevé : {x}",
       confirm_reset:"Réinitialiser toutes tes données ?",
@@ -653,6 +660,9 @@
       faq_q3:"How does it work?",
       faq_a3:"You enter your capital, emergency fund and target expenses. The app estimates your independence number (expenses × 12 ÷ withdrawal rate) and shows your progress toward milestones, one roasted bean per month invested.",
       toast_stamped:"☕ Current month stamped at {x} — click the bean to adjust",
+      btn_log_month:"☕ Log this month",
+      btn_log_update:"✓ Month logged — update",
+      btn_log_done:"✓ Logged ☕",
       toast_adopted:"☕ New contribution adopted: {permo}",
       toast_capfromlink:"☕ Capital updated from your statement: {x}",
       confirm_reset:"Reset all your data?",
@@ -750,6 +760,7 @@
     }
     document.getElementById('projLine').textContent=hist.length?t('proj_updated',{m:frMonth(hist[hist.length-1].d)}):t('proj_prompt');
     renderMs();renderGoalsEditor();renderSim();renderSimAge();renderCal();renderChart();
+    updateLogBtnLabel();
   }
 
   function renderMs(){
@@ -873,7 +884,7 @@
         if(on){cls="on";content='<span class="m">'+idx+'</span><span class="amt">'+Math.round(amt)+'</span>';clickable=true;}
         else if(future){cls="future";content='<span class="m">'+idx+'</span>';}
         else{cls="todo";content='<span class="plus">+</span>';clickable=true;}
-        var c=document.createElement('div');c.className="cell "+cls;c.innerHTML=content;
+        var c=document.createElement('div');c.className="cell "+cls+(idx===curIdx?" cal-current":"");c.innerHTML=content;
         var baseT=t('month_n',{i:idx,m:frMonth(ym)});
         c.title=baseT+(on?" · "+eur(amt):(cls==="todo"?t('to_fill'):""));
         if(clickable){
@@ -937,7 +948,20 @@
 
   function bind(id,key,setter,after){document.getElementById(id).addEventListener('change',function(e){var v=Math.max(0,+e.target.value||0);setter(v);s(key,v);if(after)after();render();});}
   function recordSnapshot(){var ym=ymNow();hist=hist.filter(function(h){return h.d!==ym;});hist.push({d:ym,v:cap});hist.sort(function(a,b){return a.d<b.d?-1:1;});s(K.hist,hist);}
-  bind('capital',K.cap,function(v){cap=v;},function(){var ym=ymNow();if(!(amounts[ym]>0)&&mo>0){amounts[ym]=mo;s(K.amt,amounts);toast(t('toast_stamped',{x:eur(mo)}));}recordSnapshot();syncCelebrated(false);});
+  // Éditer la valeur = corriger le chiffre (sûr, sans conséquence). Le tampon du mois + snapshot + célébration se font au clic sur « Enregistrer ce mois » (geste volontaire).
+  bind('capital',K.cap,function(v){cap=v;});
+  function updateLogBtnLabel(){var b=document.getElementById('logMonthBtn');if(!b||b.classList.contains('ok'))return;b.innerHTML=(amounts[ymNow()]>0)?t('btn_log_update'):t('btn_log_month');}
+  function animateStamp(){var cell=document.querySelector('#calendar .cell.cal-current');if(cell){cell.classList.remove('stamped-now');void cell.offsetWidth;cell.classList.add('stamped-now');}}
+  document.getElementById('logMonthBtn').addEventListener('click',function(){
+    var b=this;
+    cap=Math.max(0,+document.getElementById('capital').value||0);s(K.cap,cap);
+    mo=Math.max(0,+document.getElementById('monthly').value||0);s(K.mo,mo);
+    var ym=ymNow();if(!(amounts[ym]>0)&&mo>0){amounts[ym]=mo;s(K.amt,amounts);} // tampon une fois/mois
+    recordSnapshot();render();animateStamp();
+    b.classList.add('ok');b.innerHTML=t('btn_log_done'); // micro-célébration
+    clearTimeout(b._t);b._t=setTimeout(function(){b.classList.remove('ok');updateLogBtnLabel();},2000);
+    syncCelebrated(false); // grande célébration seulement si palier franchi
+  });
   bind('monthly',K.mo,function(v){mo=v;});
   bind('expenses',K.exp,function(v){expenses=v;});
   bind('cushion',K.cushion,function(v){cushion=v;},function(){syncCelebrated(false);});
