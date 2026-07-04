@@ -473,12 +473,12 @@
       proj_updated:"Dernière mise à jour : {m}.",
       proj_prompt:"Mets à jour ta valeur chaque mois — la courbe se trace au fil de l'eau.",
       ms_empty:"Ajoute un palier ci-dessous pour commencer.",
-      ms_indep:" · ≈ {inc}/mois — <span style='color:var(--green)'>ton indépendance, tout ton train de vie couvert ☕</span>",
-      ms_covers:" · ≈ {inc}/mois, soit ~{p} % de ton train de vie",
-      ms_months:" · ≈ {n} mois de dépenses",
+      ms_indep:"≈ {inc}/mois — <span style='color:var(--green)'>ton indépendance, tout ton train de vie couvert ☕</span>",
+      ms_covers:"≈ {inc}/mois, soit ~{p} % de ton train de vie",
+      ms_months:"≈ {n} mois de dépenses",
       ms_life_cushion:"Ton matelas de sécurité : de quoi encaisser un imprévu — perte d'emploi, gros pépin — sans t'endetter.",
       ms_surplus:"Tu dépasses ton matelas de {amount} (~{mlabel} en trop) — ce surplus dort en liquide. Tu pourrais en investir une partie pour accélérer vers l'indépendance.",
-      ms_life_early:"Une vraie base : tu peux voir venir et prendre des risques mesurés (formation, projet, reconversion).",
+      ms_life_early:"Une vraie base : tu peux voir venir et prendre des risques mesurés.",
       ms_life_mid:"De quoi lever le pied : temps partiel, pause, ou un travail qui compte plus que le salaire.",
       ms_life_high:"Le travail devient surtout un choix : l'essentiel de ton quotidien tournerait sans lui.",
       ms_life_full:"Liberté : travailler — ou non — devient entièrement ton choix.",
@@ -601,12 +601,12 @@
       proj_updated:"Last updated: {m}.",
       proj_prompt:"Update your value each month — the curve fills in over time.",
       ms_empty:"Add a milestone below to get started.",
-      ms_indep:" · ≈ {inc}/mo — <span style='color:var(--green)'>your independence, whole lifestyle covered ☕</span>",
-      ms_covers:" · ≈ {inc}/mo, i.e. ~{p}% of your lifestyle",
-      ms_months:" · ≈ {n} months of expenses",
+      ms_indep:"≈ {inc}/mo — <span style='color:var(--green)'>your independence, whole lifestyle covered ☕</span>",
+      ms_covers:"≈ {inc}/mo, i.e. ~{p}% of your lifestyle",
+      ms_months:"≈ {n} months of expenses",
       ms_life_cushion:"Your safety cushion: enough to absorb a shock — job loss, a big surprise — without going into debt.",
       ms_surplus:"You're {amount} over your cushion (~{mlabel} extra) — this surplus sits idle. You could invest part of it to speed toward independence.",
-      ms_life_early:"A real base: you can look ahead and take measured risks (training, a project, a career switch).",
+      ms_life_early:"A real base: you can look ahead and take measured risks.",
       ms_life_mid:"Room to ease off: part-time, a break, or work that matters more than the paycheck.",
       ms_life_high:"Work becomes mostly a choice: most of your day-to-day would run without it.",
       ms_life_full:"Freedom: working — or not — becomes entirely your call.",
@@ -689,12 +689,13 @@
   function reqMonthly(T,C,n){if(n<=0)return Infinity;var f=Math.pow(1+R,n),grown=C*f;if(grown>=T)return 0;return R>0?(T-grown)*R/(f-1):(T-C)/n;}
   function r10(x){return Math.ceil(x/10)*10;}
   function seedGoals(){
-    // Matelas de sécurité (~6 mois de dépenses) puis chiffre d'indépendance (dépenses × 12 ÷ retrait) : ¼, ½, plein.
+    // Matelas de sécurité (~6 mois de dépenses) puis chiffre d'indépendance (dépenses × 12 ÷ retrait) : ⅓, ⅔, plein.
+    // Tiers plutôt que ¼/½ → écarts réguliers, supprime le grand bond ½→plein (dead zone démotivante).
     var fi=fiTarget();
     if(!(fi>0))return JSON.parse(JSON.stringify(DEF_GOALS));
     var step=fi>=400000?25000:(fi>=150000?10000:5000);
-    var g1=Math.max(step,Math.round(fi*0.25/step)*step);
-    var g2=Math.max(g1+step,Math.round(fi*0.5/step)*step);
+    var g1=Math.max(step,Math.round(fi/3/step)*step);
+    var g2=Math.max(g1+step,Math.round(fi*2/3/step)*step);
     var g3=Math.max(g2+step,Math.ceil(fi/step)*step); // plein arrondi au-dessus → couvre bien 100 %
     var out=[];
     var mat=Math.max(1000,Math.round(6*expenses/1000)*1000); // matelas = 6 mois de dépenses, arrondi au millier
@@ -783,8 +784,8 @@
       else{var mn=monthsTo(m.v,cap,mo);foot=(mn>=9999)?t('foot_unreach'):t('foot_eta',{m:frMonth(addMonths(ymNow(),mn)),age:(age>0?t('age_dot',{a:Math.round(age+mn/12)}):"")});}
       var d=document.createElement('div');d.className="ms"+(unlocked?"":" lock");
       d.innerHTML='<div class="ms-top"><div><div class="ms-name"><span class="bean" style="background:'+col+'"></span>'+goalName(i)+' '+pill+'</div>'+
-        '<div class="ms-sub">'+eurk(m.v)+meaning+'</div></div>'+
-        '<div class="ms-fig">'+eurk(unlocked?Math.min(base,m.v):prev)+' / '+eurk(m.v)+' · '+Math.round(pct)+'%</div></div>'+
+        (meaning?'<div class="ms-sub">'+meaning+'</div>':'')+'</div>'+
+        '<div class="ms-fig">'+eurk(unlocked?Math.min(base,m.v):prev)+' / '+eurk(m.v)+'</div></div>'+
         '<div class="bar"><div class="fill" style="background:linear-gradient(90deg,'+col+','+col+'bb)"></div></div>'+
         (life?'<div class="ms-life'+(lifeWarn?' warn':'')+'">'+life+'</div>':'')+
         '<div class="ms-foot">'+foot+'</div>';
