@@ -1,5 +1,9 @@
-# Données personnelles — ne jamais versionner (le repo pourrait devenir public)
+# Données personnelles — ne jamais versionner (le repo est public)
 personal/
+
+# Notes internes (stratégie, contexte, journal) — gardées en local, hors du dépôt public
+CLAUDE.md
+STATUS.md
 
 # Système / outillage local
 .DS_Store
