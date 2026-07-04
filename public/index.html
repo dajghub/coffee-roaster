@@ -323,7 +323,7 @@
         <div class="eyebrow" style="margin-bottom:14px" data-i18n="onb_step">Étape 2/2 · ta situation</div>
         <div style="display:flex;flex-direction:column;gap:12px">
           <div><label data-i18n="onb_lbl_cap">Capital déjà investi (€)</label><input type="number" id="onbCap" step="100" placeholder="0"></div>
-          <div><label data-i18n="lbl_cushion">Épargne de précaution (€)</label><input type="number" id="onbCushion" step="100" placeholder="0"><p style="font-size:11px;color:var(--dim);margin:6px 0 0" data-i18n="onb_cushion_hint">Ce que tu as déjà de côté, liquide (livret…), non investi.</p></div>
+          <div><label data-i18n="lbl_cushion">Épargne de précaution (€)</label><input type="number" id="onbCushion" step="100" placeholder="0"><p style="font-size:11px;color:var(--dim);margin:6px 0 0" data-i18n="onb_cushion_hint">Ce que tu as déjà de côté, liquide (livret…), <b>non investi</b>.</p></div>
           <div class="fieldrow" style="display:flex;gap:10px">
             <div style="flex:1"><label data-i18n="lbl_monthly">Investissement /mois (€)</label><input type="number" id="onbMo" step="50" value="500"></div>
             <div style="flex:1"><label data-i18n="lbl_age">Ton âge</label><input type="number" id="onbAge" step="1" value="30"></div>
@@ -450,7 +450,7 @@
       onb_step:"Étape 2/2 · ta situation",
       onb_lbl_cap:"Capital déjà investi (%CUR%)",
       lbl_cushion:"Épargne de précaution (%CUR%)",
-      onb_cushion_hint:"Ce que tu as déjà de côté, liquide (livret…), non investi.",
+      onb_cushion_hint:"Ce que tu as déjà de côté, liquide (livret…), <b>non investi</b>.",
       fly_cushion:"Ton fonds d'urgence : liquide, stable, non investi (livret…). Il vise ~6 mois de dépenses et n'entre <b>ni dans la projection de rendement, ni dans le revenu passif</b> — il finance seulement le palier « matelas de sécurité ». La cible est calculée sur tes dépenses cibles ; si ton train de vie <b>actuel</b> est différent, ajuste le montant du palier via « ✎ Ajuster mes paliers ».",
       onb_note:"On calcule tes paliers et ta projection à partir de ces infos — tout reste ajustable ensuite.",
       onb_err_exp:"Renseigne tes dépenses mensuelles (supérieures à 0) — elles fixent tout ton parcours.",
@@ -578,7 +578,7 @@
       onb_step:"Step 2/2 · your situation",
       onb_lbl_cap:"Capital already invested (%CUR%)",
       lbl_cushion:"Emergency fund (%CUR%)",
-      onb_cushion_hint:"What you already have set aside, liquid (savings account…), not invested.",
+      onb_cushion_hint:"What you already have set aside, liquid (savings account…), <b>not invested</b>.",
       fly_cushion:"Your emergency fund: liquid, stable, not invested (savings account…). It targets ~6 months of expenses and counts toward <b>neither the return projection nor passive income</b> — it only funds the “safety cushion” milestone. The target is based on your target expenses; if your <b>current</b> spending differs, adjust the milestone amount via “✎ Adjust my milestones”.",
       onb_note:"We build your milestones and projection from this — all adjustable later.",
       onb_err_exp:"Enter your monthly expenses (above 0) — they set your whole journey.",
