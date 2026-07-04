@@ -10,9 +10,12 @@ permissions:
   pages: write
   id-token: write
 
+# Un seul déploiement à la fois, sans annuler celui en cours :
+# annuler un déploiement Pages en vol provoque des échecs transitoires
+# « Deployment failed, try again later » (reco officielle GitHub Pages).
 concurrency:
   group: pages
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   deploy:
