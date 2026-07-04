@@ -956,7 +956,7 @@
     var b=this;
     cap=Math.max(0,+document.getElementById('capital').value||0);s(K.cap,cap);
     mo=Math.max(0,+document.getElementById('monthly').value||0);s(K.mo,mo);
-    var ym=ymNow();if(!(amounts[ym]>0)&&mo>0){amounts[ym]=mo;s(K.amt,amounts);} // tampon une fois/mois
+    var ym=ymNow();if(mo>0){amounts[ym]=mo;s(K.amt,amounts);} // tampon du mois courant = valeur courante du champ (même mois → mis à jour, pas dupliqué)
     recordSnapshot();render();animateStamp();
     b.classList.add('ok');b.innerHTML=t('btn_log_done'); // micro-célébration
     clearTimeout(b._t);b._t=setTimeout(function(){b.classList.remove('ok');updateLogBtnLabel();},2000);
