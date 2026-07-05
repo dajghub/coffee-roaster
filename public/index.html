@@ -165,7 +165,7 @@
       <input type="file" id="importFile" accept="application/json">
     </div>
   </div>
-  <p class="tag" data-i18n="tag">Torréfie ton capital jusqu'à l'indépendance financière — un grain à la fois.</p>
+  <p class="tag" data-i18n="tag">Suis ta progression vers l'indépendance financière — un mois à la fois.</p>
 
   <div class="banner" id="demoBanner">
     <span class="grow" data-i18n="demo_banner">☕ Tu explores un exemple.</span>
@@ -196,7 +196,7 @@
       <p class="hint" id="projLine"></p>
     </div>
     <div class="card">
-      <h2 class="eyebrow"><span data-i18n="ey_passive">☕ Revenu passif — ce que ta cagnotte te verse</span> <span class="info" data-k="passive">i</span></h2>
+      <h2 class="eyebrow"><span data-i18n="ey_passive">☕ Revenu passif — ce que ton portefeuille te verse</span> <span class="info" data-k="passive">i</span></h2>
       <div><span class="capval" id="passiveHero">—</span><span class="hero-unit" data-i18n="unit_permonth"> / mois</span></div>
       <div style="margin-top:14px">
         <div style="display:flex;justify-content:space-between;font-size:12.5px;color:var(--mut);margin-bottom:7px">
@@ -210,7 +210,7 @@
   </div>
 
   <div class="card">
-    <h2 class="eyebrow" data-i18n="ey_milestones">Les paliers — de l'Americano à l'Espresso</h2>
+    <h2 class="eyebrow" data-i18n="ey_milestones">Les paliers — du matelas de sécurité à l'indépendance</h2>
     <div id="milestones"></div>
     <div id="goalsEditWrap" style="display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line2)">
       <div id="goalsEdit"></div>
@@ -314,7 +314,8 @@
           </svg>
           <div class="wordmark">Coffee Roaster</div>
         </div>
-        <p style="font-size:14.5px;color:var(--ink);margin:0 0 8px" data-i18n="onb_tag">Torréfie ton capital jusqu'à l'indépendance financière — un grain à la fois, à ton rythme.</p>
+        <p style="font-size:14.5px;color:var(--ink);margin:0 0 8px" data-i18n="onb_tag">Suis ta progression vers l'indépendance financière — un mois à la fois, à ton rythme.</p>
+        <p style="font-size:13px;color:var(--mut);margin:0 0 8px" data-i18n="onb_what">Tu entres ton capital, ton investissement mensuel et tes dépenses cibles ; l'app te montre où tu en es et à quel âge tu pourrais être libre.</p>
         <p style="font-size:13px;color:var(--mut);margin:0 0 20px" data-i18n="onb_privacy">☕ <b>100 % privé</b> : tes chiffres restent dans ton navigateur. Aucun compte, aucun serveur, personne d'autre n'y accède.</p>
         <div style="display:flex;gap:8px;margin:0 0 14px">
           <select id="onbLang" class="mini" style="flex:1" aria-label="Language / Langue"><option value="fr">French</option><option value="en">English</option></select>
@@ -391,8 +392,16 @@
   var R;
   var PAL=["#c9a36b","#a0673a","#5b3a24","#8a5a2b","#6f4e37","#b5793a"];
   var DEF_GOALS=[{v:300000},{v:600000},{v:1000000}];
-  var LADDER=["Americano","Cappuccino","Moka","Espresso","Ristretto","Grand Cru"];
-  function goalName(i){return LADDER[i]||("Grand Cru "+(i-4));}
+  // Noms de paliers fonctionnels (café = habillage, finance = information) :
+  // matelas → « Matelas de sécurité », paliers d'investissement numérotés, le 1er palier ≥ chiffre d'indépendance → « Ton indépendance ».
+  function goalName(i){
+    var v=goals[i]?goals[i].v:0;
+    if(isCushionRung(v))return t('rung_cushion');
+    var fiT=(expenses>0&&swr>0)?fiTarget():0, firstFi=-1, n=0, j;
+    for(j=0;j<goals.length;j++){if(!isCushionRung(goals[j].v)&&fiT>0&&goals[j].v>=fiT*0.995){firstFi=j;break;}}
+    for(j=0;j<=i;j++){if(!isCushionRung(goals[j].v))n++;}
+    return (i===firstFi)?t('rung_indep'):t('rung_n',{n:n});
+  }
   var K={cap:"crs_cap",mo:"crs_mo",exp:"crs_exp",age:"crs_age",goals:"crs_goals",amt:"crs_amt",hist:"crs_hist",cel:"crs_cel",onb:"crs_onb",rate:"crs_rate",swr:"crs_swr",base:"crs_base",start:"crs_start",tage:"crs_tage",lang:"crs_lang",cur:"crs_cur",cushion:"crs_cushion",lastexp:"crs_lastexp",demo:"crs_demo"};
   function g(k,d){try{var v=localStorage.getItem(k);return v===null?d:JSON.parse(v)}catch(e){return d}}
   function s(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
@@ -409,16 +418,16 @@
   var TXT={
     fr:{
       title:"Coffee Roaster — Torréfie ton capital jusqu'à l'indépendance financière",
-      tag:"Torréfie ton capital jusqu'à l'indépendance financière — un grain à la fois.",
+      tag:"Suis ta progression vers l'indépendance financière — un mois à la fois.",
       btn_export:"Exporter", btn_export_t:"Télécharge un fichier de sauvegarde",
       btn_import:"Importer", btn_import_t:"Recharge une sauvegarde exportée",
       reset_t:"Effacer toutes les données", reset_aria:"Réinitialiser toutes les données",
       ey_portfolio:"Valeur de mon portefeuille",
       lbl_curval:"Valeur actuelle (%CUR%)", lbl_monthly:"Investissement /mois (%CUR%)",
-      ey_passive:"☕ Revenu passif<span class='eyebrow-tail'> — ce que ta cagnotte te verse</span>",
+      ey_passive:"☕ Revenu passif<span class='eyebrow-tail'> — ce que ton portefeuille te verse</span>",
       unit_permonth:" / mois",
       fly_passive:"Calculé comme valeur × taux de retrait ÷ 12, <b>avant impôts</b>. Selon l'enveloppe (PEA, assurance-vie, CTO…), compte ≈ 17 à 30 % de fiscalité sur les gains retirés.",
-      ey_milestones:"Les paliers<span class='eyebrow-tail'> — de l'Americano à l'Espresso</span>",
+      ey_milestones:"Les paliers<span class='eyebrow-tail'> — du matelas de sécurité à l'indépendance</span>",
       btn_add_goal:"+ Ajouter un palier",
       btn_edit_goals:"✎ Ajuster mes paliers", btn_close_edit:"Fermer l'édition",
       ey_sim:"☕ Simulateur",
@@ -447,7 +456,8 @@
       share_goal_btn:"Partager mon objectif",
       share_goal_text:"☕ Mon objectif : financièrement libre à {age} ans. Calcule le tien :",
       toast_copied:"Lien copié — colle-le où tu veux ☕",
-      onb_tag:"Torréfie ton capital jusqu'à l'indépendance financière — un grain à la fois, à ton rythme.",
+      onb_tag:"Suis ta progression vers l'indépendance financière — un mois à la fois, à ton rythme.",
+      onb_what:"Tu entres ton capital, ton investissement mensuel et tes dépenses cibles ; l'app te montre où tu en es et à quel âge tu pourrais être libre.",
       onb_privacy:"☕ <b>100 % privé</b> : tes chiffres restent dans ton navigateur. Aucun compte, aucun serveur, personne d'autre n'y accède.",
       onb_start:"Commencer",
       onb_step1:"Étape 1/2 · bienvenue",
@@ -468,16 +478,17 @@
       del_title:"Supprimer", del_aria:"Supprimer ce palier",
       reg_note:"Projection : {rate} %/an réel · revenu passif à {swr} % de retrait.",
       cover_lbl:"de tes {exp}/mois de train de vie",
-      passive_full:"Ta cagnotte couvre déjà tout ton train de vie — le café est offert à vie ☕",
+      passive_full:"Ton portefeuille couvre déjà tout ton train de vie — le café est offert à vie ☕",
       passive_more:"Encore {x}/mois pour couvrir ton quotidien.",
       plusval_pos:"dont <b style='color:var(--green)'>+{x}</b> de plus-values",
       plusval_neg:"dont <b style='color:#c0392b'>{x}</b> (moins-value latente ou retraits)",
       next_all:"Tous les paliers atteints 🎉",
-      next_toward:"vers <b>{name}</b> ({v})",
+      next_toward:"objectif : <b>{name}</b> ({v})",
       proj_updated:"Dernière mise à jour : {m}.",
       proj_prompt:"Mets à jour ta valeur chaque mois — la courbe se trace au fil de l'eau.",
       ms_empty:"Ajoute un palier ci-dessous pour commencer.",
-      ms_indep:"≈ {inc}/mois — <span style='color:var(--green)'>ton indépendance, tout ton train de vie couvert ☕</span>",
+      rung_cushion:"Matelas de sécurité", rung_n:"Palier {n}", rung_indep:"Ton indépendance",
+      ms_indep:"≈ {inc}/mois — <span style='color:var(--green)'>tout ton train de vie couvert ☕</span>",
       ms_covers:"≈ {inc}/mois, soit ~{p} % de ton train de vie",
       ms_months:"≈ {n} mois de dépenses",
       ms_life_cushion:"Ton matelas de sécurité : de quoi encaisser un imprévu — perte d'emploi, gros pépin — sans t'endetter.",
@@ -486,7 +497,7 @@
       ms_life_mid:"De quoi lever le pied : temps partiel, pause, ou un travail qui compte plus que le salaire.",
       ms_life_high:"Le travail devient surtout un choix : l'essentiel de ton quotidien tournerait sans lui.",
       ms_life_full:"Liberté : travailler — ou non — devient entièrement ton choix.",
-      pill_served:"<span class='pill done'>✓ servi</span>",
+      pill_served:"<span class='pill done'>✓ atteint</span>",
       pill_live:"<span class='pill live'>en cours</span>",
       pill_lock:"<span class='pill lock'>🔒 dès {v}</span>",
       foot_reached:"<span style='color:var(--green)'>✓ atteint</span>",
@@ -503,21 +514,20 @@
       sooner_years:"{n} an{s} plus tôt", sooner_months:"{n} mois plus tôt",
       sim_adopt:"Adopter {permo}",
       age_setup:"Renseigne ton âge et tes dépenses dans les Réglages pour utiliser ce mode.",
-      age_covered:"Ta cagnotte couvre déjà tout ton train de vie ☕🎉",
-      age_prompt:"À quel âge veux-tu que ta cagnotte couvre tes {expmo} ? Il te faudra <b>{v}</b> au taux de retrait actuel.",
+      age_covered:"Ton portefeuille couvre déjà tout ton train de vie ☕🎉",
+      age_prompt:"À quel âge veux-tu que ton portefeuille couvre tes {expmo} ? Il te faudra <b>{v}</b> au taux de retrait actuel.",
       age_beyond:"Choisis un âge au-delà du tien ({a} ans).",
       age_selfreach:"À {rate} %/an, ton capital atteint <b>{v}</b> tout seul avant tes {tage} ans — ton versement actuel ne fait qu'accélérer ☕",
-      age_need:"Pour couvrir tes {expmo} à <b>{tage} ans</b> (cagnotte de {v}), il faudrait verser <b>~{permo}</b>.",
+      age_need:"Pour couvrir tes {expmo} à <b>{tage} ans</b> (portefeuille de {v}), il faudrait verser <b>~{permo}</b>.",
       age_levers:"<br>Leviers : viser <b>{a} ans</b> ramène à ~{permo}",
       age_lever_exp:" · {cutmo} de dépenses en moins → ~{permo}.",
       age_enough:" Ton versement actuel ({permo}) <b>suffit déjà</b> ☕🎉",
       month_n:"Mois {i} · {m}", to_fill:" · à remplir",
       aria_adjust:" · {a}, ajuster", aria_invest:", investir",
-      toast_served:"☕ {name} servi ! Palier {v} atteint 🎉",
-      celeb_title:"{name} atteint !",
+      celeb_title:"Objectif atteint : {name} !",
       celeb_sub:"Palier {v} · un pas de plus vers ta liberté ☕",
       celeb_close:"Continuer", celeb_share_btn:"Partager ☕",
-      celeb_share:"☕ J'ai atteint {name} ({v}) sur mon chemin vers l'indépendance financière. Calcule le tien :",
+      celeb_share:"☕ Objectif atteint : {name} ({v}) sur mon chemin vers l'indépendance financière. Calcule le tien :",
       demo_banner:"☕ Tu explores un exemple — les chiffres ne sont pas les tiens.",
       demo_real:"Entrer mes chiffres",
       export_reminder:"💾 Ça fait un moment — pense à exporter une sauvegarde de tes données.",
@@ -540,16 +550,16 @@
     },
     en:{
       title:"Coffee Roaster — Roast your capital toward financial independence",
-      tag:"Roast your capital toward financial independence — one bean at a time.",
+      tag:"Track your progress toward financial independence — one month at a time.",
       btn_export:"Export", btn_export_t:"Download a backup file",
       btn_import:"Import", btn_import_t:"Load an exported backup",
       reset_t:"Erase all data", reset_aria:"Reset all data",
       ey_portfolio:"My portfolio value",
       lbl_curval:"Current value (%CUR%)", lbl_monthly:"Investment /month (%CUR%)",
-      ey_passive:"☕ Passive income<span class='eyebrow-tail'> — what your pot pays you</span>",
+      ey_passive:"☕ Passive income<span class='eyebrow-tail'> — what your portfolio pays you</span>",
       unit_permonth:" / month",
       fly_passive:"Calculated as value × withdrawal rate ÷ 12, <b>before tax</b>. Depending on your account, expect ≈ 15 to 30% tax on withdrawn gains.",
-      ey_milestones:"The milestones<span class='eyebrow-tail'> — from Americano to Espresso</span>",
+      ey_milestones:"The milestones<span class='eyebrow-tail'> — from safety cushion to independence</span>",
       btn_add_goal:"+ Add a milestone",
       btn_edit_goals:"✎ Adjust my milestones", btn_close_edit:"Close editing",
       ey_sim:"☕ Simulator",
@@ -578,7 +588,8 @@
       share_goal_btn:"Share my goal",
       share_goal_text:"☕ My goal: financially free at {age}. Work out yours:",
       toast_copied:"Link copied — paste it anywhere ☕",
-      onb_tag:"Roast your capital toward financial independence — one bean at a time, at your own pace.",
+      onb_tag:"Track your progress toward financial independence — one month at a time, at your own pace.",
+      onb_what:"Enter your capital, your monthly investment and your target expenses; the app shows where you stand and at what age you could be free.",
       onb_privacy:"☕ <b>100% private</b>: your numbers stay in your browser. No account, no server, no one else can see them.",
       onb_start:"Start",
       onb_step1:"Step 1/2 · welcome",
@@ -599,16 +610,17 @@
       del_title:"Delete", del_aria:"Delete this milestone",
       reg_note:"Projection: {rate}%/yr real · passive income at {swr}% withdrawal.",
       cover_lbl:"of your {exp}/month lifestyle",
-      passive_full:"Your pot already covers your whole lifestyle — coffee's on the house for life ☕",
+      passive_full:"Your portfolio already covers your whole lifestyle — coffee's on the house for life ☕",
       passive_more:"{x}/month more to cover your day-to-day.",
       plusval_pos:"including <b style='color:var(--green)'>+{x}</b> in gains",
       plusval_neg:"including <b style='color:#c0392b'>{x}</b> (unrealized loss or withdrawals)",
       next_all:"All milestones reached 🎉",
-      next_toward:"toward <b>{name}</b> ({v})",
+      next_toward:"goal: <b>{name}</b> ({v})",
       proj_updated:"Last updated: {m}.",
       proj_prompt:"Update your value each month — the curve fills in over time.",
       ms_empty:"Add a milestone below to get started.",
-      ms_indep:"≈ {inc}/mo — <span style='color:var(--green)'>your independence, whole lifestyle covered ☕</span>",
+      rung_cushion:"Safety cushion", rung_n:"Milestone {n}", rung_indep:"Your independence",
+      ms_indep:"≈ {inc}/mo — <span style='color:var(--green)'>your whole lifestyle covered ☕</span>",
       ms_covers:"≈ {inc}/mo, i.e. ~{p}% of your lifestyle",
       ms_months:"≈ {n} months of expenses",
       ms_life_cushion:"Your safety cushion: enough to absorb a shock — job loss, a big surprise — without going into debt.",
@@ -617,7 +629,7 @@
       ms_life_mid:"Room to ease off: part-time, a break, or work that matters more than the paycheck.",
       ms_life_high:"Work becomes mostly a choice: most of your day-to-day would run without it.",
       ms_life_full:"Freedom: working — or not — becomes entirely your call.",
-      pill_served:"<span class='pill done'>✓ served</span>",
+      pill_served:"<span class='pill done'>✓ reached</span>",
       pill_live:"<span class='pill live'>in progress</span>",
       pill_lock:"<span class='pill lock'>🔒 from {v}</span>",
       foot_reached:"<span style='color:var(--green)'>✓ reached</span>",
@@ -634,21 +646,20 @@
       sooner_years:"{n} yr{s} sooner", sooner_months:"{n} mo sooner",
       sim_adopt:"Adopt {permo}",
       age_setup:"Enter your age and expenses in Settings to use this mode.",
-      age_covered:"Your pot already covers your whole lifestyle ☕🎉",
-      age_prompt:"At what age should your pot cover your {expmo}? You'll need <b>{v}</b> at the current withdrawal rate.",
+      age_covered:"Your portfolio already covers your whole lifestyle ☕🎉",
+      age_prompt:"At what age should your portfolio cover your {expmo}? You'll need <b>{v}</b> at the current withdrawal rate.",
       age_beyond:"Pick an age beyond your own (age {a}).",
       age_selfreach:"At {rate}%/yr, your capital reaches <b>{v}</b> on its own before age {tage} — your current contribution just speeds it up ☕",
-      age_need:"To cover your {expmo} at <b>age {tage}</b> (pot of {v}), you'd need to contribute <b>~{permo}</b>.",
+      age_need:"To cover your {expmo} at <b>age {tage}</b> (portfolio of {v}), you'd need to contribute <b>~{permo}</b>.",
       age_levers:"<br>Levers: targeting <b>age {a}</b> brings it down to ~{permo}",
       age_lever_exp:" · {cutmo} less expenses → ~{permo}.",
       age_enough:" Your current contribution ({permo}) is <b>already enough</b> ☕🎉",
       month_n:"Month {i} · {m}", to_fill:" · to fill",
       aria_adjust:" · {a}, adjust", aria_invest:", invest",
-      toast_served:"☕ {name} served! Milestone {v} reached 🎉",
-      celeb_title:"{name} reached!",
+      celeb_title:"Goal reached: {name}!",
       celeb_sub:"Milestone {v} · one step closer to your freedom ☕",
       celeb_close:"Continue", celeb_share_btn:"Share ☕",
-      celeb_share:"☕ I reached {name} ({v}) on my path to financial independence. Work out yours:",
+      celeb_share:"☕ Goal reached: {name} ({v}) on my path to financial independence. Work out yours:",
       demo_banner:"☕ You're exploring an example — these numbers aren't yours.",
       demo_real:"Enter my numbers",
       export_reminder:"💾 It's been a while — remember to export a backup of your data.",
