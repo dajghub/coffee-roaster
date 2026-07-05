@@ -46,6 +46,8 @@
   .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px;margin-bottom:18px;box-shadow:var(--shadow)}
   .grid2{display:grid;grid-template-columns:1.1fr .9fr;gap:18px}
   @media(max-width:760px){.grid2{grid-template-columns:1fr}.grid2 .card:not(:last-child){margin-bottom:0}}
+  /* La carte revenu passif est la colonne étroite (.9fr) de grid2 : dans la bande 2-col resserrée, on masque son sous-titre décoratif pour garder titre + ⓘ sur une ligne (cartes pleine largeur non concernées). */
+  @media(min-width:761px) and (max-width:990px){.eyebrow-tail-tight{display:none}}
   .eyebrow{font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:1px;font-weight:700;margin:0 0 9px 0}
   label{display:block;font-size:11px;color:var(--dim);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
   input[type=number],input[type=text]{width:100%;background:var(--bg2);border:1px solid var(--line2);color:var(--ink);
@@ -196,7 +198,7 @@
       <p class="hint" id="projLine"></p>
     </div>
     <div class="card">
-      <h2 class="eyebrow"><span data-i18n="ey_passive">☕ Revenu passif — ce que ton portefeuille te verse</span> <span class="info" data-k="passive">i</span></h2>
+      <h2 class="eyebrow"><span data-i18n="ey_passive">☕ Revenu passif — ce que ton portefeuille verse</span> <span class="info" data-k="passive">i</span></h2>
       <div><span class="capval" id="passiveHero">—</span><span class="hero-unit" data-i18n="unit_permonth"> / mois</span></div>
       <div style="margin-top:14px">
         <div style="display:flex;justify-content:space-between;font-size:12.5px;color:var(--mut);margin-bottom:7px">
@@ -424,7 +426,7 @@
       reset_t:"Effacer toutes les données", reset_aria:"Réinitialiser toutes les données",
       ey_portfolio:"Valeur de mon portefeuille",
       lbl_curval:"Valeur actuelle (%CUR%)", lbl_monthly:"Investissement /mois (%CUR%)",
-      ey_passive:"☕ Revenu passif<span class='eyebrow-tail'> — ce que ton portefeuille te verse</span>",
+      ey_passive:"☕ Revenu passif<span class='eyebrow-tail eyebrow-tail-tight'> — ce que ton portefeuille verse</span>",
       unit_permonth:" / mois",
       fly_passive:"Calculé comme valeur × taux de retrait ÷ 12, <b>avant impôts</b>. Selon l'enveloppe (PEA, assurance-vie, CTO…), compte ≈ 17 à 30 % de fiscalité sur les gains retirés.",
       ey_milestones:"Les paliers<span class='eyebrow-tail'> — du matelas de sécurité à l'indépendance</span>",
@@ -556,7 +558,7 @@
       reset_t:"Erase all data", reset_aria:"Reset all data",
       ey_portfolio:"My portfolio value",
       lbl_curval:"Current value (%CUR%)", lbl_monthly:"Investment /month (%CUR%)",
-      ey_passive:"☕ Passive income<span class='eyebrow-tail'> — what your portfolio pays you</span>",
+      ey_passive:"☕ Passive income<span class='eyebrow-tail eyebrow-tail-tight'> — what your portfolio pays</span>",
       unit_permonth:" / month",
       fly_passive:"Calculated as value × withdrawal rate ÷ 12, <b>before tax</b>. Depending on your account, expect ≈ 15 to 30% tax on withdrawn gains.",
       ey_milestones:"The milestones<span class='eyebrow-tail'> — from safety cushion to independence</span>",
