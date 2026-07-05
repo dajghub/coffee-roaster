@@ -112,6 +112,7 @@
   .ms-foot{font-size:12px;color:var(--dim);margin-top:7px}
   .ms-life{font-size:13.5px;color:var(--mut);margin-top:8px;padding-left:9px;border-left:2px solid var(--line2)}
   .ms-life.warn{color:var(--warn-ink);border-left-color:var(--caramel)}
+  .ms-gap{margin:14px 0 0;padding:10px 12px;background:var(--pill-live-bg);border-radius:12px;font-size:13px;color:var(--warn-ink);line-height:1.5}
   .info{display:inline-flex;width:18px;height:18px;border-radius:50%;background:var(--line2);color:var(--espresso);font-size:11px;line-height:1;align-items:center;justify-content:center;cursor:pointer;font-weight:700;font-style:italic;vertical-align:middle;position:relative}
   .info::after{content:"";position:absolute;inset:-9px} /* zone tactile ~36px sans changer le visuel */
   .info:hover{background:var(--roast);color:#fff}
@@ -550,6 +551,7 @@
       proj_prompt:"Mets à jour ta valeur chaque mois — la courbe se trace au fil de l'eau.",
       ms_empty:"Ajoute un palier ci-dessous pour commencer.",
       rung_cushion:"Matelas de sécurité", rung_n:"Palier {n}", rung_indep:"Ton indépendance",
+      ms_gap_warn:"⚠ Ton chiffre d'indépendance ({v}) dépasse désormais ton dernier palier. Si ton nouveau train de vie est durable, mets tes paliers à jour via « ✎ Ajuster mes paliers ».",
       lbl_theme:"Thème d'affichage", theme_auto:"Auto (système)", theme_light:"Clair", theme_dark:"Sombre",
       ms_indep:"≈ {inc}/mois — <span style='color:var(--green)'>tout ton train de vie couvert ☕</span>",
       ms_covers:"≈ {inc}/mois, soit ~{p} % de ton train de vie",
@@ -683,6 +685,7 @@
       proj_prompt:"Update your value each month — the curve fills in over time.",
       ms_empty:"Add a milestone below to get started.",
       rung_cushion:"Safety cushion", rung_n:"Milestone {n}", rung_indep:"Your independence",
+      ms_gap_warn:"⚠ Your independence number ({v}) is now above your last milestone. If your new lifestyle is here to stay, update your milestones via “✎ Adjust my milestones”.",
       lbl_theme:"Display theme", theme_auto:"Auto (system)", theme_light:"Light", theme_dark:"Dark",
       ms_indep:"≈ {inc}/mo — <span style='color:var(--green)'>your whole lifestyle covered ☕</span>",
       ms_covers:"≈ {inc}/mo, i.e. ~{p}% of your lifestyle",
@@ -878,6 +881,11 @@
       host.appendChild(d);
       var f=d.querySelector('.fill');requestAnimationFrame(function(){f.style.width=pct+"%";});
     });
+    // Nudge : les paliers sont figés volontairement, mais si le chiffre d'indépendance (dépenses/retrait modifiés)
+    // dépasse le dernier palier, l'échelle ne mène plus à la liberté — on le signale au lieu de recalculer en douce.
+    if(fi>0 && !goals.some(function(gg){return gg.v>=fi*0.995;})){
+      var w=document.createElement('p');w.className='ms-gap';w.innerHTML=t('ms_gap_warn',{v:eurk(fi)});host.appendChild(w);
+    }
   }
 
   function renderGoalsEditor(){
