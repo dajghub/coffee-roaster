@@ -41,7 +41,7 @@
   h1,.wordmark{font-family:'Space Grotesk','Inter',sans-serif;font-size:26px;font-weight:600;margin:0;color:var(--espresso);letter-spacing:-.3px}
   .tag{color:var(--mut);font-size:13px;margin:2px 0 24px 58px}
   .tools{display:flex;gap:8px;flex-wrap:wrap;margin-left:auto;align-items:center}
-  .mini{background:var(--bg2);border:1px solid var(--line2);color:var(--mut);border-radius:9px;padding:9px 8px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+  .mini{background:var(--bg2);border:1px solid var(--line2);color:var(--mut);border-radius:12px;padding:9px 8px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
   .mini:focus{outline:none;border-color:var(--coffee)}
   .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px;margin-bottom:18px;box-shadow:var(--shadow)}
   .grid2{display:grid;grid-template-columns:1.1fr .9fr;gap:18px}
@@ -51,9 +51,9 @@
   .eyebrow{font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:1px;font-weight:700;margin:0 0 9px 0}
   label{display:block;font-size:11px;color:var(--dim);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
   input[type=number],input[type=text]{width:100%;background:var(--bg2);border:1px solid var(--line2);color:var(--ink);
-    border-radius:9px;padding:10px 12px;font-size:15px;font-variant-numeric:tabular-nums}
+    border-radius:12px;padding:10px 12px;font-size:15px;font-variant-numeric:tabular-nums}
   input:focus{outline:none;border-color:var(--coffee)}
-  button{background:var(--coffee);border:none;color:#fdf6ec;border-radius:9px;padding:10px 15px;font-size:13.5px;cursor:pointer;font-weight:600;transition:.15s}
+  button{background:var(--coffee);border:none;color:#fdf6ec;border-radius:12px;padding:10px 15px;font-size:13.5px;cursor:pointer;font-weight:600;transition:.15s}
   button:hover{background:var(--espresso)}
   button.ghost{background:transparent;border:1px solid var(--line2);color:var(--mut)}
   button.ghost:hover{background:var(--cream);color:var(--ink)}
@@ -75,6 +75,9 @@
   .ms-top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
   .ms-name{font-size:16px;font-weight:700;display:flex;align-items:center;gap:9px;color:var(--espresso)}
   .bean{width:12px;height:14px;border-radius:50%/60% 60% 40% 40%;flex:none}
+  /* La couleur encode l'état du palier : vert = atteint, roast = en cours, neutre = verrouillé */
+  .bean.st-done{background:var(--green)}.bean.st-live{background:var(--roast)}.bean.st-lock{background:var(--line2)}
+  .fill.st-done{background:linear-gradient(90deg,var(--green),#5d8442)}
   .ms-sub{color:var(--mut);font-size:13px;font-weight:400;margin-top:2px}
   .ms-foot{font-size:12px;color:var(--dim);margin-top:7px}
   .ms-life{font-size:13.5px;color:var(--mut);margin-top:8px;padding-left:9px;border-left:2px solid var(--line2)}
@@ -82,7 +85,7 @@
   .info{display:inline-flex;width:18px;height:18px;border-radius:50%;background:var(--line2);color:var(--espresso);font-size:11px;line-height:1;align-items:center;justify-content:center;cursor:pointer;font-weight:700;font-style:italic;vertical-align:middle;position:relative}
   .info::after{content:"";position:absolute;inset:-9px} /* zone tactile ~36px sans changer le visuel */
   .info:hover{background:var(--roast);color:#fff}
-  .flyout{display:none;margin-top:8px;background:var(--bg2);border:1px solid var(--line2);border-radius:10px;padding:10px 12px;font-size:12.5px;color:var(--ink);line-height:1.5}
+  .flyout{display:none;margin-top:8px;background:var(--bg2);border:1px solid var(--line2);border-radius:12px;padding:10px 12px;font-size:12.5px;color:var(--ink);line-height:1.5}
   .flyout.open{display:block}
   .pill{font-size:10.5px;padding:3px 9px;border-radius:20px;font-weight:700}
   .pill.done{background:#e7efd9;color:var(--green)}.pill.live{background:#f3e2cb;color:#8a5628}.pill.lock{background:#eadfce;color:var(--mut)}
@@ -91,7 +94,7 @@
   .legend{display:flex;gap:18px;flex-wrap:wrap;color:var(--mut);font-size:12.5px;margin-top:12px}
   .legend span{display:flex;align-items:center;gap:6px}
   .sw{width:14px;height:3px;border-radius:2px;display:inline-block}
-  .kpi{background:var(--bg2);border:1px solid var(--line);border-radius:11px;padding:12px 15px;flex:1;min-width:110px}
+  .kpi{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:12px 15px;flex:1;min-width:110px}
   .kpi .n{font-family:'Space Grotesk','Inter',sans-serif;font-size:22px;font-weight:700;color:var(--espresso)}
   .kpi .l{font-size:11.5px;color:var(--mut);margin-top:1px}
   .stamps{display:flex;gap:10px;flex-wrap:wrap;margin:2px 0 16px}
@@ -136,6 +139,13 @@
   .banner{display:none;align-items:center;gap:8px 10px;flex-wrap:wrap;background:var(--card);border:1px solid var(--line2);border-radius:12px;padding:10px 14px;margin:0 0 18px;font-size:13px;color:var(--ink);box-shadow:var(--shadow)}
   .banner .grow{flex:1 1 210px;min-width:0}
   .banner button{padding:7px 12px;font-size:12.5px;white-space:nowrap}
+  /* Réglages repliables : configuration rare, rétrogradée visuellement */
+  details.card summary{cursor:pointer;list-style:none;user-select:none}
+  details.card summary::-webkit-details-marker{display:none}
+  details.card summary .eyebrow{display:inline;margin:0}
+  details.card summary::before{content:"+";color:var(--caramel-ink);font-weight:700;margin-right:9px;font-size:13px}
+  details.card[open] summary::before{content:"–"}
+  details.card[open] summary{display:block;margin-bottom:11px}
   .faq{max-width:620px;margin:22px auto 0}
   .faq details{border-top:1px solid var(--line);padding:2px 0}
   .faq summary{cursor:pointer;padding:11px 2px;font-weight:600;color:var(--espresso);font-size:14px;list-style:none}
@@ -212,6 +222,18 @@
   </div>
 
   <div class="card">
+    <h2 class="eyebrow" data-i18n="ey_loyalty">Carte de fidélité — un grain torréfié par mois investi</h2>
+    <div class="stamps">
+      <div class="kpi"><div class="n" id="streak">0</div><div class="l" data-i18n="kpi_streak">série en cours (mois)</div></div>
+      <div class="kpi"><div class="n" id="bestStreak">0</div><div class="l" data-i18n="kpi_best">meilleure série (mois)</div></div>
+      <div class="kpi"><div class="n" id="totalMonths">0</div><div class="l" data-i18n="kpi_months">mois investis</div></div>
+      <div class="kpi"><div class="n" id="totalInvested">0 €</div><div class="l" data-i18n="kpi_total">total investi</div></div>
+    </div>
+    <div id="calendar" style="margin-top:6px"></div>
+    <p class="note" style="margin-top:14px" data-i18n="cal_help">« + » pour investir&nbsp;&nbsp;·&nbsp;&nbsp;grain plein pour ajuster</p>
+  </div>
+
+  <div class="card">
     <h2 class="eyebrow" data-i18n="ey_milestones">Les paliers — du matelas de sécurité à l'indépendance</h2>
     <div id="milestones"></div>
     <div id="goalsEditWrap" style="display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line2)">
@@ -247,9 +269,18 @@
     </div>
   </div>
 
-  <div class="grid2">
-    <div class="card">
-      <h2 class="eyebrow" data-i18n="ey_settings">Réglages</h2>
+
+  <div class="card">
+      <h2 class="eyebrow" data-i18n="ey_chart">Évolution — réel vs plan</h2>
+      <div class="chart-wrap"><canvas id="chart"></canvas></div>
+      <div class="legend"><span><span class="sw" style="background:var(--coffee)"></span><span data-i18n="lg_real">Réel</span></span><span><span class="sw" style="background:var(--dim);height:2px"></span><span data-i18n="lg_plan">Plan</span></span></div>
+  </div>
+
+
+
+  <details class="card" id="settingsCard">
+    <summary><h2 class="eyebrow" data-i18n="ey_settings">Réglages</h2></summary>
+
       <div class="fieldrow" style="display:flex;gap:12px;flex-wrap:wrap">
         <div style="flex:1;min-width:110px"><label><span data-i18n="lbl_expenses">Dépenses cibles /mois (€)</span> <span class="info" data-k="expenses">i</span></label><input type="number" id="expenses" step="50"><div class="flyout" id="fly-expenses" data-i18n="fly_expenses">Le train de vie mensuel que tu veux pouvoir financer une fois indépendant(e) — c'est lui qui fixe ton chiffre d'indépendance (× 12 ÷ taux de retrait). Si tu ne sais pas, pars de tes dépenses actuelles.</div></div>
         <div style="flex:1;min-width:90px"><label data-i18n="lbl_age">Ton âge</label><input type="number" id="age" step="1"></div>
@@ -270,25 +301,7 @@
         </div>
       </div>
       <p class="note" id="regNote"></p>
-    </div>
-    <div class="card">
-      <h2 class="eyebrow" data-i18n="ey_chart">Évolution — réel vs plan</h2>
-      <div class="chart-wrap"><canvas id="chart"></canvas></div>
-      <div class="legend"><span><span class="sw" style="background:var(--coffee)"></span><span data-i18n="lg_real">Réel</span></span><span><span class="sw" style="background:var(--dim);height:2px"></span><span data-i18n="lg_plan">Plan</span></span></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <h2 class="eyebrow" data-i18n="ey_loyalty">Carte de fidélité — un grain torréfié par mois investi</h2>
-    <div class="stamps">
-      <div class="kpi"><div class="n" id="streak">0</div><div class="l" data-i18n="kpi_streak">série en cours (mois)</div></div>
-      <div class="kpi"><div class="n" id="bestStreak">0</div><div class="l" data-i18n="kpi_best">meilleure série (mois)</div></div>
-      <div class="kpi"><div class="n" id="totalMonths">0</div><div class="l" data-i18n="kpi_months">mois investis</div></div>
-      <div class="kpi"><div class="n" id="totalInvested">0 €</div><div class="l" data-i18n="kpi_total">total investi</div></div>
-    </div>
-    <div id="calendar" style="margin-top:6px"></div>
-    <p class="note" style="margin-top:14px" data-i18n="cal_help">« + » pour investir&nbsp;&nbsp;·&nbsp;&nbsp;grain plein pour ajuster</p>
-  </div>
+  </details>
 
   <p class="note" style="text-align:center;margin-top:4px" data-i18n="footer_note">💾 Pense à cliquer <b>Exporter</b> pour sauvegarder tes données de temps en temps — vider le cache du navigateur les effacerait.</p>
   <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px">
@@ -392,7 +405,16 @@
 <script>
 (function(){
   var R;
-  var PAL=["#c9a36b","#a0673a","#5b3a24","#8a5a2b","#6f4e37","#b5793a"];
+  function cssVar(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim();}
+  // État d'un palier : 'done' (atteint), 'live' (en cours), 'lock' (verrouillé) — la couleur suit l'état, pas la position.
+  function msState(i){
+    var v=goals[i].v, isM=isCushionRung(v), base=isM?cushion:cap;
+    if(base>=v)return 'done';
+    if(isM)return 'live';
+    var prev=0;for(var j=i-1;j>=0;j--){if(!isCushionRung(goals[j].v)){prev=goals[j].v;break;}}
+    return (prev===0||cap>=prev)?'live':'lock';
+  }
+  function msColor(st){return st==='done'?cssVar('--green'):st==='live'?cssVar('--roast'):cssVar('--line2');}
   var DEF_GOALS=[{v:300000},{v:600000},{v:1000000}];
   // Noms de paliers fonctionnels (café = habillage, finance = information) :
   // matelas → « Matelas de sécurité », paliers d'investissement numérotés, le 1er palier ≥ chiffre d'indépendance → « Ton indépendance ».
@@ -782,7 +804,7 @@
     var fi=(expenses>0&&swr>0)?fiTarget():0;
     goals.forEach(function(m,i){
       // Matelas = épargne de précaution (base = cushion, jamais projetée) ; autres paliers = capital investi (base = cap)
-      var isMatelas=isCushionRung(m.v), base=isMatelas?cushion:cap, col=PAL[i%PAL.length];
+      var isMatelas=isCushionRung(m.v), base=isMatelas?cushion:cap, st=msState(i);
       var prev=0; // borne basse : dernier palier d'INVESTISSEMENT précédent (le matelas ne compte pas dans la chaîne cap)
       if(!isMatelas){for(var j=i-1;j>=0;j--){if(!isCushionRung(goals[j].v)){prev=goals[j].v;break;}}}
       var reached=base>=m.v, unlocked=isMatelas?true:(prev===0?true:cap>=prev);
@@ -807,10 +829,10 @@
       else if(reached){foot=t('foot_reached');}
       else{var mn=monthsTo(m.v,cap,mo);foot=(mn>=9999)?t('foot_unreach'):t('foot_eta',{m:frMonth(addMonths(ymNow(),mn)),age:(age>0?t('age_dot',{a:Math.round(age+mn/12)}):"")});}
       var d=document.createElement('div');d.className="ms"+(unlocked?"":" lock");
-      d.innerHTML='<div class="ms-top"><div><div class="ms-name"><span class="bean" style="background:'+col+'"></span>'+goalName(i)+' '+pill+'</div>'+
+      d.innerHTML='<div class="ms-top"><div><div class="ms-name"><span class="bean st-'+st+'"></span>'+goalName(i)+' '+pill+'</div>'+
         (meaning?'<div class="ms-sub">'+meaning+'</div>':'')+'</div>'+
         '<div class="ms-fig">'+eurk(unlocked?Math.min(base,m.v):prev)+' / '+eurk(m.v)+'</div></div>'+
-        '<div class="bar"><div class="fill" style="background:linear-gradient(90deg,'+col+','+col+'bb)"></div></div>'+
+        '<div class="bar"><div class="fill'+(reached?' st-done':'')+'"></div></div>'+
         (life?'<div class="ms-life'+(lifeWarn?' warn':'')+'">'+life+'</div>':'')+
         '<div class="ms-foot">'+foot+'</div>';
       host.appendChild(d);
@@ -822,7 +844,7 @@
     var host=document.getElementById('goalsEdit');host.innerHTML="";
     goals.forEach(function(gg,i){
       var row=document.createElement('div');row.className="goalrow";
-      var nm=document.createElement('div');nm.className="gname-lbl";nm.innerHTML='<span class="bean" style="background:'+PAL[i%PAL.length]+'"></span>'+goalName(i);
+      var nm=document.createElement('div');nm.className="gname-lbl";nm.innerHTML='<span class="bean st-'+msState(i)+'"></span>'+goalName(i);
       var vl=document.createElement('input');vl.type="number";vl.className="gval";vl.value=gg.v;vl.step=10000;
       var del=document.createElement('button');del.className="ghost";del.textContent="×";del.title=t('del_title');del.setAttribute('aria-label',t('del_aria'));
       vl.addEventListener('change',function(){goals[i].v=Math.max(0,+vl.value||0);goals.sort(function(a,b){return a.v-b.v;});s(K.goals,goals);render();});
@@ -933,8 +955,8 @@
       {label:t('lg_plan'),data:plan.map(function(p){return p.v;}),borderColor:'#8a7563',borderWidth:1.5,borderDash:[5,4],pointRadius:0,fill:false,tension:.25}
     ]};
     var opts={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return (c.datasetIndex===0?t('tt_real'):t('tt_plan'))+(c.parsed.y==null?'—':eur(c.parsed.y));}}}},
-      scales:{x:{ticks:{color:'#7f6b57',maxTicksLimit:7,font:{size:10}},grid:{display:false}},y:{ticks:{color:'#7f6b57',font:{size:10},callback:function(v){return v===0?'':Math.round(v/1000)+'k';}},grid:{color:'#ece0cf'}}}};
-    var goalLines={id:'goalLines',afterDatasetsDraw:function(ch){var yA=ch.scales.y,xA=ch.scales.x,c2=ch.ctx;goals.forEach(function(gg,i){if(isCushionRung(gg.v))return;if(gg.v>=yA.min&&gg.v<=yA.max){var py=yA.getPixelForValue(gg.v);c2.save();c2.strokeStyle=PAL[i%PAL.length];c2.setLineDash([4,3]);c2.globalAlpha=.55;c2.lineWidth=1;c2.beginPath();c2.moveTo(xA.left,py);c2.lineTo(xA.right,py);c2.stroke();c2.globalAlpha=1;c2.setLineDash([]);c2.fillStyle=PAL[i%PAL.length];c2.font='9px sans-serif';c2.textAlign='right';c2.fillText(goalName(i),xA.right-2,py-3);c2.restore();}});}};
+      scales:{x:{ticks:{color:'#7f6b57',maxTicksLimit:7,font:{size:10,family:"'Inter',sans-serif"}},grid:{display:false}},y:{ticks:{color:'#7f6b57',font:{size:10,family:"'Inter',sans-serif"},callback:function(v){return v===0?'':Math.round(v/1000)+'k';}},grid:{color:'#ece0cf'}}}};
+    var goalLines={id:'goalLines',afterDatasetsDraw:function(ch){var yA=ch.scales.y,xA=ch.scales.x,c2=ch.ctx;goals.forEach(function(gg,i){if(isCushionRung(gg.v))return;if(gg.v>=yA.min&&gg.v<=yA.max){var py=yA.getPixelForValue(gg.v);var col=msColor(msState(i));c2.save();c2.strokeStyle=col;c2.setLineDash([4,3]);c2.globalAlpha=.55;c2.lineWidth=1;c2.beginPath();c2.moveTo(xA.left,py);c2.lineTo(xA.right,py);c2.stroke();c2.globalAlpha=1;c2.setLineDash([]);c2.fillStyle=col;c2.font="10px 'Space Grotesk','Inter',sans-serif";c2.textAlign='right';c2.fillText(goalName(i),xA.right-2,py-3);c2.restore();}});}};
     if(chart){chart.data=data;chart.options=opts;chart.update();}else{chart=new Chart(document.getElementById('chart'),{type:'line',data:data,options:opts,plugins:[goalLines]});}
   }
 
