@@ -30,9 +30,22 @@
   :root{--bg:#efe3d3;--bg2:#f6ecdd;--card:#fffaf2;--line:#e6d5c1;--line2:#d8c3a9;
     --espresso:#3b2a1e;--ink:#4a3627;--mut:#6d5a47;--dim:#7f6b57;--coffee:#6f4e37;
     --caramel:#c08a4a;--caramel-ink:#8f5a2c;--roast:#a0673a;--green:#4e7036;--cream:#f3e7d6;
+    --btn-ink:#fdf6ec;--ok-ink:#fff;--toast-ink:#f7ead9;--cell-on-hi:#8a5f40;--cell-on-ink:#fbeede;
+    --pill-done-bg:#e7efd9;--pill-live-bg:#f3e2cb;--pill-live-ink:#8a5628;--pill-lock-bg:#eadfce;
+    --warn-ink:#8a4f28;--chart-grid:#ece0cf;--halo:#f7edde;
+    --danger-ink:#a33b2e;--danger-line:#dcb4a8;--danger-bg:#f6e3dd;
     --shadow:0 1px 0 rgba(255,255,255,.6) inset,0 10px 26px rgba(59,42,30,.10)}
+  /* Mode sombre : mêmes rôles, palette café nuit. Auto (prefers-color-scheme) ou choix explicite dans Réglages. */
+  :root[data-theme="dark"]{--bg:#191410;--bg2:#2b2318;--card:#241d14;--line:#3a2f20;--line2:#55452e;
+    --espresso:#f2e8d8;--ink:#e3d5c1;--mut:#c7b299;--dim:#a68f76;--coffee:#c89a67;
+    --caramel:#d3a660;--caramel-ink:#d9ad6c;--roast:#cd9257;--green:#94bd74;--cream:#31281a;
+    --btn-ink:#241a10;--ok-ink:#1c2611;--toast-ink:#241a10;--cell-on-hi:#e2b981;--cell-on-ink:#241a10;
+    --pill-done-bg:#33431f;--pill-live-bg:#4a3a20;--pill-live-ink:#dcb271;--pill-lock-bg:#382e1f;
+    --warn-ink:#d99f63;--chart-grid:#352b1c;--halo:#241d14;
+    --danger-ink:#e08573;--danger-line:#7a4438;--danger-bg:#3d2620;
+    --shadow:0 1px 0 rgba(255,255,255,.03) inset,0 10px 26px rgba(0,0,0,.45)}
   *{box-sizing:border-box}
-  body{margin:0;background:radial-gradient(900px 500px at 78% -12%,#f7edde 0%,var(--bg) 55%);
+  body{margin:0;background:radial-gradient(900px 500px at 78% -12%,var(--halo) 0%,var(--bg) 55%);
     color:var(--ink);font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
     line-height:1.55;padding:30px 22px 60px;max-width:1020px;margin:0 auto;font-variant-numeric:tabular-nums}
   .headrow{display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap}
@@ -53,13 +66,13 @@
   input[type=number],input[type=text]{width:100%;background:var(--bg2);border:1px solid var(--line2);color:var(--ink);
     border-radius:12px;padding:10px 12px;font-size:15px;font-variant-numeric:tabular-nums}
   input:focus{outline:none;border-color:var(--coffee)}
-  button{background:var(--coffee);border:none;color:#fdf6ec;border-radius:12px;padding:10px 15px;font-size:13.5px;cursor:pointer;font-weight:600;transition:.15s}
+  button{background:var(--coffee);border:none;color:var(--btn-ink);border-radius:12px;padding:10px 15px;font-size:13.5px;cursor:pointer;font-weight:600;transition:.15s}
   button:hover{background:var(--espresso)}
   button.ghost{background:transparent;border:1px solid var(--line2);color:var(--mut)}
   button.ghost:hover{background:var(--cream);color:var(--ink)}
-  button.ok,button.ok:hover{background:var(--green);color:#fff}
-  button.ghost.danger{color:#a33b2e;border-color:#dcb4a8}
-  button.ghost.danger:hover{background:#f6e3dd;color:#8f2f23}
+  button.ok,button.ok:hover{background:var(--green);color:var(--ok-ink)}
+  button.ghost.danger{color:var(--danger-ink);border-color:var(--danger-line)}
+  button.ghost.danger:hover{background:var(--danger-bg);color:var(--danger-ink)}
   .cell:focus-visible,.info:focus-visible,button:focus-visible{outline:2px solid var(--coffee);outline-offset:2px}
   .hero-num{font-family:'Space Grotesk','Inter',sans-serif;font-size:50px;font-weight:700;letter-spacing:-1.5px;color:var(--coffee);line-height:1}
   .hero-unit{font-size:19px;color:var(--mut);font-weight:500}
@@ -77,18 +90,18 @@
   .bean{width:12px;height:14px;border-radius:50%/60% 60% 40% 40%;flex:none}
   /* La couleur encode l'état du palier : vert = atteint, roast = en cours, neutre = verrouillé */
   .bean.st-done{background:var(--green)}.bean.st-live{background:var(--roast)}.bean.st-lock{background:var(--line2)}
-  .fill.st-done{background:linear-gradient(90deg,var(--green),#5d8442)}
+  .fill.st-done{background:var(--green)}
   .ms-sub{color:var(--mut);font-size:13px;font-weight:400;margin-top:2px}
   .ms-foot{font-size:12px;color:var(--dim);margin-top:7px}
   .ms-life{font-size:13.5px;color:var(--mut);margin-top:8px;padding-left:9px;border-left:2px solid var(--line2)}
-  .ms-life.warn{color:#8a4f28;border-left-color:var(--caramel)}
+  .ms-life.warn{color:var(--warn-ink);border-left-color:var(--caramel)}
   .info{display:inline-flex;width:18px;height:18px;border-radius:50%;background:var(--line2);color:var(--espresso);font-size:11px;line-height:1;align-items:center;justify-content:center;cursor:pointer;font-weight:700;font-style:italic;vertical-align:middle;position:relative}
   .info::after{content:"";position:absolute;inset:-9px} /* zone tactile ~36px sans changer le visuel */
   .info:hover{background:var(--roast);color:#fff}
   .flyout{display:none;margin-top:8px;background:var(--bg2);border:1px solid var(--line2);border-radius:12px;padding:10px 12px;font-size:12.5px;color:var(--ink);line-height:1.5}
   .flyout.open{display:block}
   .pill{font-size:10.5px;padding:3px 9px;border-radius:20px;font-weight:700}
-  .pill.done{background:#e7efd9;color:var(--green)}.pill.live{background:#f3e2cb;color:#8a5628}.pill.lock{background:#eadfce;color:var(--mut)}
+  .pill.done{background:var(--pill-done-bg);color:var(--green)}.pill.live{background:var(--pill-live-bg);color:var(--pill-live-ink)}.pill.lock{background:var(--pill-lock-bg);color:var(--mut)}
   .ms-fig{font-size:12.5px;color:var(--mut);white-space:nowrap}
   .chart-wrap{position:relative;height:230px}
   .legend{display:flex;gap:18px;flex-wrap:wrap;color:var(--mut);font-size:12.5px;margin-top:12px}
@@ -104,13 +117,16 @@
   .cell{aspect-ratio:1;border-radius:50%;background:var(--bg2);border:1.5px dashed var(--line2);cursor:pointer;
     display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:9px;color:var(--mut);transition:.14s;user-select:none}
   .cell:hover{transform:scale(1.12);border-color:var(--coffee);z-index:1}
-  .cell.on{background:radial-gradient(circle at 38% 32%,#8a5f40,var(--coffee) 70%);border:1.5px solid var(--coffee);color:#fbeede}
+  .cell.on{background:radial-gradient(circle at 38% 32%,var(--cell-on-hi),var(--coffee) 70%);border:1.5px solid var(--coffee);color:var(--cell-on-ink)}
   .cell.on .amt{font-size:8px;font-weight:700}
   .cell .m{font-weight:600}.cell.future{opacity:.5}
   .cell.pre{opacity:.5;border:1.5px solid var(--line2);background:var(--cream);color:var(--dim);cursor:default}
   .cell.todo{border:1.5px dashed var(--caramel)}
   .cell.todo .plus{color:var(--caramel-ink);font-size:14px;font-weight:700;line-height:1}
   @keyframes stampPop{0%{transform:scale(.55);opacity:.35}55%{transform:scale(1.18)}100%{transform:scale(1)}}
+  .confetti{position:absolute;top:-14px;width:9px;height:12px;border-radius:50%/60% 60% 40% 40%;opacity:0;pointer-events:none;animation:confFall 1.7s ease-in forwards}
+  @keyframes confFall{0%{opacity:1;transform:translateY(0) rotate(0)}100%{opacity:0;transform:translateY(330px) rotate(540deg)}}
+  @media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
   .cell.stamped-now{animation:stampPop .5s cubic-bezier(.2,1.3,.5,1)}
   .goalrow{display:flex;gap:8px;margin-bottom:8px;align-items:center}
   .goalrow input.gval{flex:1}
@@ -121,7 +137,7 @@
   input[type=range]{width:100%;accent-color:var(--coffee)}
   .welcome{background:linear-gradient(120deg,#f6ead6,#f2ddc2);border:1px solid var(--line2)}
   #toasts{position:fixed;left:0;right:0;bottom:22px;display:flex;flex-direction:column;align-items:center;gap:8px;z-index:60;pointer-events:none}
-  .toast{background:var(--espresso);color:#f7ead9;padding:12px 20px;border-radius:30px;font-size:14px;font-weight:600;
+  .toast{background:var(--espresso);color:var(--toast-ink);padding:12px 20px;border-radius:30px;font-size:14px;font-weight:600;
     box-shadow:0 12px 30px rgba(59,42,30,.4);opacity:0;transform:translateY(14px);transition:.35s}
   .toast.show{opacity:1;transform:translateY(0)}
   input[type=file]{display:none}
@@ -153,7 +169,7 @@
   .faq summary::before{content:"+";color:var(--caramel-ink);font-weight:700;margin-right:9px}
   .faq details[open] summary::before{content:"–"}
   .faq p{margin:0 0 12px;padding-left:22px;color:var(--mut);font-size:13.5px;line-height:1.6}
-  #onb{display:none;position:fixed;inset:0;z-index:100;background:radial-gradient(900px 500px at 78% -12%,#f7edde 0%,var(--bg) 55%);overflow:auto;align-items:center;justify-content:center;padding:24px}
+  #onb{display:none;position:fixed;inset:0;z-index:100;background:radial-gradient(900px 500px at 78% -12%,var(--halo) 0%,var(--bg) 55%);overflow:auto;align-items:center;justify-content:center;padding:24px}
   .onb-card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:30px;max-width:460px;width:100%;box-shadow:var(--shadow)}
 </style>
 </head>
@@ -300,6 +316,10 @@
           <div class="flyout" id="fly-swr" data-i18n="fly_swr">Le pourcentage de ton capital que tu peux retirer chaque année sans l'épuiser — la fameuse <b>« règle des 4 % »</b>. Prudent : <b>3 à 4 %</b>. Plus bas = plus sûr, surtout pour une longue période. Et pense <b>net d'impôts</b> : les retraits sont fiscalisés (≈ 17 à 30 % sur les gains selon l'enveloppe) — vise large sur tes dépenses.</div>
         </div>
       </div>
+      <div style="margin-top:12px;max-width:230px">
+        <label data-i18n="lbl_theme">Thème d'affichage</label>
+        <select id="themeSel" class="mini" style="width:100%"><option value="auto" data-i18n="theme_auto">Auto (système)</option><option value="light" data-i18n="theme_light">Clair</option><option value="dark" data-i18n="theme_dark">Sombre</option></select>
+      </div>
       <p class="note" id="regNote"></p>
   </details>
 
@@ -355,7 +375,7 @@
           <div><label data-i18n="lbl_expenses">Dépenses cibles /mois (€)</label><input type="number" id="onbExp" step="50" value="2000"><p style="font-size:11px;color:var(--dim);margin:6px 0 0" data-i18n="onb_exp_hint">Le train de vie que tu veux financer, pas forcément tes dépenses d'aujourd'hui.</p></div>
         </div>
         <p style="font-size:12px;color:var(--dim);margin:12px 0 16px" data-i18n="onb_note">Tu fixeras ensuite tes objectifs dans le dashboard.</p>
-        <p id="onbErr" style="display:none;font-size:12.5px;color:#a33b2e;background:#f6e3dd;border-radius:9px;padding:9px 12px;margin:0 0 12px"></p>
+        <p id="onbErr" style="display:none;font-size:12.5px;color:var(--danger-ink);background:var(--danger-bg);border-radius:12px;padding:9px 12px;margin:0 0 12px"></p>
         <div style="display:flex;gap:8px">
           <button class="ghost" id="onbBack" data-i18n="onb_back">← Retour</button>
           <button id="onbFinish" data-i18n="onb_finish" style="flex:1">Accéder à mon dashboard ☕</button>
@@ -387,7 +407,7 @@
     </div>
   </div>
   <div id="celebrate" role="dialog" aria-modal="true" aria-labelledby="celebTitle">
-    <div style="background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px 22px;width:340px;max-width:100%;box-shadow:0 20px 60px rgba(59,42,30,.35);text-align:center">
+    <div style="position:relative;overflow:hidden;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px 22px;width:340px;max-width:100%;box-shadow:0 20px 60px rgba(59,42,30,.35);text-align:center">
       <div style="font-size:44px;line-height:1">🎉</div>
       <div id="celebTitle" style="font-family:'Space Grotesk','Inter',sans-serif;font-size:22px;font-weight:700;color:var(--espresso);margin:10px 0 4px">—</div>
       <div id="celebSub" style="font-size:13px;color:var(--mut);margin-bottom:18px">—</div>
@@ -406,6 +426,7 @@
 (function(){
   var R;
   function cssVar(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim();}
+  function hexRgba(h,a){h=h.replace('#','');return 'rgba('+parseInt(h.substr(0,2),16)+','+parseInt(h.substr(2,2),16)+','+parseInt(h.substr(4,2),16)+','+a+')';}
   // État d'un palier : 'done' (atteint), 'live' (en cours), 'lock' (verrouillé) — la couleur suit l'état, pas la position.
   function msState(i){
     var v=goals[i].v, isM=isCushionRung(v), base=isM?cushion:cap;
@@ -426,7 +447,7 @@
     for(j=0;j<=i;j++){if(!isCushionRung(goals[j].v))n++;}
     return (i===firstFi)?t('rung_indep'):t('rung_n',{n:n});
   }
-  var K={cap:"crs_cap",mo:"crs_mo",exp:"crs_exp",age:"crs_age",goals:"crs_goals",amt:"crs_amt",hist:"crs_hist",cel:"crs_cel",onb:"crs_onb",rate:"crs_rate",swr:"crs_swr",base:"crs_base",start:"crs_start",tage:"crs_tage",lang:"crs_lang",cur:"crs_cur",cushion:"crs_cushion",lastexp:"crs_lastexp",demo:"crs_demo"};
+  var K={cap:"crs_cap",mo:"crs_mo",exp:"crs_exp",age:"crs_age",goals:"crs_goals",amt:"crs_amt",hist:"crs_hist",cel:"crs_cel",onb:"crs_onb",rate:"crs_rate",swr:"crs_swr",base:"crs_base",start:"crs_start",tage:"crs_tage",lang:"crs_lang",cur:"crs_cur",cushion:"crs_cushion",lastexp:"crs_lastexp",demo:"crs_demo",theme:"crs_theme"};
   function g(k,d){try{var v=localStorage.getItem(k);return v===null?d:JSON.parse(v)}catch(e){return d}}
   function s(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
 
@@ -512,6 +533,7 @@
       proj_prompt:"Mets à jour ta valeur chaque mois — la courbe se trace au fil de l'eau.",
       ms_empty:"Ajoute un palier ci-dessous pour commencer.",
       rung_cushion:"Matelas de sécurité", rung_n:"Palier {n}", rung_indep:"Ton indépendance",
+      lbl_theme:"Thème d'affichage", theme_auto:"Auto (système)", theme_light:"Clair", theme_dark:"Sombre",
       ms_indep:"≈ {inc}/mois — <span style='color:var(--green)'>tout ton train de vie couvert ☕</span>",
       ms_covers:"≈ {inc}/mois, soit ~{p} % de ton train de vie",
       ms_months:"≈ {n} mois de dépenses",
@@ -644,6 +666,7 @@
       proj_prompt:"Update your value each month — the curve fills in over time.",
       ms_empty:"Add a milestone below to get started.",
       rung_cushion:"Safety cushion", rung_n:"Milestone {n}", rung_indep:"Your independence",
+      lbl_theme:"Display theme", theme_auto:"Auto (system)", theme_light:"Light", theme_dark:"Dark",
       ms_indep:"≈ {inc}/mo — <span style='color:var(--green)'>your whole lifestyle covered ☕</span>",
       ms_covers:"≈ {inc}/mo, i.e. ~{p}% of your lifestyle",
       ms_months:"≈ {n} months of expenses",
@@ -951,11 +974,11 @@
     var labels=plan.map(function(p){return p.d;}), hm={};hist.forEach(function(h){hm[h.d]=h.v;});
     var real=labels.map(function(l){return hm[l]!==undefined?Math.round(hm[l]):null;});
     var data={labels:labels.map(frMonth),datasets:[
-      {label:t('lg_real'),data:real,borderColor:'#6f4e37',backgroundColor:'rgba(111,78,55,.12)',borderWidth:2.5,pointRadius:3,pointBackgroundColor:'#6f4e37',spanGaps:true,fill:true,tension:.25},
-      {label:t('lg_plan'),data:plan.map(function(p){return p.v;}),borderColor:'#8a7563',borderWidth:1.5,borderDash:[5,4],pointRadius:0,fill:false,tension:.25}
+      {label:t('lg_real'),data:real,borderColor:cssVar('--coffee'),backgroundColor:hexRgba(cssVar('--coffee'),.12),borderWidth:2.5,pointRadius:3,pointBackgroundColor:cssVar('--coffee'),spanGaps:true,fill:true,tension:.25},
+      {label:t('lg_plan'),data:plan.map(function(p){return p.v;}),borderColor:cssVar('--dim'),borderWidth:1.5,borderDash:[5,4],pointRadius:0,fill:false,tension:.25}
     ]};
     var opts={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return (c.datasetIndex===0?t('tt_real'):t('tt_plan'))+(c.parsed.y==null?'—':eur(c.parsed.y));}}}},
-      scales:{x:{ticks:{color:'#7f6b57',maxTicksLimit:7,font:{size:10,family:"'Inter',sans-serif"}},grid:{display:false}},y:{ticks:{color:'#7f6b57',font:{size:10,family:"'Inter',sans-serif"},callback:function(v){return v===0?'':Math.round(v/1000)+'k';}},grid:{color:'#ece0cf'}}}};
+      scales:{x:{ticks:{color:cssVar('--dim'),maxTicksLimit:7,font:{size:10,family:"'Inter',sans-serif"}},grid:{display:false}},y:{ticks:{color:cssVar('--dim'),font:{size:10,family:"'Inter',sans-serif"},callback:function(v){return v===0?'':Math.round(v/1000)+'k';}},grid:{color:cssVar('--chart-grid')}}}};
     var goalLines={id:'goalLines',afterDatasetsDraw:function(ch){var yA=ch.scales.y,xA=ch.scales.x,c2=ch.ctx;goals.forEach(function(gg,i){if(isCushionRung(gg.v))return;if(gg.v>=yA.min&&gg.v<=yA.max){var py=yA.getPixelForValue(gg.v);var col=msColor(msState(i));c2.save();c2.strokeStyle=col;c2.setLineDash([4,3]);c2.globalAlpha=.55;c2.lineWidth=1;c2.beginPath();c2.moveTo(xA.left,py);c2.lineTo(xA.right,py);c2.stroke();c2.globalAlpha=1;c2.setLineDash([]);c2.fillStyle=col;c2.font="10px 'Space Grotesk','Inter',sans-serif";c2.textAlign='right';c2.fillText(goalName(i),xA.right-2,py-3);c2.restore();}});}};
     if(chart){chart.data=data;chart.options=opts;chart.update();}else{chart=new Chart(document.getElementById('chart'),{type:'line',data:data,options:opts,plugins:[goalLines]});}
   }
@@ -971,7 +994,12 @@
     if(!silent && newly.length){ newly.sort(function(a,b){return b.v-a.v;}); showCelebrate(newly[0].i,newly[0].v); } // modal pour le plus haut palier franchi
   }
   var celebEl=document.getElementById('celebrate'), celebV=0, celebName='';
-  function showCelebrate(i,v){celebName=goalName(i);celebV=v;
+  function spawnConfetti(){
+    if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+    var box=celebEl.firstElementChild,cols=[cssVar('--green'),cssVar('--caramel'),cssVar('--roast'),cssVar('--coffee')];
+    for(var c=0;c<14;c++){var sp=document.createElement('span');sp.className='confetti';sp.style.left=(4+Math.random()*92)+'%';sp.style.background=cols[c%4];sp.style.animationDelay=(Math.random()*.55)+'s';sp.style.width=(7+Math.random()*5)+'px';box.appendChild(sp);(function(x){setTimeout(function(){x.remove();},2500);})(sp);}
+  }
+  function showCelebrate(i,v){celebName=goalName(i);celebV=v;spawnConfetti();
     document.getElementById('celebTitle').textContent=t('celeb_title',{name:celebName});
     document.getElementById('celebSub').textContent=t('celeb_sub',{v:eurk(v)});
     celebEl.style.display='flex';setTimeout(function(){document.getElementById('celebClose').focus();},30);}
@@ -1003,6 +1031,15 @@
   bind('age',K.age,function(v){age=v;});
   document.getElementById('rate').addEventListener('change',function(e){rate=Math.max(0,+e.target.value||5);R=rate/100/12;s(K.rate,rate);render();});
   document.getElementById('swr').addEventListener('change',function(e){swr=Math.max(0.1,+e.target.value||4);s(K.swr,swr);render();});
+  function applyTheme(){
+    var pref=g(K.theme,'auto');
+    var dark=pref==='dark'||(pref==='auto'&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches);
+    document.documentElement.setAttribute('data-theme',dark?'dark':'light');
+    if(chart)renderChart(); // le canvas relit les variables CSS
+  }
+  if(window.matchMedia){var _mq=matchMedia('(prefers-color-scheme: dark)');var _onMq=function(){if(g(K.theme,'auto')==='auto')applyTheme();};if(_mq.addEventListener)_mq.addEventListener('change',_onMq);else if(_mq.addListener)_mq.addListener(_onMq);}
+  document.getElementById('themeSel').addEventListener('change',function(){s(K.theme,this.value);applyTheme();});
+  document.getElementById('themeSel').value=g(K.theme,'auto');
   function setLang(v){LANG=v==='en'?'en':'fr';s(K.lang,LANG);applyStatic();render();}
   function setCur(v){CUR=SYMS[v]?v:'EUR';CURSYM=SYMS[CUR];s(K.cur,CUR);applyStatic();render();}
   ['langSel','onbLang'].forEach(function(id){document.getElementById(id).addEventListener('change',function(){setLang(this.value);});});
@@ -1184,6 +1221,7 @@
     toast(t('toast_capfromlink',{x:eur(cap)}));
   }
 
+  applyTheme();
   applyStatic();
   syncCelebrated(true);
   render();
