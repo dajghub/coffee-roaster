@@ -151,6 +151,9 @@
   .cell.pre{opacity:.5;border:1.5px solid var(--line2);background:var(--cream);color:var(--dim);cursor:default}
   .cell.todo{border:1.5px dashed var(--caramel)}
   .cell.todo .plus{color:var(--caramel-ink);font-size:14px;font-weight:700;line-height:1}
+  /* Repère rétrospectif : mois où un palier a été franchi. Permanent (basé sur `celebrated`), ne recule jamais. */
+  /* liseré à la couleur de la carte puis anneau doré : détache le repère du grain dans les deux thèmes */
+  .cell.ms-hit{box-shadow:0 0 0 1.5px var(--card),0 0 0 3.5px var(--caramel)}
   @keyframes stampPop{0%{transform:scale(.55);opacity:.35}55%{transform:scale(1.18)}100%{transform:scale(1)}}
   .confetti{position:absolute;top:-14px;width:9px;height:12px;border-radius:50%/60% 60% 40% 40%;opacity:0;pointer-events:none;animation:confFall 1.7s ease-in forwards}
   @keyframes confFall{0%{opacity:1;transform:translateY(0) rotate(0)}100%{opacity:0;transform:translateY(330px) rotate(540deg)}}
@@ -170,6 +173,7 @@
   .toast.show{opacity:1;transform:translateY(0)}
   input[type=file]{display:none}
   @media(max-width:560px){.hero-num{font-size:40px}.cal-months{gap:3px}.cell{font-size:8px}.cell .amt{display:none}
+    .cell.ms-hit{box-shadow:0 0 0 1px var(--card),0 0 0 2.5px var(--caramel)}
     .card{padding:18px}
     .tag{margin:12px 0 24px 0}
     .tools{gap:6px;width:100%}
@@ -274,7 +278,7 @@
       <div class="kpi"><div class="n" id="totalInvested">0 €</div><div class="l" data-i18n="kpi_total">total investi</div></div>
     </div>
     <div id="calendar" style="margin-top:6px"></div>
-    <p class="note" style="margin-top:14px" data-i18n="cal_help">« + » pour investir&nbsp;&nbsp;·&nbsp;&nbsp;grain plein pour ajuster</p>
+    <p class="note" id="calHelp" style="margin-top:14px" data-i18n="cal_help">« + » pour investir&nbsp;&nbsp;·&nbsp;&nbsp;grain plein pour ajuster</p>
   </div>
 
   <div class="card">
@@ -475,7 +479,7 @@
     for(j=0;j<=i;j++){if(!isCushionRung(goals[j].v))n++;}
     return (i===firstFi)?t('rung_indep'):t('rung_n',{n:n});
   }
-  var K={cap:"crs_cap",mo:"crs_mo",exp:"crs_exp",age:"crs_age",goals:"crs_goals",amt:"crs_amt",hist:"crs_hist",cel:"crs_cel",onb:"crs_onb",rate:"crs_rate",swr:"crs_swr",base:"crs_base",start:"crs_start",tage:"crs_tage",lang:"crs_lang",cur:"crs_cur",cushion:"crs_cushion",lastexp:"crs_lastexp",demo:"crs_demo",theme:"crs_theme"};
+  var K={cap:"crs_cap",mo:"crs_mo",exp:"crs_exp",age:"crs_age",goals:"crs_goals",amt:"crs_amt",hist:"crs_hist",cel:"crs_cel",onb:"crs_onb",rate:"crs_rate",swr:"crs_swr",base:"crs_base",start:"crs_start",tage:"crs_tage",lang:"crs_lang",cur:"crs_cur",cushion:"crs_cushion",lastexp:"crs_lastexp",demo:"crs_demo",theme:"crs_theme",celm:"crs_celm"};
   function g(k,d){try{var v=localStorage.getItem(k);return v===null?d:JSON.parse(v)}catch(e){return d}}
   function s(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
 
@@ -522,6 +526,7 @@
       ey_loyalty:"Carte de fidélité<span class='eyebrow-tail'> — un grain torréfié par mois investi</span>",
       kpi_streak:"série en cours (mois)", kpi_best:"meilleure série (mois)", kpi_months:"mois investis", kpi_total:"total investi",
       cal_help:"« + » pour investir&nbsp;&nbsp;·&nbsp;&nbsp;grain plein pour ajuster",
+      cal_ms_hit:"🏆 {name} franchi ici", cal_ms_legend:"anneau doré = palier franchi",
       footer_note:"💾 Pense à cliquer <b>Exporter</b> pour sauvegarder tes données de temps en temps — vider le cache du navigateur les effacerait.",
       donate_btn:"☕ Offre-moi un café",
       share_app_btn:"Partager l'app",
@@ -656,6 +661,7 @@
       ey_loyalty:"Loyalty card<span class='eyebrow-tail'> — one roasted bean per month invested</span>",
       kpi_streak:"current streak (months)", kpi_best:"best streak (months)", kpi_months:"months invested", kpi_total:"total invested",
       cal_help:"« + » to invest&nbsp;&nbsp;·&nbsp;&nbsp;full bean to adjust",
+      cal_ms_hit:"🏆 {name} reached here", cal_ms_legend:"gold ring = milestone reached",
       footer_note:"💾 Click <b>Export</b> now and then to back up your data — clearing your browser cache would erase it.",
       donate_btn:"☕ Buy me a coffee",
       share_app_btn:"Share the app",
@@ -767,7 +773,7 @@
   }
 
   var cap=g(K.cap,0), mo=g(K.mo,500), expenses=g(K.exp,2000), age=g(K.age,30),
-      goals=g(K.goals,DEF_GOALS), amounts=g(K.amt,{}), hist=g(K.hist,[]), celebrated=g(K.cel,[]),
+      goals=g(K.goals,DEF_GOALS), amounts=g(K.amt,{}), hist=g(K.hist,[]), celebrated=g(K.cel,[]), celMonths=g(K.celm,{}),
       rate=g(K.rate,5), swr=g(K.swr,4), baseInvested=g(K.base,null), startYm=g(K.start,null), tage=g(K.tage,0), cushion=g(K.cushion,0), chart=null;
   R=rate/100/12;
   if(baseInvested===null){baseInvested=cap;s(K.base,baseInvested);}
@@ -963,9 +969,27 @@
     ba.className=mode==='age'?'':'ghost';ba.setAttribute('aria-pressed',mode==='age'?'true':'false');
   }
 
+  // Repères rétrospectifs : { indexMoisRelatif: [noms de paliers franchis ce mois-là] }.
+  // Source de permanence = `celebrated` (jamais dé-coché) → le repère reste même si la valeur repasse sous le palier.
+  // Le matelas est exclu : il suit `cushion`, pas l'historique de valeur (`hist`).
+  function milestoneHitMonths(){
+    var map={};
+    goals.forEach(function(gg,i){
+      if(isCushionRung(gg.v)||celebrated.indexOf(gg.v)<0)return;
+      var ym=celMonths[gg.v]; // mois figé au franchissement : insensible à une baisse ultérieure de la valeur
+      if(!ym){ // repli pour les données créées avant cette fonctionnalité : on cherche dans l'historique
+        for(var h=0;h<hist.length;h++){ if(hist[h].v>=gg.v){ym=hist[h].d;break;} }
+      }
+      if(!ym)return;
+      var idx=monthsSince(startYm,ym)+1;
+      if(idx>=1){(map[idx]=map[idx]||[]).push(goalName(i));}
+    });
+    return map;
+  }
+
   function renderCal(){
     var host=document.getElementById('calendar');host.innerHTML="";
-    var now=ymNow();
+    var now=ymNow(), msHits=milestoneHitMonths();
     var curIdx=monthsSince(startYm,now)+1; if(curIdx<1)curIdx=1;
     var rows=Math.max(3,Math.ceil((curIdx+3)/12));
     for(var r=0;r<rows;r++){
@@ -977,14 +1001,16 @@
         if(on){cls="on";content='<span class="m">'+idx+'</span><span class="amt">'+Math.round(amt)+'</span>';clickable=true;}
         else if(future){cls="future";content='<span class="m">'+idx+'</span>';}
         else{cls="todo";content='<span class="plus">+</span>';clickable=true;}
-        var c=document.createElement('div');c.className="cell "+cls+(idx===curIdx?" cal-current":"");c.innerHTML=content;
+        var hit=msHits[idx];
+        var c=document.createElement('div');c.className="cell "+cls+(idx===curIdx?" cal-current":"")+(hit?" ms-hit":"");c.innerHTML=content;
         var baseT=t('month_n',{i:idx,m:frMonth(ym)});
-        c.title=baseT+(on?" · "+eur(amt):(cls==="todo"?t('to_fill'):""));
+        var hitT=hit?" · "+t('cal_ms_hit',{name:hit.join(", ")}):"";
+        c.title=baseT+(on?" · "+eur(amt):(cls==="todo"?t('to_fill'):""))+hitT;
         if(clickable){
           var act=(function(key,cur){return function(){ if(cur>0){openModal(key);} else{amounts[key]=mo;s(K.amt,amounts);render();} }})(ym,amt);
           c.onclick=act;
           c.setAttribute('tabindex','0');c.setAttribute('role','button');
-          c.setAttribute('aria-label',baseT+(on?t('aria_adjust',{a:eur(amt)}):t('aria_invest')));
+          c.setAttribute('aria-label',baseT+(on?t('aria_adjust',{a:eur(amt)}):t('aria_invest'))+hitT);
           c.addEventListener('keydown',(function(fn){return function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();fn();}}})(act));
         }else{c.style.cursor="default";}
         mr.appendChild(c);
@@ -998,6 +1024,9 @@
     document.getElementById('bestStreak').textContent=best;
     document.getElementById('totalMonths').textContent=cnt;
     document.getElementById('totalInvested').textContent=eur(baseInvested+sumStamped());
+    // Légende de l'anneau : affichée seulement s'il y a au moins un repère (sinon c'est du bruit pour un nouvel utilisateur)
+    var helpEl=document.getElementById('calHelp');
+    if(helpEl)helpEl.innerHTML=t('cal_help')+(Object.keys(msHits).length?"&nbsp;&nbsp;·&nbsp;&nbsp;"+t('cal_ms_legend'):"");
   }
 
   function renderChart(){
@@ -1024,8 +1053,8 @@
     setTimeout(function(){t.classList.add('show');},20);setTimeout(function(){t.classList.remove('show');setTimeout(function(){t.remove();},400);},3600);}
   function syncCelebrated(silent){
     var newly=[];
-    goals.forEach(function(gg,i){ var base=isCushionRung(gg.v)?cushion:cap; if(base>=gg.v && celebrated.indexOf(gg.v)<0){ celebrated.push(gg.v); newly.push({i:i,v:gg.v}); } });
-    s(K.cel,celebrated);
+    goals.forEach(function(gg,i){ var base=isCushionRung(gg.v)?cushion:cap; if(base>=gg.v && celebrated.indexOf(gg.v)<0){ celebrated.push(gg.v); celMonths[gg.v]=ymNow(); newly.push({i:i,v:gg.v}); } });
+    s(K.cel,celebrated);s(K.celm,celMonths);
     if(!silent && newly.length){ newly.sort(function(a,b){return b.v-a.v;}); showCelebrate(newly[0].i,newly[0].v); } // modal pour le plus haut palier franchi
   }
   var celebEl=document.getElementById('celebrate'), celebV=0, celebName='';
@@ -1055,10 +1084,11 @@
     cap=Math.max(0,+document.getElementById('capital').value||0);s(K.cap,cap);
     mo=Math.max(0,+document.getElementById('monthly').value||0);s(K.mo,mo);
     var ym=ymNow();if(mo>0){amounts[ym]=mo;s(K.amt,amounts);} // tampon du mois courant = valeur courante du champ (même mois → mis à jour, pas dupliqué)
-    recordSnapshot();render();animateStamp();
+    recordSnapshot();
+    syncCelebrated(false); // AVANT render() : met `celebrated` à jour pour que le repère du palier s'affiche dans la même passe (+ grande célébration si palier franchi)
+    render();animateStamp();
     b.classList.add('ok');b.innerHTML=t('btn_log_done'); // micro-célébration
     clearTimeout(b._t);b._t=setTimeout(function(){b.classList.remove('ok');updateLogBtnLabel();},2000);
-    syncCelebrated(false); // grande célébration seulement si palier franchi
   });
   bind('monthly',K.mo,function(v){mo=v;});
   bind('expenses',K.exp,function(v){expenses=v;});
@@ -1180,7 +1210,7 @@
     window.open('https://buymeacoffee.com/getcoffeeroaster','_blank','noopener');
   });
   function doExport(){
-    var blob=new Blob([JSON.stringify({version:1,cap:cap,cushion:cushion,mo:mo,expenses:expenses,age:age,rate:rate,swr:swr,tage:tage,lang:LANG,cur:CUR,baseInvested:baseInvested,startYm:startYm,goals:goals,amounts:amounts,hist:hist,celebrated:celebrated},null,2)],{type:"application/json"});
+    var blob=new Blob([JSON.stringify({version:1,cap:cap,cushion:cushion,mo:mo,expenses:expenses,age:age,rate:rate,swr:swr,tage:tage,lang:LANG,cur:CUR,baseInvested:baseInvested,startYm:startYm,goals:goals,amounts:amounts,hist:hist,celebrated:celebrated,celMonths:celMonths},null,2)],{type:"application/json"});
     var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=t('export_filename');a.click();
     s(K.lastexp,ymNow());document.getElementById('exportReminder').style.display='none'; // sauvegarde faite → snooze le rappel
   }
@@ -1197,9 +1227,9 @@
       e.target.value="";
       showConfirm(t('confirm_import'),function(){
         var nn=function(v,def){return (v!=null&&isFinite(+v))?+v:def;};
-        cap=nn(d.cap,0);cushion=nn(d.cushion,0);mo=nn(d.mo,500);expenses=nn(d.expenses,2000);age=nn(d.age,30);rate=nn(d.rate,5);swr=nn(d.swr,4);tage=nn(d.tage,0);baseInvested=nn(d.baseInvested,cap);startYm=d.startYm||ymNow();goals=Array.isArray(d.goals)?d.goals:DEF_GOALS;amounts=(d.amounts&&typeof d.amounts==='object')?d.amounts:{};hist=Array.isArray(d.hist)?d.hist:[];celebrated=Array.isArray(d.celebrated)?d.celebrated:[];R=rate/100/12;
+        cap=nn(d.cap,0);cushion=nn(d.cushion,0);mo=nn(d.mo,500);expenses=nn(d.expenses,2000);age=nn(d.age,30);rate=nn(d.rate,5);swr=nn(d.swr,4);tage=nn(d.tage,0);baseInvested=nn(d.baseInvested,cap);startYm=d.startYm||ymNow();goals=Array.isArray(d.goals)?d.goals:DEF_GOALS;amounts=(d.amounts&&typeof d.amounts==='object')?d.amounts:{};hist=Array.isArray(d.hist)?d.hist:[];celebrated=Array.isArray(d.celebrated)?d.celebrated:[];celMonths=(d.celMonths&&typeof d.celMonths==='object')?d.celMonths:{};R=rate/100/12;
         if(d.lang==='en'||d.lang==='fr')LANG=d.lang; if(SYMS[d.cur])CUR=d.cur; CURSYM=SYMS[CUR];
-        s(K.cap,cap);s(K.cushion,cushion);s(K.mo,mo);s(K.exp,expenses);s(K.age,age);s(K.rate,rate);s(K.swr,swr);s(K.tage,tage);s(K.lang,LANG);s(K.cur,CUR);s(K.base,baseInvested);s(K.start,startYm);s(K.goals,goals);s(K.amt,amounts);s(K.hist,hist);s(K.cel,celebrated);applyStatic();render();
+        s(K.cap,cap);s(K.cushion,cushion);s(K.mo,mo);s(K.exp,expenses);s(K.age,age);s(K.rate,rate);s(K.swr,swr);s(K.tage,tage);s(K.lang,LANG);s(K.cur,CUR);s(K.base,baseInvested);s(K.start,startYm);s(K.goals,goals);s(K.amt,amounts);s(K.hist,hist);s(K.cel,celebrated);s(K.celm,celMonths);applyStatic();render();
       });
     };r.readAsText(f);
   });
