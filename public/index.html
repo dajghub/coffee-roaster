@@ -519,8 +519,9 @@
     <div class="card-body">
       <div class="grid-fields">
         <div><label for="expenses"><span data-i18n="lbl_expenses">Dépenses cibles /mois (€)</span><span class="info" data-k="expenses">i</span></label><input type="number" id="expenses" step="50" inputmode="decimal"><div class="flyout" id="fly-expenses" data-i18n="fly_expenses"></div></div>
+        <div><label for="curexp"><span data-i18n="lbl_curexp">Dépenses actuelles /mois (€)</span><span class="info" data-k="curexp">i</span></label><input type="number" id="curexp" step="50" inputmode="decimal"><div class="flyout" id="fly-curexp" data-i18n="fly_curexp"></div></div>
+        <div><label for="cushion"><span data-i18n="lbl_cushion">Épargne de précaution (€)</span><span class="info" data-k="cushion">i</span></label><input type="number" id="cushion" step="100" inputmode="decimal"><div class="flyout" id="fly-cushion" data-i18n="fly_cushion"></div></div>
         <div><label for="age" data-i18n="lbl_age">Ton âge</label><input type="number" id="age" step="1" inputmode="numeric"></div>
-        <div class="span2"><label for="cushion"><span data-i18n="lbl_cushion">Épargne de précaution (€)</span><span class="info" data-k="cushion">i</span></label><input type="number" id="cushion" step="100" inputmode="decimal"><div class="flyout" id="fly-cushion" data-i18n="fly_cushion"></div></div>
         <div><label for="rate"><span data-i18n="lbl_return">Rendement annuel réel (%)</span><span class="info" data-k="return">i</span></label><input type="number" id="rate" step="0.5" inputmode="decimal"><div class="flyout" id="fly-return" data-i18n="fly_return"></div></div>
         <div><label for="swr"><span data-i18n="lbl_swr">Taux de retrait (%)</span><span class="info" data-k="swr">i</span></label><input type="number" id="swr" step="0.5" inputmode="decimal"><div class="flyout" id="fly-swr" data-i18n="fly_swr"></div></div>
         <div><label for="themeSel" data-i18n="lbl_theme">Thème d'affichage</label>
@@ -594,6 +595,7 @@
             <label for="onbStamped" data-i18n="onb_stamped">J'ai déjà investi ce mois-ci</label>
           </div>
           <div><label for="onbExp" data-i18n="lbl_expenses">Dépenses cibles /mois (€)</label><input type="number" id="onbExp" step="50" value="2000" inputmode="decimal"><p class="onb-hint" data-i18n="onb_exp_hint">Le train de vie que tu veux financer, pas forcément tes dépenses d'aujourd'hui.</p></div>
+          <div><label for="onbCurExp" data-i18n="onb_lbl_curexp">Dépenses actuelles /mois (€), facultatif</label><input type="number" id="onbCurExp" step="50" inputmode="decimal"><p class="onb-hint" data-i18n="onb_curexp_hint">Sert à calculer ton matelas de sécurité (~6 mois). Laisse vide si c'est le même montant.</p></div>
         </div>
         <p class="onb-hint" style="margin:14px 0 18px" data-i18n="onb_note">On calcule tes paliers et ta projection à partir de ces infos.</p>
         <p id="onbErr" class="onb-err"></p>
@@ -676,7 +678,7 @@
     for(j=0;j<=i;j++){if(!isCushionRung(goals[j].v))n++;}
     return (i===firstFi)?t('rung_indep'):t('rung_n',{n:n});
   }
-  var K={cap:"crs_cap",mo:"crs_mo",exp:"crs_exp",age:"crs_age",goals:"crs_goals",amt:"crs_amt",hist:"crs_hist",cel:"crs_cel",onb:"crs_onb",rate:"crs_rate",swr:"crs_swr",base:"crs_base",start:"crs_start",tage:"crs_tage",lang:"crs_lang",cur:"crs_cur",cushion:"crs_cushion",lastexp:"crs_lastexp",demo:"crs_demo",theme:"crs_theme",celm:"crs_celm"};
+  var K={cap:"crs_cap",mo:"crs_mo",exp:"crs_exp",age:"crs_age",goals:"crs_goals",amt:"crs_amt",hist:"crs_hist",cel:"crs_cel",onb:"crs_onb",rate:"crs_rate",swr:"crs_swr",base:"crs_base",start:"crs_start",tage:"crs_tage",lang:"crs_lang",cur:"crs_cur",cushion:"crs_cushion",lastexp:"crs_lastexp",demo:"crs_demo",theme:"crs_theme",celm:"crs_celm",curexp:"crs_curexp"};
   function g(k,d){try{var v=localStorage.getItem(k);return v===null?d:JSON.parse(v)}catch(e){return d}}
   function s(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
 
@@ -712,6 +714,10 @@
       lbl_expenses:"Dépenses cibles /mois (%CUR%)", lbl_age:"Ton âge",
       fly_expenses:"Le train de vie mensuel que tu veux pouvoir financer une fois indépendant(e) — c'est lui qui fixe ton chiffre d'indépendance (× 12 ÷ taux de retrait). Si tu ne sais pas, pars de tes dépenses actuelles.",
       onb_exp_hint:"Le train de vie que tu veux financer, pas forcément tes dépenses d'aujourd'hui.",
+      lbl_curexp:"Dépenses actuelles /mois (%CUR%)",
+      onb_lbl_curexp:"Dépenses actuelles /mois (%CUR%), facultatif",
+      onb_curexp_hint:"Sert à calculer ton matelas de sécurité (~6 mois). Laisse vide si c'est le même montant.",
+      fly_curexp:"Ce que tu dépenses <b>aujourd'hui</b> chaque mois. Ça sert uniquement au matelas de sécurité : en cas de coup dur, c'est ton train de vie actuel qu'il faut couvrir. Vide = tes dépenses cibles.",
       onb_stamped:"J'ai déjà investi ce mois-ci",
       lbl_return:"Rendement annuel réel (%)",
       fly_return:"Le gain annuel moyen espéré de tes placements, <b>après inflation</b> (« réel »). Repères par profil : <b>100 % actions</b> ~5 à 6 %/an · <b>diversifié</b> (type 60/40 actions/obligations) ~3,5 à 4,5 % · <b>fonds euros / obligations</b> ~1 à 2 %. Au-delà de 6-7 %, méfiance — on se berce vite d'illusions. À noter : le « plan » du graphique est en euros d'aujourd'hui, alors que ta valeur saisie gonfle aussi avec l'inflation — « battre le plan » sur la durée est donc en partie normal.",
@@ -742,7 +748,7 @@
       onb_lbl_cap:"Capital déjà investi (%CUR%)",
       lbl_cushion:"Épargne de précaution (%CUR%)",
       onb_cushion_hint:"Ce que tu as déjà de côté, liquide (livret…), <b>non investi</b>.",
-      fly_cushion:"Ton fonds d'urgence : liquide, stable, non investi (livret…). Il vise ~6 mois de dépenses et n'entre <b>ni dans la projection de rendement, ni dans le revenu passif</b> — il finance seulement le palier « matelas de sécurité ». La cible est calculée sur tes dépenses cibles ; si ton train de vie <b>actuel</b> est différent, ajuste le montant du palier via « ✎ Ajuster mes paliers ».",
+      fly_cushion:"Ton fonds d'urgence : liquide, stable, non investi (livret…). Il vise ~6 mois de dépenses et n'entre <b>ni dans la projection de rendement, ni dans le revenu passif</b> — il finance seulement le palier « matelas de sécurité ». La cible est calculée sur tes dépenses <b>actuelles</b> (ou cibles si non renseignées), au moment où les paliers sont créés ; tu peux la changer via « ✎ Ajuster mes paliers ».",
       onb_note:"On calcule tes paliers et ta projection à partir de ces infos — tout reste ajustable ensuite.",
       onb_err_exp:"Renseigne tes dépenses mensuelles (supérieures à 0) — elles fixent tout ton parcours.",
       onb_err_age:"Renseigne un âge réaliste (entre 16 et 99 ans).",
@@ -849,6 +855,10 @@
       lbl_expenses:"Target expenses /month (%CUR%)", lbl_age:"Your age",
       fly_expenses:"The monthly lifestyle you want to be able to fund once independent — it sets your independence number (× 12 ÷ withdrawal rate). If unsure, start from your current expenses.",
       onb_exp_hint:"The lifestyle you want to fund — not necessarily what you spend today.",
+      lbl_curexp:"Current expenses /month (%CUR%)",
+      onb_lbl_curexp:"Current expenses /month (%CUR%), optional",
+      onb_curexp_hint:"Used to size your safety cushion (~6 months). Leave empty if it's the same amount.",
+      fly_curexp:"What you spend <b>today</b> each month. It's only used for the safety cushion: if something goes wrong, it's your current lifestyle that needs covering. Empty = your target expenses.",
       onb_stamped:"I've already invested this month",
       lbl_return:"Real annual return (%)",
       fly_return:"The average yearly gain you expect from your investments, <b>after inflation</b> (real). Benchmarks by profile: <b>100% stocks</b> ~5 to 6%/yr · <b>diversified</b> (e.g. 60/40 stocks/bonds) ~3.5 to 4.5% · <b>bonds / cash-like</b> ~1 to 2%. Above 6-7%, be wary — it's easy to fool yourself. Note: the chart's plan is in today's money, while the value you enter also inflates over time — so beating the plan over the years is partly normal.",
@@ -879,7 +889,7 @@
       onb_lbl_cap:"Capital already invested (%CUR%)",
       lbl_cushion:"Emergency fund (%CUR%)",
       onb_cushion_hint:"What you already have set aside, liquid (savings account…), <b>not invested</b>.",
-      fly_cushion:"Your emergency fund: liquid, stable, not invested (savings account…). It targets ~6 months of expenses and counts toward <b>neither the return projection nor passive income</b> — it only funds the “safety cushion” milestone. The target is based on your target expenses; if your <b>current</b> spending differs, adjust the milestone amount via “✎ Adjust my milestones”.",
+      fly_cushion:"Your emergency fund: liquid, stable, not invested (savings account…). It targets ~6 months of expenses and counts toward <b>neither the return projection nor passive income</b> — it only funds the “safety cushion” milestone. The target is based on your <b>current</b> expenses (or target expenses if not set), when milestones are created; you can change it via “✎ Adjust my milestones”.",
       onb_note:"We build your milestones and projection from this — all adjustable later.",
       onb_err_exp:"Enter your monthly expenses (above 0) — they set your whole journey.",
       onb_err_age:"Enter a realistic age (between 16 and 99).",
@@ -975,7 +985,7 @@
 
   var cap=g(K.cap,0), mo=g(K.mo,500), expenses=g(K.exp,2000), age=g(K.age,30),
       goals=g(K.goals,DEF_GOALS), amounts=g(K.amt,{}), hist=g(K.hist,[]), celebrated=g(K.cel,[]), celMonths=g(K.celm,{}),
-      rate=g(K.rate,5), swr=g(K.swr,4), baseInvested=g(K.base,null), startYm=g(K.start,null), tage=g(K.tage,0), cushion=g(K.cushion,0), chart=null;
+      rate=g(K.rate,5), swr=g(K.swr,4), baseInvested=g(K.base,null), startYm=g(K.start,null), tage=g(K.tage,0), cushion=g(K.cushion,0), curexp=g(K.curexp,0), chart=null;
   R=rate/100/12;
   if(baseInvested===null){baseInvested=cap;s(K.base,baseInvested);}
   if(startYm===null){startYm=ymNow();s(K.start,startYm);}
@@ -991,6 +1001,8 @@
   function monthsTo(t,c,m){if(c>=t)return 0;if(m<=0&&R<=0)return 9999;var v=c,n=0;while(v<t&&n<1200){v=v*(1+R)+m;n++;}return n>=1200?9999:n;}
   function passive(c){return c*(swr/100)/12;}
   function fiTarget(){return expenses*12/(swr/100);}
+  // Dépenses actuelles (matelas de sécurité uniquement) ; 0 = non renseigné → dépenses cibles.
+  function curExp(){return curexp>0?curexp:expenses;}
   function reqMonthly(T,C,n){if(n<=0)return Infinity;var f=Math.pow(1+R,n),grown=C*f;if(grown>=T)return 0;return R>0?(T-grown)*R/(f-1):(T-C)/n;}
   function r10(x){return Math.ceil(x/10)*10;}
   function seedGoals(){
@@ -1003,13 +1015,13 @@
     var g2=Math.max(g1+step,Math.round(fi*2/3/step)*step);
     var g3=Math.max(g2+step,Math.ceil(fi/step)*step); // plein arrondi au-dessus → couvre bien 100 %
     var out=[];
-    var mat=Math.max(1000,Math.round(6*expenses/1000)*1000); // matelas = 6 mois de dépenses, arrondi au millier
+    var mat=Math.max(1000,Math.round(6*curExp()/1000)*1000); // matelas = 6 mois de dépenses ACTUELLES, arrondi au millier
     if(mat<g1)out.push({v:mat}); // 1er palier = épargne de précaution (victoire précoce)
     out.push({v:g1},{v:g2},{v:g3});
     return out;
   }
-  // Un palier est un "matelas de sécurité" (base = épargne liquide) s'il vaut moins d'un an de dépenses et reste sous le chiffre d'indépendance.
-  function isCushionRung(v){var fiT=(expenses>0&&swr>0)?fiTarget():0;return expenses>0 && v<12*expenses && v<fiT*0.995;}
+  // Un palier est un "matelas de sécurité" (base = épargne liquide) s'il vaut moins d'un an de dépenses actuelles et reste sous le chiffre d'indépendance.
+  function isCushionRung(v){var fiT=(expenses>0&&swr>0)?fiTarget():0;return curExp()>0 && v<12*curExp() && v<fiT*0.995;}
   // Prochain palier d'INVESTISSEMENT non atteint (le matelas est suivi à part, via l'épargne de précaution).
   function nextGoalIdx(){var last=0;for(var i=0;i<goals.length;i++){if(isCushionRung(goals[i].v))continue;last=i;if(cap<goals[i].v)return i;}return last;}
 
@@ -1032,6 +1044,7 @@
     document.getElementById('age').value=age;
     document.getElementById('rate').value=rate;
     document.getElementById('swr').value=swr;
+    var ceEl=document.getElementById('curexp');if(ceEl&&document.activeElement!==ceEl)ceEl.value=curexp||"";if(ceEl)ceEl.placeholder=expenses>0?String(expenses):""; // vide = dépenses cibles (montré en grisé)
     var cuEl=document.getElementById('cushion');if(cuEl&&document.activeElement!==cuEl)cuEl.value=cushion||"";
     document.getElementById('regNote').textContent=t('reg_note',{rate:rate,swr:swr});
 
@@ -1073,9 +1086,9 @@
       if(fi>0){
         if(m.v>=fi*0.995){ meaning=t('ms_indep',{inc:inc}); life=t('ms_life_full'); }
         else if(isMatelas){
-          meaning=t('ms_months',{n:Math.max(1,Math.round(m.v/expenses))});
+          meaning=t('ms_months',{n:Math.max(1,Math.round(m.v/curExp()))});
           var surplus=cushion-m.v; // au-delà de la cible ; on ne signale qu'un surplus net (≥ 2 mois de dépenses)
-          if(expenses>0 && surplus>=2*expenses){var nm=Math.round(surplus/expenses);life=t('ms_surplus',{amount:eur(surplus),mlabel:nm+(LANG==='en'?(nm>1?' months':' month'):' mois')});lifeWarn=true;}
+          var ce=curExp();if(ce>0 && surplus>=2*ce){var nm=Math.round(surplus/ce);life=t('ms_surplus',{amount:eur(surplus),mlabel:nm+(LANG==='en'?(nm>1?' months':' month'):' mois')});lifeWarn=true;}
           else life=t('ms_life_cushion');
         }
         else if(cov>=70){ meaning=t('ms_covers',{p:Math.round(cov),inc:inc}); life=t('ms_life_high'); }
@@ -1306,6 +1319,7 @@
   });
   bind('monthly',K.mo,function(v){mo=v;});
   bind('expenses',K.exp,function(v){expenses=v;});
+  bind('curexp',K.curexp,function(v){curexp=v;});
   bind('cushion',K.cushion,function(v){cushion=v;},function(){syncCelebrated(false);});
   bind('age',K.age,function(v){age=v;});
   document.getElementById('rate').addEventListener('change',function(e){rate=Math.max(0,+e.target.value||5);R=rate/100/12;s(K.rate,rate);render();});
@@ -1353,7 +1367,7 @@
   document.getElementById('addGoal').addEventListener('click',function(){goals.push({v:(goals.length?goals[goals.length-1].v+300000:300000)});s(K.goals,goals);render();});
   var onbEl=document.getElementById('onb');
   function showOnb(){document.getElementById('onb1').style.display='block';document.getElementById('onb2').style.display='none';
-    document.getElementById('onbCap').value=cap||'';document.getElementById('onbCushion').value=cushion||'';document.getElementById('onbMo').value=mo;document.getElementById('onbAge').value=age;document.getElementById('onbExp').value=expenses;
+    document.getElementById('onbCap').value=cap||'';document.getElementById('onbCushion').value=cushion||'';document.getElementById('onbMo').value=mo;document.getElementById('onbAge').value=age;document.getElementById('onbExp').value=expenses;document.getElementById('onbCurExp').value=curexp||'';
     document.getElementById('onbStamped').checked=false;
     onbEl.style.display='flex';}
   document.getElementById('onbStart').addEventListener('click',function(){document.getElementById('onb1').style.display='none';document.getElementById('onb2').style.display='block';document.getElementById('onbCap').focus();});
@@ -1363,7 +1377,7 @@
     document.getElementById('onbErr').style.display='none';
     ['onbExp','onbAge'].forEach(function(id){document.getElementById(id).style.borderColor='';});
     var pnum=function(id){var n=parseFloat(document.getElementById(id).value);return isFinite(n)?n:NaN;}; // 0 tapé reste 0 (pas de substitution silencieuse)
-    var expV=pnum('onbExp'), ageV=pnum('onbAge'), moV=pnum('onbMo'), capV=pnum('onbCap'), cushV=pnum('onbCushion');
+    var expV=pnum('onbExp'), ageV=pnum('onbAge'), moV=pnum('onbMo'), capV=pnum('onbCap'), cushV=pnum('onbCushion'), curV=pnum('onbCurExp');
     if(!(expV>0)){onbError('onb_err_exp','onbExp');return;}          // dépenses cibles : obligatoires, > 0
     if(!(ageV>=16&&ageV<=99)){onbError('onb_err_age','onbAge');return;} // âge : plage réaliste requise
     cap=Math.max(0,isFinite(capV)?capV:0);
@@ -1371,17 +1385,18 @@
     mo=Math.max(0,isFinite(moV)?moV:500);   // versement : 0 accepté (pas d'apport en cours)
     age=ageV;
     expenses=expV;
+    curexp=(curV>0&&curV!==expV)?curV:0; // facultatif : vide ou identique = dépenses cibles
     baseInvested=cap;startYm=ymNow();
     // Versement du mois déjà inclus dans le capital saisi : on tamponne le grain 1 et on le sort de la base (évite double comptage / fausse moins-value).
     if(document.getElementById('onbStamped').checked&&mo>0){amounts[startYm]=mo;baseInvested=Math.max(0,cap-mo);s(K.amt,amounts);}
     goals=seedGoals();celebrated=[];
-    s(K.cap,cap);s(K.cushion,cushion);s(K.mo,mo);s(K.age,age);s(K.exp,expenses);s(K.base,baseInvested);s(K.start,startYm);s(K.goals,goals);s(K.cel,celebrated);s(K.onb,true);
+    s(K.cap,cap);s(K.cushion,cushion);s(K.mo,mo);s(K.age,age);s(K.exp,expenses);s(K.curexp,curexp);s(K.base,baseInvested);s(K.start,startYm);s(K.goals,goals);s(K.cel,celebrated);s(K.onb,true);
     localStorage.removeItem(K.demo);document.getElementById('demoBanner').style.display='none';
     syncCelebrated(true);onbEl.style.display='none';render();
   });
   // Mode démo : charge un exemple vivant (sans que ce soient les chiffres de l'utilisateur)
   document.getElementById('onbDemo').addEventListener('click',function(){
-    expenses=2200;cushion=13000;mo=600;age=32;rate=5;swr=4;R=rate/100/12;
+    expenses=2200;curexp=0;cushion=13000;mo=600;age=32;rate=5;swr=4;R=rate/100/12;
     startYm=addMonths(ymNow(),-7);            // démarré il y a 7 mois → carte de fidélité vivante
     cap=68000;baseInvested=42000;             // plus-value positive visible
     amounts={};for(var dm=0;dm<7;dm++){if(dm!==3)amounts[addMonths(startYm,dm)]=600;} // 6 mois investis, 1 trou
@@ -1393,7 +1408,7 @@
   });
   document.getElementById('demoRealBtn').addEventListener('click',function(){
     Object.keys(K).forEach(function(k){if(k!=='lang'&&k!=='cur')localStorage.removeItem(K[k]);});
-    cap=0;cushion=0;mo=500;expenses=2000;age=30;tage=0;rate=5;swr=4;R=rate/100/12;goals=JSON.parse(JSON.stringify(DEF_GOALS));amounts={};hist=[];celebrated=[];baseInvested=0;startYm=ymNow();
+    cap=0;cushion=0;curexp=0;mo=500;expenses=2000;age=30;tage=0;rate=5;swr=4;R=rate/100/12;goals=JSON.parse(JSON.stringify(DEF_GOALS));amounts={};hist=[];celebrated=[];baseInvested=0;startYm=ymNow();
     document.getElementById('demoBanner').style.display='none';render();showOnb();
   });
 
@@ -1408,7 +1423,7 @@
 
   document.getElementById('resetBtn').addEventListener('click',function(){
     showConfirm(t('confirm_reset'),function(){Object.keys(K).forEach(function(k){localStorage.removeItem(K[k]);});
-      cap=0;cushion=0;mo=500;expenses=2000;age=30;tage=0;rate=5;swr=4;R=rate/100/12;goals=JSON.parse(JSON.stringify(DEF_GOALS));amounts={};hist=[];celebrated=[];baseInvested=0;startYm=ymNow();
+      cap=0;cushion=0;curexp=0;mo=500;expenses=2000;age=30;tage=0;rate=5;swr=4;R=rate/100/12;goals=JSON.parse(JSON.stringify(DEF_GOALS));amounts={};hist=[];celebrated=[];baseInvested=0;startYm=ymNow();
       document.getElementById('demoBanner').style.display='none';document.getElementById('exportReminder').style.display='none';
       s(K.lang,LANG);s(K.cur,CUR);render();showOnb();});
   });
@@ -1424,7 +1439,7 @@
     window.open('https://buymeacoffee.com/getcoffeeroaster','_blank','noopener');
   });
   function doExport(){
-    var blob=new Blob([JSON.stringify({version:1,cap:cap,cushion:cushion,mo:mo,expenses:expenses,age:age,rate:rate,swr:swr,tage:tage,lang:LANG,cur:CUR,baseInvested:baseInvested,startYm:startYm,goals:goals,amounts:amounts,hist:hist,celebrated:celebrated,celMonths:celMonths},null,2)],{type:"application/json"});
+    var blob=new Blob([JSON.stringify({version:1,cap:cap,cushion:cushion,mo:mo,expenses:expenses,curexp:curexp,age:age,rate:rate,swr:swr,tage:tage,lang:LANG,cur:CUR,baseInvested:baseInvested,startYm:startYm,goals:goals,amounts:amounts,hist:hist,celebrated:celebrated,celMonths:celMonths},null,2)],{type:"application/json"});
     var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=t('export_filename');a.click();
     s(K.lastexp,ymNow());document.getElementById('exportReminder').style.display='none'; // sauvegarde faite → snooze le rappel
   }
@@ -1441,9 +1456,9 @@
       e.target.value="";
       showConfirm(t('confirm_import'),function(){
         var nn=function(v,def){return (v!=null&&isFinite(+v))?+v:def;};
-        cap=nn(d.cap,0);cushion=nn(d.cushion,0);mo=nn(d.mo,500);expenses=nn(d.expenses,2000);age=nn(d.age,30);rate=nn(d.rate,5);swr=nn(d.swr,4);tage=nn(d.tage,0);baseInvested=nn(d.baseInvested,cap);startYm=d.startYm||ymNow();goals=Array.isArray(d.goals)?d.goals:DEF_GOALS;amounts=(d.amounts&&typeof d.amounts==='object')?d.amounts:{};hist=Array.isArray(d.hist)?d.hist:[];celebrated=Array.isArray(d.celebrated)?d.celebrated:[];celMonths=(d.celMonths&&typeof d.celMonths==='object')?d.celMonths:{};R=rate/100/12;
+        cap=nn(d.cap,0);cushion=nn(d.cushion,0);mo=nn(d.mo,500);expenses=nn(d.expenses,2000);curexp=Math.max(0,nn(d.curexp,0));age=nn(d.age,30);rate=nn(d.rate,5);swr=nn(d.swr,4);tage=nn(d.tage,0);baseInvested=nn(d.baseInvested,cap);startYm=d.startYm||ymNow();goals=Array.isArray(d.goals)?d.goals:DEF_GOALS;amounts=(d.amounts&&typeof d.amounts==='object')?d.amounts:{};hist=Array.isArray(d.hist)?d.hist:[];celebrated=Array.isArray(d.celebrated)?d.celebrated:[];celMonths=(d.celMonths&&typeof d.celMonths==='object')?d.celMonths:{};R=rate/100/12;
         if(d.lang==='en'||d.lang==='fr')LANG=d.lang; if(SYMS[d.cur])CUR=d.cur; CURSYM=SYMS[CUR];
-        s(K.cap,cap);s(K.cushion,cushion);s(K.mo,mo);s(K.exp,expenses);s(K.age,age);s(K.rate,rate);s(K.swr,swr);s(K.tage,tage);s(K.lang,LANG);s(K.cur,CUR);s(K.base,baseInvested);s(K.start,startYm);s(K.goals,goals);s(K.amt,amounts);s(K.hist,hist);s(K.cel,celebrated);s(K.celm,celMonths);applyStatic();render();
+        s(K.cap,cap);s(K.cushion,cushion);s(K.mo,mo);s(K.exp,expenses);s(K.curexp,curexp);s(K.age,age);s(K.rate,rate);s(K.swr,swr);s(K.tage,tage);s(K.lang,LANG);s(K.cur,CUR);s(K.base,baseInvested);s(K.start,startYm);s(K.goals,goals);s(K.amt,amounts);s(K.hist,hist);s(K.cel,celebrated);s(K.celm,celMonths);applyStatic();render();
       });
     };r.readAsText(f);
   });
